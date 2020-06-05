@@ -1,0 +1,71 @@
+package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
+
+import java.util.Date;
+import java.util.List;
+import javax.persistence.EntityManager;
+import org.springframework.stereotype.Component;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ComisionDao;
+import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
+
+@Component
+public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements ComisionDao {
+
+	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Comisiones> listar() {
+		EntityManager manager = createEntityManager();
+		List<Comisiones> lista = manager
+				.createQuery("FROM Comisiones c WHERE c.cFlgeliminado=:eliminado ORDER BY c.cOmisionidpk DESC")
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
+	}
+
+	@Override
+	public Comisiones buscarPorId(Comisiones comisiones) {
+		return buscarId(comisiones.getcOmisionidpk());
+	}
+
+	@Override
+	public List<Comisiones> buscar(Comisiones comisiones) {
+		return null;
+	}
+
+	@Override
+	public Comisiones Registrar(Comisiones comisiones) {
+		comisiones.setvCodcomision(GenerarCorrelativo());
+		guardar(comisiones); 
+		return comisiones;
+	}
+
+	@Override
+	public Comisiones Actualizar(Comisiones comisiones) {
+		comisiones.setdFecmodifica(new Date());
+		actualizar(comisiones);
+		return comisiones;
+	}
+
+	@Override
+	public Comisiones Eliminar(Comisiones comisiones) {
+		comisiones.setdFecelimina(new Date());
+		comisiones.setcFlgeliminado(ConstantesUtil.C_INDC_ACTIVO);
+		actualizar(comisiones);
+		return comisiones;
+	}
+	
+	
+	public String GenerarCorrelativo() {
+		EntityManager manager = createEntityManager();
+		Long correlativo = (Long) manager.createQuery("SELECT COUNT(c)+1 FROM Comisiones c").getSingleResult();
+		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.COMISION_ALIAS_CORRELATIVO);
+		manager.close();
+		return StrcorrelativoFinal;
+	}
+
+
+}

@@ -1,0 +1,200 @@
+package pe.gob.mtpe.sivice.externo.integracion.api;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.PlanTrabajoService;
+import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
+
+@RestController
+@RequestMapping({ "/api/plantrabajo" })
+public class ControladorPlanTrabajo {
+
+	private static final Logger logger = LoggerFactory.getLogger(ControladorPlanTrabajo.class);
+
+	@Autowired
+	private PlanTrabajoService planTrabajoService;
+	
+	@Autowired
+	private ArchivoUtilitarioService archivoUtilitarioService;
+
+	@Value("${rutaArchivo}")
+	private String rutaRaiz;
+
+	@GetMapping("/")
+	public List<PlanTrabajo> listarPlanTrabajo() {
+		logger.info("============  BUSCAR listarPlanTrabajo =================");
+		return planTrabajoService.listar();
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> buscarPorIdPlanTrabajo(@PathVariable Long id) {
+		PlanTrabajo generico  = new PlanTrabajo();
+		generico.setpLantrabidpk(id); 
+		Map<String, Object> response = new HashMap<>();
+		try {
+			generico = planTrabajoService.buscarPorId(generico);
+			if (generico == null) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.PLANTRABAJO_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.PLANTRABAJO_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+			
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return new ResponseEntity<PlanTrabajo>(generico,HttpStatus.OK);
+	}
+	
+
+	@PostMapping("/buscar")
+	public List<PlanTrabajo> buscarPlanTrabajo(@RequestBody PlanTrabajo buscar) {
+		return planTrabajoService.buscar(buscar);
+	}
+	
+	
+ 	
+	@PostMapping("/registrar")
+	public ResponseEntity<?> registrarPlanTrabajo(
+			@RequestParam(value="docaprobacion",required=true) MultipartFile docaprobacion, @RequestParam(value="docplantrabajo",required=true) MultipartFile docplantrabajo,
+			@RequestParam(value="comisionfk"   ,required=true) Long          comisionfk,    @RequestParam(value="dFecaprobacion",required=true) String  dFecaprobacion,
+			@RequestParam(value="dFecinicio"   ,required=true) String        dFecinicio,    @RequestParam(value="dFecfin",required=true)        String  dFecfin,
+			@RequestParam(value="vNumdocapr"   ,required=true) String        vNumdocapr
+			) {
+		
+		PlanTrabajo generico = new PlanTrabajo();
+		Archivos archivoDocAprobacion = new Archivos();
+		Archivos archivoPlanTrabajo = new Archivos();
+		
+		Map<String, Object> response = new HashMap<>();
+		try {
+			
+			 if(docplantrabajo.isEmpty() || (docaprobacion.isEmpty())  ||  (docaprobacion.isEmpty() && docplantrabajo.isEmpty())) {
+				 response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.PLANTRABAJO_MSG_DOC_ADJUNTOS);
+					response.put(ConstantesUtil.X_ERROR, ConstantesUtil.PLANTRABAJO_ERROR_DOC_ADJUNTOS);
+					response.put(ConstantesUtil.X_ENTIDAD, generico);
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			 }else {
+				 logger.info("============ pland de trabajo =============");
+				 
+				 archivoDocAprobacion = archivoUtilitarioService.cargarArchivo(docaprobacion, ConstantesUtil.C_DOCAPROBACION_PLAN_TRABAJO_SIGLAS);
+				 archivoPlanTrabajo   = archivoUtilitarioService.cargarArchivo(docplantrabajo, ConstantesUtil.C_DOC_PLAN_TRABAJO_SIGLAS);
+				 
+				 if ((archivoDocAprobacion.isVerificarCarga() == true && archivoDocAprobacion.isVerificarCarga() == true)
+						  && (archivoPlanTrabajo.isVerificarCarga() == true && archivoPlanTrabajo.isVerificarCarga() == true) ) {
+					 logger.info("=================== cargaron plandes de trabajo =================");
+					 generico.setcOmisionfk(comisionfk);
+					 generico.setdFecaprobacion(FechasUtil.convertStringToDate(dFecaprobacion));
+					 generico.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
+					 generico.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
+					 generico.setvNumdocapr(vNumdocapr);
+					 
+					 generico.setvNomarchdocaprob(archivoDocAprobacion.getNombre());
+					 generico.setvUbidocaprobacion(archivoDocAprobacion.getUbicacion());
+					 generico.setvExtarchdocaprob(archivoDocAprobacion.getExtension());
+					 
+					 generico.setvNomarchplan(archivoPlanTrabajo.getNombre());
+					 generico.setvUbiarchplan(archivoPlanTrabajo.getUbicacion());
+					 generico.setvExtarchplan(archivoPlanTrabajo.getExtension());
+					 
+		 
+					 
+					 generico =planTrabajoService.Registrar(generico);
+				 }
+			 }
+			
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
+    		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<PlanTrabajo>(generico,HttpStatus.CREATED);
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<?> actualizarPlanTrabajo(@RequestBody PlanTrabajo planTrabajo) {
+		logger.info("============  BUSCAR PROFESION =================");
+		PlanTrabajo generico = new PlanTrabajo();
+    	Map<String,Object> response = new HashMap<>();
+    	try {
+    		
+    		generico = planTrabajoService.buscarPorId(planTrabajo);
+			if (generico == null) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.PLANTRABAJO_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.PLANTRABAJO_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ENTIDAD, planTrabajo);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+
+			planTrabajo.setnUsureg(generico.getnUsureg());
+			planTrabajo.setdFecreg(generico.getdFecreg());
+			generico =planTrabajoService.Actualizar(planTrabajo);
+    		
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, planTrabajo);
+    		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    	 
+    	return new ResponseEntity<PlanTrabajo>(generico,HttpStatus.OK);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> eliminarPlanTrabajo(@PathVariable Long id) {
+		logger.info("============  BUSCAR PROFESION =================");
+		PlanTrabajo generico = new PlanTrabajo();
+		generico.setpLantrabidpk(id);
+    	Map<String,Object> response = new HashMap<>();
+    	try {
+    		
+
+			generico = planTrabajoService.buscarPorId(generico);
+			if (generico == null) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.PLANTRABAJO_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.PLANTRABAJO_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+ 
+			generico =planTrabajoService.Eliminar(generico);
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
+    		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+     
+    	return new ResponseEntity<PlanTrabajo>(generico,HttpStatus.OK);
+
+	}
+
+}

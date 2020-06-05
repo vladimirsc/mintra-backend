@@ -347,6 +347,8 @@ public class Consejeros implements Serializable {
 	}
 
 	 
-	 
+	public String obtenerRutaAbsoluta() {
+		return this.getvUbidocasig()+this.getvNombredocasig()+"."+this.getvExtdocasig();
+	}
 
 }

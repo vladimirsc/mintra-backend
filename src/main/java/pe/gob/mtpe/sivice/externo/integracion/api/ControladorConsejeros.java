@@ -1,8 +1,11 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -230,6 +233,22 @@ public class ControladorConsejeros {
 		Consejeros consejero = new Consejeros();
 		consejero.setcOmisionfk(id);
 	  return consejeroService.listarConsejerosPorComision(consejero);
+	}
+	
+	@GetMapping("/descargar/{id}")
+	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+		Consejeros generico = new Consejeros();
+		generico.setcOnsejeroidpk(id);
+		String ruta = "";
+		try {
+			generico = consejeroService.buscarPorId(generico);
+			ruta = rutaRaiz + generico.obtenerRutaAbsoluta();
+			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNombredocasig()+"."+generico.getvExtdocasig());
+			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 	}
 	
 }

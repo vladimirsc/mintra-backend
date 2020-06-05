@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ConsejeroDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @Component
 public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements ConsejeroDao {
@@ -38,15 +44,38 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		return consejeros;
 	}
 
-	@SuppressWarnings("unchecked")
+	 
 	@Override
 	public List<Consejeros> buscar(Consejeros consejero) {
 		EntityManager manager = createEntityManager();
-		List<Consejeros> lista = manager
-				.createQuery("FROM Consejeros c WHERE c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
-				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		
+		CriteriaQuery<Consejeros> criteriaQuery = builder.createQuery(Consejeros.class);
+		Root<Consejeros> root = criteriaQuery.from(Consejeros.class);
+
+		consejero.setvNumdocasig((consejero.getvNumdocasig()!=null)?     consejero.getvNumdocasig()   :"");
+		consejero.setdFecinicio((consejero.getdFecinicio()!= null) ?     consejero.getdFecinicio()    :FechasUtil.convertStringToDate("01-01-1880"));
+		consejero.setdFecfin( (consejero.getdFecfin()!=null)?            consejero.getdFecfin()       :FechasUtil.convertStringToDate("01-01-1880") );
+		consejero.setvNumdocumento((consejero.getvNumdocumento()!=null)? consejero.getvNumdocumento() : "");
+		consejero.setvDesnombre( (consejero.getvDesnombre()!=null)?      consejero.getvDesnombre()    : "");
+		consejero.setvDesappaterno( (consejero.getvDesappaterno()!=null)?consejero.getvDesappaterno() : "");
+		consejero.setvDesapmaterno((consejero.getvDesapmaterno()!=null)? consejero.getvDesapmaterno() : "");
+		consejero.setvEntidad((consejero.getvEntidad()!=null)?           consejero.getvEntidad()      : "");
+		 
+		Predicate valor1 = builder.equal(root.get("vNumdocasig"), consejero.getvNumdocasig()) ;
+		Predicate valor2 = builder.between(root.get("dFecinicio"), consejero.getdFecinicio(), consejero.getdFecfin());
+		Predicate valor3 = builder.equal(root.get("vNumdocumento"),consejero.getvNumdocumento()) ;
+		Predicate valor4 = builder.equal(root.get("vDesnombre"), consejero.getvDesnombre()) ;
+		Predicate valor5 = builder.equal(root.get("vDesappaterno"), consejero.getvDesappaterno()) ;
+		Predicate valor6 = builder.equal(root.get("vDesapmaterno"), consejero.getvDesapmaterno()) ;
+		Predicate valor7 = builder.equal(root.get("vEntidad"),consejero.getvEntidad()) ;
+		Predicate finalbusqueda = builder.or(valor1,valor2,valor3,valor4,valor5,valor6,valor7);
+		
+		criteriaQuery.where(finalbusqueda);
+		Query<Consejeros> query = (Query<Consejeros>) manager.createQuery(criteriaQuery);
+		List<Consejeros> resultado = query.getResultList();
 		manager.close();
-		return lista;
+		return resultado;
 	}
 
 	@Override

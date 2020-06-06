@@ -69,7 +69,11 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		Predicate valor5 = builder.equal(root.get("vDesappaterno"), consejero.getvDesappaterno()) ;
 		Predicate valor6 = builder.equal(root.get("vDesapmaterno"), consejero.getvDesapmaterno()) ;
 		Predicate valor7 = builder.equal(root.get("vEntidad"),consejero.getvEntidad()) ;
-		Predicate finalbusqueda = builder.or(valor1,valor2,valor3,valor4,valor5,valor6,valor7);
+		Predicate valor8 = builder.equal(root.get("rEgionfk"),consejero.getrEgionfk()) ;
+		Predicate valor9 = builder.equal(root.get("cOnsejofk"),consejero.getcOnsejofk()) ;
+		Predicate valor10 = builder.or(valor1,valor2,valor3,valor4,valor5,valor6,valor7); 
+		Predicate valor11 = builder.and(valor8,valor9);
+		Predicate finalbusqueda =builder.and(valor10,valor11);
 		
 		criteriaQuery.where(finalbusqueda);
 		Query<Consejeros> query = (Query<Consejeros>) manager.createQuery(criteriaQuery);
@@ -122,6 +126,26 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		}
 
 		return lista;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Consejeros buscarPorDni(Consejeros consejero) {
+		EntityManager manager = createEntityManager();
+		 Consejeros  consejeroresultado = new Consejeros();
+		List<Consejeros> lista = manager
+				.createQuery("FROM Consejeros c WHERE c.vNumdocumento=:numerodoc AND c.cFlgeliminado=:eliminado")
+				.setParameter("numerodoc", consejero.getvNumdocumento()) 
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+
+		if (lista.isEmpty()) {
+			consejeroresultado = null;
+		}else {
+			consejeroresultado = lista.get(0);
+		}
+
+		return consejeroresultado;
 	}
 
 }

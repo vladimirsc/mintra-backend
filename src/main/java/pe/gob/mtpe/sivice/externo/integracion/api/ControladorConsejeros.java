@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +33,7 @@ import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT})
 @RequestMapping({"/api/consejeros"})
 public class ControladorConsejeros {
 
@@ -110,6 +113,14 @@ public class ControladorConsejeros {
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
+			 consejeroBuscar.setvNumdocumento(vNumdocumento);
+			 consejeroBuscar = consejeroService.buscarPorDni(consejeroBuscar);
+				if(consejeroBuscar!=null) {
+					response.put(ConstantesUtil.X_MENSAJE,ConstantesUtil.C_DNI_DUPLICADO_MSG_CONSEJEROS);
+					response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_DNI_DUPLICADO_ERROR_CONSEJEROS);
+					response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+				}
 			
 			if(docaprob.isEmpty()) {
 				
@@ -172,32 +183,82 @@ public class ControladorConsejeros {
 	
 	
 
-	@PutMapping("/{id}")
-	public ResponseEntity<?> actualizarConsejeros(@RequestBody Consejeros consejeros, @PathVariable Long id) {
-		logger.info("==========  listarConsejeros  ===========");
-		consejeros.setcOnsejeroidpk(id);
-		Consejeros generico =  new Consejeros();
+	@PutMapping("/actualizar")
+	public ResponseEntity<?> actualizarConsejeros(
+			@RequestParam(value="docaprob")        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  String vTipdocumento,
+			@RequestParam(value="vNumdocumento")   String        vNumdocumento, @RequestParam(value="vDesnombre")     String vDesnombre,
+			@RequestParam(value="vDesappaterno")   String        vDesappaterno, @RequestParam(value="vDesapmaterno")  String vDesapmaterno,
+			@RequestParam(value="vProfesion")     String         vProfesion,   @RequestParam(value="vDesemail1" )    String  vDesemail1,
+			@RequestParam(value="vDesemail2")      String        vDesemail2,    @RequestParam(value="vEntidad")      String  vEntidad,
+			@RequestParam(value="vTpconsejero")   String         vTpconsejero, @RequestParam(value="dFecinicio")     String  dFecinicio, 
+			@RequestParam(value="dFecfin")         String        dFecfin,       @RequestParam(value="vNumdocasig")    String vNumdocasig,
+			@RequestParam(value="rEgionfk")        Long          rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
+			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestParam(value="cOnsejeroidpk")  Long  cOnsejeroidpk){
+		
+		Archivos archivo = new Archivos();
+		Consejeros consejeroBuscar = new Consejeros();
+		consejeroBuscar.setcOnsejeroidpk(cOnsejeroidpk);
+		
+		
 		Map<String, Object> response = new HashMap<>();
 		try {
-			generico = consejeroService.buscarPorId(consejeros);
-			if (generico == null) {
+			
+			
+			consejeroBuscar = consejeroService.buscarPorId(consejeroBuscar);
+			if (consejeroBuscar == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CONSEJERO_MSG_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.CONSEJERO_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ENTIDAD, consejeros);
+				response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
-			 consejeros.setnUsureg(generico.getnUsureg());
-			 consejeros.setdFecreg(generico.getdFecreg());
-			generico = consejeroService.Actualizar(consejeros);
+			//verificamos que no cambie de dni
+			if(!consejeroBuscar.getvNumdocumento().equals(vNumdocumento)) {
+				consejeroBuscar.setvNumdocumento(vNumdocumento);
+				 consejeroBuscar = consejeroService.buscarPorDni(consejeroBuscar);
+				if(consejeroBuscar!=null) {
+					response.put(ConstantesUtil.X_MENSAJE,ConstantesUtil.C_DNI_DUPLICADO_MSG_CONSEJEROS);
+					response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_DNI_DUPLICADO_ERROR_CONSEJEROS);
+					response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+				}
+			} 
+ 
+			
+			if(!docaprob.isEmpty()) {
+				archivo = archivoUtilitarioService.cargarArchivo(docaprob, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION); 
+				consejeroBuscar.setvNombredocasig(archivo.getNombre());
+				consejeroBuscar.setvUbidocasig(archivo.getUbicacion());
+				consejeroBuscar.setvExtdocasig(archivo.getExtension());
+			}
+			
+			consejeroBuscar.setvTipdocumento(vTipdocumento);
+			consejeroBuscar.setvNumdocumento(vNumdocumento);
+			consejeroBuscar.setvDesnombre(vDesnombre);
+			consejeroBuscar.setvDesappaterno(vDesappaterno);
+			consejeroBuscar.setvDesapmaterno(vDesapmaterno);
+			consejeroBuscar.setvProfesion(vProfesion);
+			consejeroBuscar.setvDesemail1(vDesemail1);
+			consejeroBuscar.setvDesemail2(vDesemail2);
+			consejeroBuscar.setvEntidad(vEntidad);
+			consejeroBuscar.setvTpconsejero(vTpconsejero);
+			consejeroBuscar.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
+			consejeroBuscar.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
+			consejeroBuscar.setvNumdocasig(vNumdocasig);
+			consejeroBuscar.setcOmisionfk(cOmisionfk);
+			
+			consejeroBuscar = consejeroService.Actualizar(consejeroBuscar);
+			
+			
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			response.put(ConstantesUtil.X_ENTIDAD, consejeros);
+			response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		return new ResponseEntity<Consejeros>(generico,HttpStatus.OK);
+		
+		return new ResponseEntity<Consejeros>(consejeroBuscar,HttpStatus.OK);
+		
 	}
 
 	@DeleteMapping("/{id}")

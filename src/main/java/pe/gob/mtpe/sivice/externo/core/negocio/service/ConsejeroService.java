@@ -9,6 +9,8 @@ public interface ConsejeroService {
 	List<Consejeros> listar(Consejeros consejero);
 
 	Consejeros buscarPorId(Consejeros consejero);
+	
+	Consejeros buscarPorDni(Consejeros consejero);
 
 	List<Consejeros> buscar(Consejeros consejero);
 	

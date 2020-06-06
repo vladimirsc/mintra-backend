@@ -26,7 +26,9 @@ public class ConstantesUtil {
 	public static final String C_ARCHIVO_VALIDACION_UBICACION_CORRECTA ="El archivo se encuentra en su ubicacion";
 	public static final String C_ARCHIVO_VALIDACION_UBICACION_INCORRECTA ="El archivo no se encuentra en su ubicacion";
 	
-
+	//VALIDACIONES
+	public static final String C_DNI_DUPLICADO_MSG_CONSEJEROS ="ACTIVO Y DUPLICADO";
+	public static final String C_DNI_DUPLICADO_ERROR_CONSEJEROS ="El DNI se encuentra activo,con otro consejero";
 	// ******* ACTAS ******
 
 	// busquedas

@@ -10,8 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
+import javax.persistence.Table; 
+import javax.validation.constraints.Email; 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -43,7 +43,8 @@ public class Consejeros implements Serializable {
 	@Column(name = "V_TPDOCUMENTO")
 	private String vTipdocumento;
 
-	@Column(name = "V_NUMDOCUMENTO", unique=true)
+	 
+	@Column(name = "V_NUMDOCUMENTO")
 	private String vNumdocumento;
 
 	
@@ -118,7 +119,7 @@ public class Consejeros implements Serializable {
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
 	
- 
+    private  transient String vnombreComision;
 	
 	public Consejeros() {
 
@@ -351,4 +352,13 @@ public class Consejeros implements Serializable {
 		return this.getvUbidocasig()+this.getvNombredocasig()+"."+this.getvExtdocasig();
 	}
 
+	public String getVnombreComision() {
+		return vnombreComision;
+	}
+
+	public void setVnombreComision(String vnombreComision) {
+		this.vnombreComision = vnombreComision;
+	}
+
+	
 }

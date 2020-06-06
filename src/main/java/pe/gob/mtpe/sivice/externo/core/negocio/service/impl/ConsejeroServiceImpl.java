@@ -37,7 +37,18 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 
 	@Override
 	public List<Consejeros> buscar(Consejeros consejero) {
-		return consejeroDao.buscar(consejero);
+		List<Consejeros> lista = new ArrayList<Consejeros>();
+		lista = consejeroDao.buscar(consejero);
+		if(!lista.isEmpty()) {
+			Comisiones comision = new Comisiones();
+			for (Consejeros i : lista) {
+				comision.setcOmisionidpk(i.getcOmisionfk());
+				comision = comisionDao.buscarPorId(comision);
+				i.setVnombreComision(comision.getvCodcomision());
+			}
+			
+		}
+		return lista;
 	}
 
 	@Override
@@ -73,11 +84,16 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 			comision = comisionDao.buscarPorId(comision);
 			
 			for (Consejeros i : lista) {
-				i.setvEntidad(comision.getvCodcomision());
+				i.setVnombreComision(comision.getvCodcomision());
 			}
 		}
 		
 		return lista;
+	}
+
+	@Override
+	public Consejeros buscarPorDni(Consejeros consejero) { 
+		return consejeroDao.buscarPorDni(consejero);
 	}
 
 }

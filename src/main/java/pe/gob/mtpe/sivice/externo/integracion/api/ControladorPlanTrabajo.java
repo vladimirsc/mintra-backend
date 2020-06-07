@@ -1,9 +1,11 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,10 +87,10 @@ public class ControladorPlanTrabajo {
  	
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarPlanTrabajo(
-			@RequestParam(value="docaprobacion",required=true) MultipartFile docaprobacion, @RequestParam(value="docplantrabajo",required=true) MultipartFile docplantrabajo,
-			@RequestParam(value="comisionfk"   ,required=true) Long          comisionfk,    @RequestParam(value="dFecaprobacion",required=true) String  dFecaprobacion,
-			@RequestParam(value="dFecinicio"   ,required=true) String        dFecinicio,    @RequestParam(value="dFecfin",required=true)        String  dFecfin,
-			@RequestParam(value="vNumdocapr"   ,required=true) String        vNumdocapr
+			@RequestParam(value="docaprobacion") MultipartFile docaprobacion, @RequestParam(value="docplantrabajo") MultipartFile docplantrabajo,
+			@RequestParam(value="comisionfk"   ) Long          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
+			@RequestParam(value="dFecinicio"   ) String        dFecinicio,    @RequestParam(value="dFecfin")        String  dFecfin,
+			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr
 			) {
 		
 		PlanTrabajo generico = new PlanTrabajo();
@@ -125,9 +127,7 @@ public class ControladorPlanTrabajo {
 					 generico.setvNomarchplan(archivoPlanTrabajo.getNombre());
 					 generico.setvUbiarchplan(archivoPlanTrabajo.getUbicacion());
 					 generico.setvExtarchplan(archivoPlanTrabajo.getExtension());
-					 
-		 
-					 
+
 					 generico =planTrabajoService.Registrar(generico);
 				 }
 			 }
@@ -142,28 +142,53 @@ public class ControladorPlanTrabajo {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> actualizarPlanTrabajo(@RequestBody PlanTrabajo planTrabajo) {
+	public ResponseEntity<?> actualizarPlanTrabajo(
+			@RequestParam(value="docaprobacion") MultipartFile docaprobacion, @RequestParam(value="docplantrabajo") MultipartFile docplantrabajo,
+			@RequestParam(value="comisionfk"   ) Long          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
+			@RequestParam(value="dFecinicio"   ) String        dFecinicio,    @RequestParam(value="dFecfin")        String  dFecfin,
+			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,    @RequestParam(value="pLantrabidpk"   ) Long  pLantrabidpk
+			) {
 		logger.info("============  BUSCAR PROFESION =================");
 		PlanTrabajo generico = new PlanTrabajo();
+		Archivos archivoAprobacion = new Archivos();
+		Archivos archivoPlanTrabajo = new Archivos();
     	Map<String,Object> response = new HashMap<>();
     	try {
-    		
-    		generico = planTrabajoService.buscarPorId(planTrabajo);
+    		generico.setpLantrabidpk(pLantrabidpk);
+    		generico = planTrabajoService.buscarPorId(generico);
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.PLANTRABAJO_MSG_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.PLANTRABAJO_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ENTIDAD, planTrabajo);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-
-			planTrabajo.setnUsureg(generico.getnUsureg());
-			planTrabajo.setdFecreg(generico.getdFecreg());
-			generico =planTrabajoService.Actualizar(planTrabajo);
+			
+			if(!docaprobacion.isEmpty()) {
+				archivoAprobacion = archivoUtilitarioService.cargarArchivo(docaprobacion, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION); 
+				generico.setvNomarchdocaprob(archivoAprobacion.getNombre());
+				generico.setvUbidocaprobacion(archivoAprobacion.getUbicacion());
+				generico.setvExtarchdocaprob(archivoAprobacion.getExtension());
+			} 
+			
+			if(!docplantrabajo.isEmpty()) {
+				archivoPlanTrabajo = archivoUtilitarioService.cargarArchivo(docaprobacion, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION); 
+				generico.setvNomarchplan(archivoPlanTrabajo.getNombre());
+				generico.setvUbiarchplan(archivoPlanTrabajo.getUbicacion());
+				generico.setvExtarchplan(archivoPlanTrabajo.getExtension());
+			} 
+			
+			generico.setdFecaprobacion(FechasUtil.convertStringToDate(dFecaprobacion));
+			generico.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
+			generico.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
+			generico.setvNumdocapr(vNumdocapr);
+			
+			generico =planTrabajoService.Actualizar(generico);
+			 
     		
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			response.put(ConstantesUtil.X_ENTIDAD, planTrabajo);
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
     		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
     	 
@@ -198,5 +223,43 @@ public class ControladorPlanTrabajo {
     	return new ResponseEntity<PlanTrabajo>(generico,HttpStatus.OK);
 
 	}
+	
+	
+	
+	@GetMapping("/descargaraprobacion/{id}")
+	public void descargarArchivoAprobacion(@PathVariable Long id, HttpServletResponse res) {
+		PlanTrabajo generico = new PlanTrabajo();
+		generico.setpLantrabidpk(id);
+		String ruta = "";
+		try {
+			generico = planTrabajoService.buscarPorId(generico);
+			ruta = rutaRaiz + generico.obtenerRutaAbsolutaAprobacion();
+			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNomarchdocaprob()+"."+generico.getvExtarchdocaprob());
+			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+	}
+	
+	@GetMapping("/descargarplan/{id}")
+	public void descargarArchivoPlan(@PathVariable Long id, HttpServletResponse res) {
+		PlanTrabajo generico = new PlanTrabajo();
+		generico.setpLantrabidpk(id);
+		String ruta = "";
+		try {
+			generico = planTrabajoService.buscarPorId(generico);
+			ruta = rutaRaiz + generico.obtenerRutaAbsolutaPlanTrabajo();
+			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNomarchplan()+"."+generico.getvExtarchplan());
+			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+	}
+	
+	
+	
+	
 
 }

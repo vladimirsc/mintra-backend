@@ -1,28 +1,23 @@
 package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 
-import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.hibernate.query.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.PlanTrabajoDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
-import pe.gob.mtpe.sivice.externo.integracion.api.ControladorPlanTrabajo;
 
 @Component
 public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements PlanTrabajoDao {
 
-	private static final Logger logger = LoggerFactory.getLogger(PlanTrabajoDaoImpl.class);
+	//private static final Logger logger = LoggerFactory.getLogger(PlanTrabajoDaoImpl.class);
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -64,8 +59,7 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 		criteriaQuery.where(finalbusqueda);
 		Query<PlanTrabajo> query = (Query<PlanTrabajo>) manager.createQuery(criteriaQuery);
 		List<PlanTrabajo> resultado = query.getResultList();
-		manager.close();
-		logger.info("==========="+resultado.size());
+		manager.close(); 
 		return resultado;
 	}
 
@@ -78,14 +72,14 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 
 	@Override
 	public PlanTrabajo Actualizar(PlanTrabajo planTrabajo) {
-		planTrabajo.setdFecmodifica(new Date());
+		planTrabajo.setdFecmodifica(FechasUtil.fechaActual());
 		actualizar(planTrabajo);
 		return planTrabajo;
 	}
 
 	@Override
 	public PlanTrabajo Eliminar(PlanTrabajo planTrabajo) {
-		planTrabajo.setdFecelimina(new Date());
+		planTrabajo.setdFecelimina(FechasUtil.fechaActual());
 		planTrabajo.setcFlgeliminado(ConstantesUtil.C_INDC_ACTIVO);
 		actualizar(planTrabajo);
 		return planTrabajo;

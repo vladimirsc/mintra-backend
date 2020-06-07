@@ -298,6 +298,12 @@ public class PlanTrabajo implements Serializable {
 		this.dFecaprobacionfin = dFecaprobacionfin;
 	}
 
-	 
+	public String obtenerRutaAbsolutaAprobacion() {
+		return this.getvUbidocapr()+this.getvNomarchdocaprob()+"."+this.getvExtarchdocaprob();
+	}
+	
+	public String obtenerRutaAbsolutaPlanTrabajo() {
+		return this.getvUbiarchplan()+this.getvNomarchplan()+"."+this.getvExtarchplan();
+	}
 
 }

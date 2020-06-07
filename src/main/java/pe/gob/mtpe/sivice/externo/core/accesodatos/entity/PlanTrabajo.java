@@ -100,6 +100,8 @@ public class PlanTrabajo implements Serializable {
 	@Column(name = "V_EXTARCHDOCAPROB")
 	private String vExtarchdocaprob;
 	
+	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	private transient Date dFecaprobacionfin;
 	
 
 	public PlanTrabajo() {
@@ -286,6 +288,14 @@ public class PlanTrabajo implements Serializable {
 
 	public void setvExtarchdocaprob(String vExtarchdocaprob) {
 		this.vExtarchdocaprob = vExtarchdocaprob;
+	}
+
+	public Date getdFecaprobacionfin() {
+		return dFecaprobacionfin;
+	}
+
+	public void setdFecaprobacionfin(Date dFecaprobacionfin) {
+		this.dFecaprobacionfin = dFecaprobacionfin;
 	}
 
 	 

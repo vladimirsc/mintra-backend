@@ -3,17 +3,26 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.PlanTrabajoDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
+import pe.gob.mtpe.sivice.externo.integracion.api.ControladorPlanTrabajo;
 
 @Component
 public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements PlanTrabajoDao {
 
-	
+	private static final Logger logger = LoggerFactory.getLogger(PlanTrabajoDaoImpl.class);
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -34,8 +43,30 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 
 	@Override
 	public List<PlanTrabajo> buscar(PlanTrabajo planTrabajo) {
-		// TODO Auto-generated method stub
-		return null;
+		 
+		EntityManager manager = createEntityManager();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		
+		CriteriaQuery<PlanTrabajo> criteriaQuery = builder.createQuery(PlanTrabajo.class);
+		Root<PlanTrabajo> root = criteriaQuery.from(PlanTrabajo.class);
+		
+		planTrabajo.setdFecaprobacion( (planTrabajo.getdFecaprobacion()!=null)?planTrabajo.getdFecaprobacion() : FechasUtil.convertStringToDate("01-01-1880")  );
+		planTrabajo.setdFecaprobacionfin( (planTrabajo.getdFecaprobacionfin() !=null)?planTrabajo.getdFecaprobacionfin() : FechasUtil.convertStringToDate("01-01-1880"));
+		
+		planTrabajo.setdFecinicio( (planTrabajo.getdFecinicio()!=null)? planTrabajo.getdFecinicio() : FechasUtil.convertStringToDate("01-01-1880"));
+		planTrabajo.setdFecfin((planTrabajo.getdFecfin()!=null)? planTrabajo.getdFecfin() : FechasUtil.convertStringToDate("01-01-1880"));
+		
+		Predicate valor1 = builder.equal(root.get("vCodigoplantrab"), planTrabajo.getvCodigoplantrab());
+		Predicate valor2 = builder.between(root.get("dFecaprobacion"), planTrabajo.getdFecaprobacion(), planTrabajo.getdFecaprobacionfin());
+		Predicate valor3 = builder.between(root.get("dFecinicio"), planTrabajo.getdFecinicio(), planTrabajo.getdFecfin());
+		Predicate finalbusqueda=builder.or(valor1,valor2,valor3);
+		
+		criteriaQuery.where(finalbusqueda);
+		Query<PlanTrabajo> query = (Query<PlanTrabajo>) manager.createQuery(criteriaQuery);
+		List<PlanTrabajo> resultado = query.getResultList();
+		manager.close();
+		logger.info("==========="+resultado.size());
+		return resultado;
 	}
 
 	@Override

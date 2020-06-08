@@ -51,10 +51,14 @@ public class FechasUtil {
 	
 	
 	public static Date fechaActual() {
-		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 		Calendar cal = Calendar.getInstance();
 		format.setCalendar(cal);
 		return cal.getTime();
 	}
+	
+	
+	
+	 
 
 }

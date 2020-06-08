@@ -2,19 +2,19 @@ package pe.gob.mtpe.sivice.externo.core.negocio.service;
 
 import java.util.List;
 
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesion;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 
 public interface SesionService {
 
-	List<Sesion> listar();
+	List<Sesiones> listar();
 
-	Sesion buscarPorId(Sesion sesion);
+	Sesiones buscarPorId(Sesiones sesion);
 
-	List<Sesion> buscar(Sesion sesion);
+	List<Sesiones> buscar(Sesiones sesion);
 
-	public Sesion Registrar(Sesion sesion);
+	public Sesiones Registrar(Long consejo,Long comision,Long tipoSesion, Sesiones sesion);
 
-	public Sesion Actualizar(Sesion sesion);
+	public Sesiones Actualizar(Long comision,Long tipoSesion,Sesiones sesion);
 
-	public Sesion Eliminar(Sesion sesion);
+	public Sesiones Eliminar(Sesiones sesion);
 }

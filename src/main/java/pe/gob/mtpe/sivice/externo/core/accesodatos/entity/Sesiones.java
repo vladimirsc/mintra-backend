@@ -8,15 +8,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "TBC_SESION")
-public class Sesion implements Serializable {
+@Table(name = "TBC_SESIONES")
+public class Sesiones implements Serializable {
 
 	/**
 	 * 
@@ -30,22 +34,14 @@ public class Sesion implements Serializable {
 	@Column(name = "SESION_ID_PK")
 	private Long sEsionidpk;
 
-	@Column(name = "TIPOSESION_FK")
-	private Long tIposesionfk;
-
-	@Column(name = "COMISION_FK")
-	private Long cOmisionfk;
-
 	@Column(name = "V_CODSESION")
 	private String vCodsesion;
 
 	@Column(name = "D_HORINICIO")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dHorinicio;
+	private String dHorinicio;
 
 	@Column(name = "D_HORFIN")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dHorfin;
+	private String dHorfin;
 
 	@Column(name = "D_FECREACION")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
@@ -71,8 +67,24 @@ public class Sesion implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "CONSEJOS_FK",nullable = false, insertable = true, updatable = true)
+	private Consejos consejofk;
+	
+	@OneToOne
+	@JoinColumn(name = "COMISION_FK",nullable = true, insertable = true, updatable = true)
+	private Comisiones comisionfk;
+	
+	@ManyToOne
+	@JoinColumn(name = "TIPOSESION_FK",nullable = false, insertable = true, updatable = true)
+	private TipoSesiones tipoSesiones;
+	
+	
 
-	public Sesion() {
+	public Sesiones() {
 
 	}
 	
@@ -90,22 +102,6 @@ public class Sesion implements Serializable {
 		this.sEsionidpk = sEsionidpk;
 	}
 
-	public Long gettIposesionfk() {
-		return tIposesionfk;
-	}
-
-	public void settIposesionfk(Long tIposesionfk) {
-		this.tIposesionfk = tIposesionfk;
-	}
-
-	public Long getcOmisionfk() {
-		return cOmisionfk;
-	}
-
-	public void setcOmisionfk(Long cOmisionfk) {
-		this.cOmisionfk = cOmisionfk;
-	}
-
 	public String getvCodsesion() {
 		return vCodsesion;
 	}
@@ -114,19 +110,19 @@ public class Sesion implements Serializable {
 		this.vCodsesion = vCodsesion;
 	}
 
-	public Date getdHorinicio() {
+	public String getdHorinicio() {
 		return dHorinicio;
 	}
 
-	public void setdHorinicio(Date dHorinicio) {
+	public void setdHorinicio(String dHorinicio) {
 		this.dHorinicio = dHorinicio;
 	}
 
-	public Date getdHorfin() {
+	public String getdHorfin() {
 		return dHorfin;
 	}
 
-	public void setdHorfin(Date dHorfin) {
+	public void setdHorfin(String dHorfin) {
 		this.dHorfin = dHorfin;
 	}
 
@@ -186,5 +182,30 @@ public class Sesion implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
+	public Consejos getConsejofk() {
+		return consejofk;
+	}
+
+	public void setConsejofk(Consejos consejofk) {
+		this.consejofk = consejofk;
+	}
+
+	public Comisiones getComisionfk() {
+		return comisionfk;
+	}
+
+	public void setComisionfk(Comisiones comisionfk) {
+		this.comisionfk = comisionfk;
+	}
+
+	public TipoSesiones getTipoSesiones() {
+		return tipoSesiones;
+	}
+
+	public void setTipoSesiones(TipoSesiones tipoSesiones) {
+		this.tipoSesiones = tipoSesiones;
+	}
+
+	 
 	 
 }

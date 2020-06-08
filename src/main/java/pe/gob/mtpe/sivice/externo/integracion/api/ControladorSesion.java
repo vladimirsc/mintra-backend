@@ -3,6 +3,7 @@ package pe.gob.mtpe.sivice.externo.integracion.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesion;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.SesionService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -34,19 +37,20 @@ public class ControladorSesion {
 	private SesionService sesionService;
 
 	@GetMapping("/")
-	public List<Sesion> listarSesion() {
+	public List<Sesiones> listarSesion() {
 		logger.info("============  BUSCAR listarSesion =================");
+		//falta adicionar el consejo como parametro eso de la session se obtiene
 		return sesionService.listar();
 	}
 
 	@PostMapping("/buscar")
-	public List<Sesion> buscarSesion(@RequestBody Sesion buscar) {
+	public List<Sesiones> buscarSesion(@RequestBody Sesiones buscar) {
 		return sesionService.buscar(buscar);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorIdPlanTrabajo(@PathVariable Long id) {
-		Sesion generico  = new Sesion();
+		Sesiones generico  = new Sesiones();
 		generico.setsEsionidpk(id); 
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -65,15 +69,29 @@ public class ControladorSesion {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		return new ResponseEntity<Sesion>(generico,HttpStatus.OK);
+		return new ResponseEntity<Sesiones>(generico,HttpStatus.OK);
 	}
 
-	@PostMapping("/sesion")
-	public ResponseEntity<?> registrarSesion(@RequestBody Sesion generico) {
+	@PostMapping("/registrar")
+	public ResponseEntity<?> registrarSesion(
+			 @RequestParam(value="consejofk")   Long consejofk,
+			 @RequestParam(value="cOmisionfk")  Long cOmisionfk,
+			 @RequestParam(value="tiposesion")  Long tiposesion,
+			 @RequestParam(value="dFecreacion") String dFecreacion,
+			 @RequestParam(value="dHorinicio")  String dHorinicio,
+			 @RequestParam(value="dHorfin")     String dHorfin
+			) {
 		logger.info("============  BUSCAR PROFESION =================");
+		// OBTENER 
+		Sesiones generico = new Sesiones();
 		Map<String, Object> response = new HashMap<>();
 		try {
-			generico = sesionService.Registrar(generico);
+			
+			 
+			 generico.setdFecreacion(FechasUtil.convertStringToDate(dFecreacion));
+			 generico.setdHorinicio(dHorinicio);
+			 generico.setdHorfin(dHorfin);
+			 generico = sesionService.Registrar(consejofk,cOmisionfk,tiposesion,generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
@@ -81,41 +99,50 @@ public class ControladorSesion {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		return new ResponseEntity<Sesion>(generico,HttpStatus.CREATED);
+		return new ResponseEntity<Sesiones>(generico,HttpStatus.CREATED);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<?> actualizarSesion(@RequestBody Sesion sesion) {
+	@PutMapping("/actualizar")
+	public ResponseEntity<?> actualizarSesion( 
+			 @RequestParam(value="sEsionidpk")  Long sEsionidpk,
+			 @RequestParam(value="cOmisionfk")  Long cOmisionfk,
+			 @RequestParam(value="tiposesion")  Long tiposesion,
+			 @RequestParam(value="dFecreacion") String dFecreacion,
+			 @RequestParam(value="dHorinicio")  String dHorinicio,
+			 @RequestParam(value="dHorfin")     String dHorfin,
+			 @RequestParam(value="codusuario")  Long codusuario
+			) {
 		logger.info("============  BUSCAR PROFESION =================");
-		Sesion generico = new Sesion();
+		Sesiones generico = new Sesiones();
 		Map<String, Object> response = new HashMap<>();
 		try {
-			
-			generico = sesionService.buscarPorId(sesion);
+			generico.setsEsionidpk(sEsionidpk);
+			generico = sesionService.buscarPorId(generico);
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.SESION_MSG_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.SESION_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ENTIDAD, sesion);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-			 
-			sesion.setnUsureg(generico.getnUsureg());
-			sesion.setdFecreg(generico.getdFecreg());
-			generico = sesionService.Actualizar(sesion);
+			generico.setdFecreacion(FechasUtil.convertStringToDate(dFecreacion));
+			 generico.setdHorinicio(dHorinicio);
+			 generico.setdHorfin(dHorfin); 
+			 generico.setnUsumodifica(codusuario);
+			generico = sesionService.Actualizar(cOmisionfk,tiposesion,generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			response.put(ConstantesUtil.X_ENTIDAD, sesion);
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
  
-		return new ResponseEntity<Sesion>(generico,HttpStatus.OK);
+		return new ResponseEntity<Sesiones>(generico,HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminarSesion(@PathVariable Long id) {
 		logger.info("============  BUSCAR PROFESION =================");
-		Sesion generico =  new Sesion();
+		Sesiones generico =  new Sesiones();
 		generico.setsEsionidpk(id); 
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -135,7 +162,7 @@ public class ControladorSesion {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
  
-		return new ResponseEntity<Sesion>(generico,HttpStatus.OK);
+		return new ResponseEntity<Sesiones>(generico,HttpStatus.OK);
 
 	}
 

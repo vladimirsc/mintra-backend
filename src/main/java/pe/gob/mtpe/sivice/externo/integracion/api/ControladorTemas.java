@@ -3,6 +3,7 @@ package pe.gob.mtpe.sivice.externo.integracion.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Temas;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoTemas;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.TemaService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -143,8 +145,12 @@ public class ControladorTemas {
 				generico.setvUbiarchivo3(archivo3.getUbicacion());
 				generico.setvExtarchivo3(archivo3.getExtension());
 				
+				TipoTemas pipoTema =  new TipoTemas();
+				pipoTema.settIpotemaidpk(tIpotemafk);
+				
 				generico.setsEsionfk(sEsionfk);
-				generico.settIpotemafk(tIpotemafk);
+				//generico.settIpotemafk(tIpotemafk);
+				generico.settIpotemafk(pipoTema);
 				generico.setvDescripcion(vDescripcion);
 				
 				generico = temaService.Registrar(generico);

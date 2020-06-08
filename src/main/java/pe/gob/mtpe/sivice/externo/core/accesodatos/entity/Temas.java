@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -33,8 +35,7 @@ public class Temas implements Serializable {
 	@Column(name = "SESION_FK")
 	private Long sEsionfk;
 
-	@Column(name = "TIPOTEMA_FK")
-	private Long tIpotemafk;
+	 
 
 	@Column(name = "V_DESCRIPCION")
 	private String vDescripcion;
@@ -102,7 +103,12 @@ public class Temas implements Serializable {
 	
 	@Column(name = "V_EXTARCHIVO3")
 	private String vExtarchivo3;
-
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "TIPOTEMA_FK")
+	private TipoTemas tIpotemafk;
+	
 	public Temas() {
 
 	}
@@ -129,13 +135,7 @@ public class Temas implements Serializable {
 		this.sEsionfk = sEsionfk;
 	}
 
-	public Long gettIpotemafk() {
-		return tIpotemafk;
-	}
-
-	public void settIpotemafk(Long tIpotemafk) {
-		this.tIpotemafk = tIpotemafk;
-	}
+	 
 
 	public String getvDescripcion() {
 		return vDescripcion;
@@ -295,6 +295,14 @@ public class Temas implements Serializable {
 
 	public void setvExtarchivo3(String vExtarchivo3) {
 		this.vExtarchivo3 = vExtarchivo3;
+	}
+
+	public TipoTemas gettIpotemafk() {
+		return tIpotemafk;
+	}
+
+	public void settIpotemafk(TipoTemas tIpotemafk) {
+		this.tIpotemafk = tIpotemafk;
 	}
 
 	 

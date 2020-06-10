@@ -43,7 +43,7 @@ public class SesionServiceImpl implements SesionService {
 		return sesionDao.buscar(sesion);
 	}
 
-	@SuppressWarnings("null")
+	 
 	@Override
 	public Sesiones Registrar(Long consejo, Long comision, Long tipoSesion, Sesiones sesion) {
 

@@ -26,8 +26,8 @@ public class ComisionConsejeroServiceImpl implements ComisionConsejeroService {
 	}
 
 	@Override
-	public List<ComiConsej> buscar(ComiConsej comiConsej) {
-		return comisiConsejeDao.buscar(comiConsej);
+	public List<ComiConsej> buscar(Long comision) {
+		return comisiConsejeDao.buscar(comision);
 	}
 
 	@Override
@@ -43,6 +43,12 @@ public class ComisionConsejeroServiceImpl implements ComisionConsejeroService {
 	@Override
 	public ComiConsej Eliminar(ComiConsej comiConsej) {
 		return comisiConsejeDao.Eliminar(comiConsej);
+	}
+
+	@Override
+	public List<ComiConsej> listaConsejerosPorComision(Long idcomision) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -96,4 +96,10 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 		return consejeroDao.buscarPorDni(consejero);
 	}
 
+	@Override
+	public List<Consejeros> listarConsejerosPorConsejo(Long idconsejo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

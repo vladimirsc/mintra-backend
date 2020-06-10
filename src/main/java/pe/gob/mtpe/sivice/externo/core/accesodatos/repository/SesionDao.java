@@ -1,7 +1,7 @@
 package pe.gob.mtpe.sivice.externo.core.accesodatos.repository;
 
 import java.util.List;
-
+ 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 
 public interface SesionDao {
@@ -17,4 +17,6 @@ public interface SesionDao {
 	public Sesiones Actualizar(Sesiones sesion);
 
 	public Sesiones Eliminar(Sesiones sesion);
+	
+	
 }

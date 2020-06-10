@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Component;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.SesionDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -65,5 +65,7 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 		manager.close();
 		return StrcorrelativoFinal;
 	}
+
+	 
 
 }

@@ -342,5 +342,11 @@ public class ConstantesUtil {
 
 	// eliminacion
 	public static final String TEMA_MSG_EXITO_ELIMINAR = "El Tema fue eliminado con \u00e9xito con con codigo de Acta N° ";
+	
+	
+	public static final String C_FLAG_ASISTIO_SI="1";
+	public static final String C_FLAG_ASISTIO_NO="0";
+	public static final String C_HORA_INICIO_DEFAULT="00:00 AM";
+	public static final String C_HORA_FINALDEFAULT="00:00 AM";
 
 }

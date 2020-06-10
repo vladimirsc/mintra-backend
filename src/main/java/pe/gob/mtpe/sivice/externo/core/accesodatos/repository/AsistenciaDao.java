@@ -17,4 +17,8 @@ public interface AsistenciaDao {
 
 	public Asistencias Eliminar(Asistencias asistencia);
 	
+	Long cantidadAsistentesPorSesion(Long idsesion);
+	
+	List<Asistencias> listarConsejerosAsistencia(Long idsesion);
+	
 }

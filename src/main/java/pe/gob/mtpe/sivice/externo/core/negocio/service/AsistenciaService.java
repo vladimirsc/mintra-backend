@@ -2,7 +2,9 @@ package pe.gob.mtpe.sivice.externo.core.negocio.service;
 
 import java.util.List;
 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.AsistenciaConsejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Asistencias;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 
 public interface AsistenciaService {
 	
@@ -17,4 +19,10 @@ public interface AsistenciaService {
 	public Asistencias Actualizar(Asistencias asistencia);
 
 	public Asistencias Eliminar(Asistencias asistencia);
+	
+	Sesiones buscarSesion(Sesiones sesiones);
+	
+	Long cantidadAsistentesPorSesion(Long idsesion);
+	
+	List<AsistenciaConsejeros> listarConsejerosAsistencia(Long idsesion);
 }

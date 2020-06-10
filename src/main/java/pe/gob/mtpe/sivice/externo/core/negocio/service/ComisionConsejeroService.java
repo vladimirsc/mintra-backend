@@ -10,12 +10,14 @@ public interface ComisionConsejeroService {
 
 	ComiConsej buscarPorId(ComiConsej comiConsej);
 
-	List<ComiConsej> buscar(ComiConsej comiConsej);
+	List<ComiConsej> buscar(Long comision);
 
 	public ComiConsej Registrar(ComiConsej comiConsej);
 
 	public ComiConsej Actualizar(ComiConsej comiConsej);
 
 	public ComiConsej Eliminar(ComiConsej comiConsej);
+	
+	List<ComiConsej> listaConsejerosPorComision(Long idcomision);
 
 }

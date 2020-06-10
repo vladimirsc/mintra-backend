@@ -22,4 +22,6 @@ public interface ConsejeroDao {
 	Consejeros buscarPorTipoDocNumero(Consejeros consejero);
 
 	List<Consejeros> listarConsejerosPorComision(Consejeros consejero);
+	
+	List<Consejeros> listarConsejerosPorConsejo(Long idconsejo);
 }

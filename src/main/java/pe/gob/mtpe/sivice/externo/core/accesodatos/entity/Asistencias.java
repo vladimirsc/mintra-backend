@@ -2,12 +2,13 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne; 
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -23,33 +24,27 @@ public class Asistencias implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBD_ASISTENCIAS") 
-	@SequenceGenerator(name="SEQ_TBD_ASISTENCIAS",sequenceName="DB_TRAMITE.SEQ_TBD_ASISTENCIAS", allocationSize=1) 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TBD_ASISTENCIAS")
+	@SequenceGenerator(name = "SEQ_TBD_ASISTENCIAS", sequenceName = "DB_TRAMITE.SEQ_TBD_ASISTENCIAS", allocationSize = 1)
 	@Column(name = "ASISTENCIA_ID_PK")
 	private Long aSistenciaidpk;
 
-	@Column(name = "CONSEJERO_FK")
-	private Long cOnsejerofk;
-
-	@Column(name = "D_HOENTRADA")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dHoentrada;
+	@Column(name = "V_HOENTRADA")
+	private String vHoentrada;
 
 	@Column(name = "SESION_FK")
 	private Long sEsionfk;
 
-	@Column(name = "D_HOSALIDA")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dHosalida;
+	@Column(name = "V_HOSALIDA")
+	private String vHosalida;
 
 	@Column(name = "C_FLGASISTIO", length = 1)
 	private String cFlgasistio;
 
 	@Column(name = "C_FLGELIMINADO", length = 1)
 	private String cFlgeliminado;
-	
+
 	@Column(name = "D_FECELIMINA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecelimina;
@@ -67,15 +62,19 @@ public class Asistencias implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+	@ManyToOne
+	@JoinColumn(name="CONSEJERO_FK")
+	private  Consejeros consejero;
 
 	public Asistencias() {
 
 	}
-	
+
 	@PrePersist
 	protected void valoresIniciales() {
-	  this.dFecreg =new Date();
-	  this.cFlgeliminado="0";
+		this.dFecreg = new Date();
+		this.cFlgeliminado = "0";
 	}
 
 	public Long getaSistenciaidpk() {
@@ -86,20 +85,13 @@ public class Asistencias implements Serializable {
 		this.aSistenciaidpk = aSistenciaidpk;
 	}
 
-	public Long getcOnsejerofk() {
-		return cOnsejerofk;
+
+	public String getvHoentrada() {
+		return vHoentrada;
 	}
 
-	public void setcOnsejerofk(Long cOnsejerofk) {
-		this.cOnsejerofk = cOnsejerofk;
-	}
-
-	public Date getdHoentrada() {
-		return dHoentrada;
-	}
-
-	public void setdHoentrada(Date dHoentrada) {
-		this.dHoentrada = dHoentrada;
+	public void setvHoentrada(String vHoentrada) {
+		this.vHoentrada = vHoentrada;
 	}
 
 	public Long getsEsionfk() {
@@ -110,12 +102,12 @@ public class Asistencias implements Serializable {
 		this.sEsionfk = sEsionfk;
 	}
 
-	public Date getdHosalida() {
-		return dHosalida;
+	public String getvHosalida() {
+		return vHosalida;
 	}
 
-	public void setdHosalida(Date dHosalida) {
-		this.dHosalida = dHosalida;
+	public void setvHosalida(String vHosalida) {
+		this.vHosalida = vHosalida;
 	}
 
 	public String getcFlgasistio() {
@@ -174,6 +166,15 @@ public class Asistencias implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
-	 
+	public Consejeros getConsejero() {
+		return consejero;
+	}
 
+	public void setConsejero(Consejeros consejero) {
+		this.consejero = consejero;
+	}
+
+	 
+	 
+	
 }

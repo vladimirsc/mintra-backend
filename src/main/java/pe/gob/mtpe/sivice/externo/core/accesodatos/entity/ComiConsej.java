@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -29,14 +31,14 @@ public class ComiConsej implements Serializable {
 	@SequenceGenerator(name="SEQ_TBD_COMI_CONSEJ",sequenceName="DB_TRAMITE.SEQ_TBD_COMI_CONSEJ", allocationSize=1) 
 	@Column(name = "COMI_CONS_ID_PK")
 	private Long cOmiconsidpk;
+	
+	@Column(name="COMISION_FK")
+	private  Long comisionfk;
 
 	@Column(name = "TPCONSEJERO_FK")
 	private Long tPconsejerofk;
 
-	@Column(name = "CONSEJERO_FK")
-	private Long cOnsejerofk;
-
-	@Column(name = "C_FLGELIMINADO", length = 1)
+	 @Column(name = "C_FLGELIMINADO", length = 1)
 	private String cFlgeliminado;
 	
 	@Column(name = "D_FECELIMINA")
@@ -56,6 +58,14 @@ public class ComiConsej implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+	
+	@ManyToOne
+	@JoinColumn(name="CONSEJERO_FK")
+	private  Consejeros consejero;
+	 
+	
+	
 
 	public ComiConsej() {
 
@@ -82,14 +92,7 @@ public class ComiConsej implements Serializable {
 	public void settPconsejerofk(Long tPconsejerofk) {
 		this.tPconsejerofk = tPconsejerofk;
 	}
-
-	public Long getcOnsejerofk() {
-		return cOnsejerofk;
-	}
-
-	public void setcOnsejerofk(Long cOnsejerofk) {
-		this.cOnsejerofk = cOnsejerofk;
-	}
+ 
 
 	public String getcFlgeliminado() {
 		return cFlgeliminado;
@@ -138,6 +141,25 @@ public class ComiConsej implements Serializable {
 	public void setdFecmodifica(Date dFecmodifica) {
 		this.dFecmodifica = dFecmodifica;
 	}
+
+	public Consejeros getConsejero() {
+		return consejero;
+	}
+
+	public void setConsejero(Consejeros consejero) {
+		this.consejero = consejero;
+	}
+
+	public Long getComisionfk() {
+		return comisionfk;
+	}
+
+	public void setComisionfk(Long comisionfk) {
+		this.comisionfk = comisionfk;
+	}
+
+	 
+	 
 
 	 
 }

@@ -31,7 +31,7 @@ public class ComisionConsejeroDaoImpl extends BaseDao<Long, ComiConsej> implemen
 	}
 
 	@Override
-	public List<ComiConsej> buscar(ComiConsej comiConsej) {
+	public List<ComiConsej> buscar(Long comision) {
 		return null;
 	}
 
@@ -54,6 +54,19 @@ public class ComisionConsejeroDaoImpl extends BaseDao<Long, ComiConsej> implemen
 		comiConsej.setcFlgeliminado(ConstantesUtil.C_INDC_ACTIVO);
 		actualizar(comiConsej);
 		return comiConsej;
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ComiConsej> listaConsejerosPorComision(Long idcomision) {
+		EntityManager manager = createEntityManager();
+		List<ComiConsej> lista = manager
+				.createQuery("FROM ComiConsej c   WHERE c.comisionfk=:comision AND c.cFlgeliminado=:eliminado")
+				.setParameter("comision", idcomision)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
 	}
 
 }

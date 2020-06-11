@@ -1,5 +1,6 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.SesionService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
@@ -44,8 +46,30 @@ public class ControladorSesion {
 	}
 
 	@PostMapping("/buscar")
-	public List<Sesiones> buscarSesion(@RequestBody Sesiones buscar) {
-		return sesionService.buscar(buscar);
+	public List<Sesiones> buscarSesion(
+			@RequestParam("codigosesion")  String codigosesion,
+			@RequestParam("tiposesion")    Long tiposesion,
+			@RequestParam("fechainicio")   String fechainicio,
+			@RequestParam("fechafin")      String fechafin
+			) {
+		List<Sesiones> generico = new  ArrayList<Sesiones>();
+		Sesiones sesionbuscar = new Sesiones();
+		
+		 try {
+			 if(tiposesion!=null) {
+				 TipoSesiones tiposesiones = new TipoSesiones();
+				 tiposesiones.settIposesionidpk(tiposesion); 
+			  }
+
+			 sesionbuscar.setvCodsesion(codigosesion); 
+			 sesionbuscar.setdFechaInicio(FechasUtil.convertStringToDate(fechainicio));
+			 sesionbuscar.setdFechaFin(FechasUtil.convertStringToDate(fechafin));
+			 
+			 generico = sesionService.buscar(sesionbuscar);
+		} catch (Exception e) {
+			generico = null;
+		}
+		return generico;
 	}
 	
 	@GetMapping("/{id}")

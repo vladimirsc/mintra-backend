@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "TBC_SESIONES")
+@Table(name = "TBC_SESIONES",schema="DB_TRAMITE")
 public class Sesiones implements Serializable {
 
 	/**
@@ -82,7 +82,9 @@ public class Sesiones implements Serializable {
 	@JoinColumn(name = "TIPOSESION_FK",nullable = false, insertable = true, updatable = true)
 	private TipoSesiones tipoSesiones;
 	
+	private transient Date dFechaInicio;
 	
+	private transient Date dFechaFin;
 
 	public Sesiones() {
 
@@ -204,6 +206,22 @@ public class Sesiones implements Serializable {
 
 	public void setTipoSesiones(TipoSesiones tipoSesiones) {
 		this.tipoSesiones = tipoSesiones;
+	}
+
+	public Date getdFechaInicio() {
+		return dFechaInicio;
+	}
+
+	public void setdFechaInicio(Date dFechaInicio) {
+		this.dFechaInicio = dFechaInicio;
+	}
+
+	public Date getdFechaFin() {
+		return dFechaFin;
+	}
+
+	public void setdFechaFin(Date dFechaFin) {
+		this.dFechaFin = dFechaFin;
 	}
 
 	 

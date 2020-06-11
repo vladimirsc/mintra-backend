@@ -66,6 +66,9 @@ public class Asistencias implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="CONSEJERO_FK")
 	private  Consejeros consejero;
+	
+	@Column(name = "INVITADOS_FK")
+	private Long iNvitadosfk;
 
 	public Asistencias() {
 
@@ -172,6 +175,14 @@ public class Asistencias implements Serializable {
 
 	public void setConsejero(Consejeros consejero) {
 		this.consejero = consejero;
+	}
+
+	public Long getiNvitadosfk() {
+		return iNvitadosfk;
+	}
+
+	public void setiNvitadosfk(Long iNvitadosfk) {
+		this.iNvitadosfk = iNvitadosfk;
 	}
 
 	 

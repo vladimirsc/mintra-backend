@@ -237,7 +237,7 @@ public class ControladorPlanTrabajo {
 			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNomarchdocaprob()+"."+generico.getvExtarchdocaprob());
 			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 
 	}
@@ -253,7 +253,7 @@ public class ControladorPlanTrabajo {
 			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNomarchplan()+"."+generico.getvExtarchplan());
 			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 
 	}

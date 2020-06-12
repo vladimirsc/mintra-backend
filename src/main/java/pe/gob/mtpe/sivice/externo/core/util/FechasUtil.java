@@ -31,7 +31,7 @@ public class FechasUtil {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+		
 		}
 
 		return StrcorrelativoFinal;

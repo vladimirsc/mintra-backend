@@ -17,7 +17,7 @@ public class InvitadoServiceImpl implements InvitadoService {
 
 	@Override
 	public Invitados buscarPorId(Invitados invitados) {
-		// TODO Auto-generated method stub
+		
 		return invitadosDao.buscarPorId(invitados);
 	}
 

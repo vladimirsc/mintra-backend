@@ -198,7 +198,7 @@ public class ControladorActas {
 			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNombrearchivo()+"."+generico.getvArchivoextension());
 			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 
 	}

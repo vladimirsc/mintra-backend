@@ -47,7 +47,7 @@ public class ComisionConsejeroServiceImpl implements ComisionConsejeroService {
 
 	@Override
 	public List<ComiConsej> listaConsejerosPorComision(Long idcomision) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

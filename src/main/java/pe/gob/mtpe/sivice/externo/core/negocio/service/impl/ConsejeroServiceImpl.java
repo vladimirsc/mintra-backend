@@ -53,19 +53,19 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 
 	@Override
 	public Consejeros Registrar(Consejeros consejero) {
-		// TODO Auto-generated method stub
+		
 		return consejeroDao.Registrar(consejero);
 	}
 
 	@Override
 	public Consejeros Actualizar(Consejeros consejero) {
-		// TODO Auto-generated method stub
+		
 		return consejeroDao.Actualizar(consejero);
 	}
 
 	@Override
 	public Consejeros Eliminar(Consejeros consejero) {
-		// TODO Auto-generated method stub
+		
 		return consejeroDao.Eliminar(consejero);
 	}
 
@@ -98,7 +98,7 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 
 	@Override
 	public List<Consejeros> listarConsejerosPorConsejo(Long idconsejo) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

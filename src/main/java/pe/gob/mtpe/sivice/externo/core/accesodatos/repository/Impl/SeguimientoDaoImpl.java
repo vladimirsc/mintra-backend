@@ -36,7 +36,7 @@ public class SeguimientoDaoImpl extends BaseDao<Long, Seguimientos> implements S
 
 	@Override
 	public List<Seguimientos> buscar(Seguimientos seguimientos) {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 

@@ -189,5 +189,7 @@ public class ControladorSesion {
 		return new ResponseEntity<Sesiones>(generico,HttpStatus.OK);
 
 	}
+	
+ 
 
 }

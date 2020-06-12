@@ -24,7 +24,7 @@ public class ComisionServiceimpl implements ComisionService {
 
 	@Override
 	public Comisiones buscarPorId(Comisiones comisiones) {
-		// TODO Auto-generated method stub
+		
 		return ComisionDao.buscarPorId(comisiones);
 	}
 

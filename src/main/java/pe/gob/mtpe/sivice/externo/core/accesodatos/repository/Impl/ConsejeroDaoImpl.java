@@ -106,7 +106,7 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 
 	@Override
 	public Consejeros buscarPorTipoDocNumero(Consejeros consejero) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

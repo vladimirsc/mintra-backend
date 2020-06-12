@@ -45,25 +45,25 @@ public class PersonaDaoImpl extends BaseDao<Long, Personas> implements PersonaDa
 
 	@Override
 	public List<Personas> listar() {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 
 	@Override
 	public List<Personas> buscar(Personas personas) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Personas ActualizarPersona(Personas personas) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Personas EliminarPersona(Personas personas) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

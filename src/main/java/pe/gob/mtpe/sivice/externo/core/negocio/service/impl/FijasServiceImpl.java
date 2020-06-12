@@ -110,13 +110,13 @@ public class FijasServiceImpl implements FijasService {
 
 	@Override
 	public List<Entidades> listarEntidades() {
-		// TODO Auto-generated method stub
+		
 		return fijasDao.listarEntidades();
 	}
 
 	@Override
 	public Entidades buscarPorEntidad(Entidades entidad) {
-		// TODO Auto-generated method stub
+		
 		return fijasDao.buscarPorEntidad(entidad);
 	}
 

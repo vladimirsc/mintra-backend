@@ -80,7 +80,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Override
 	public Sesiones buscarSesion(Sesiones sesiones) {
-		// TODO Auto-generated method stub
+		
 		return SesionDao.buscarPorId(sesiones);
 	}
 

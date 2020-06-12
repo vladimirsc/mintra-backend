@@ -306,7 +306,7 @@ public class ControladorConsejeros {
 			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNombredocasig()+"."+generico.getvExtdocasig());
 			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 
 	}

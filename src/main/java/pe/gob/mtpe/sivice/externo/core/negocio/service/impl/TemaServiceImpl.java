@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Temas;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.SesionDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.TemaDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.TemaService;
 
@@ -16,10 +18,13 @@ public class TemaServiceImpl implements TemaService {
 	
 	@Autowired
 	private TemaDao temaDao;
+	
+	@Autowired
+	private SesionDao sesionDao;
 
 	@Override
 	public List<Temas> listar() {
-		return temaDao.listar();
+		return null;
 	}
 
 	@Override
@@ -45,6 +50,16 @@ public class TemaServiceImpl implements TemaService {
 	@Override
 	public Temas Eliminar(Temas temas) {
 		return temaDao.Eliminar(temas);
+	}
+
+	@Override
+	public Sesiones cabeceraSesion(Sesiones sesiones) { 
+		return sesionDao.buscarPorId(sesiones);
+	}
+
+	@Override
+	public List<Temas> temasPorSesion(Long idsesion) { 
+		return temaDao.temasPorSesion(idsesion);
 	}
 
 }

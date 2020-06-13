@@ -348,5 +348,9 @@ public class ConstantesUtil {
 	public static final String C_FLAG_ASISTIO_NO="0";
 	public static final String C_HORA_INICIO_DEFAULT="00:00 AM";
 	public static final String C_HORA_FINALDEFAULT="00:00 AM";
+	
+	
+    public static final String C_ARCHIVO_MENSAJE ="Archivo";
+    public static final String C_ARCHIVO_ERROR_MENSAJE ="No se encontro el Archivo";
 
 }

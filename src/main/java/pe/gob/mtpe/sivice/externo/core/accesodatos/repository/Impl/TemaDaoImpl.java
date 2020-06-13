@@ -57,6 +57,18 @@ public class TemaDaoImpl extends BaseDao<Long, Temas> implements TemaDao {
 		actualizar(temas);
 		return temas;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Temas> temasPorSesion(Long idsesion) {
+		EntityManager manager = createEntityManager();
+		List<Temas> lista = manager
+				.createQuery("FROM Temas c WHERE c.sEsionfk=:sesion  AND c.cFlgeliminado=:eliminado ORDER BY c.tEmaidpk DESC")
+				.setParameter("sesion", idsesion)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
+	}
 	
 	
 

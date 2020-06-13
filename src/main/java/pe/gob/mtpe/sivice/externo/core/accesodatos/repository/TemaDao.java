@@ -1,7 +1,6 @@
 package pe.gob.mtpe.sivice.externo.core.accesodatos.repository;
 
 import java.util.List;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Temas;
 
 public interface TemaDao {
@@ -17,4 +16,7 @@ public interface TemaDao {
 	public Temas Actualizar(Temas temas);
 
 	public Temas Eliminar(Temas temas);
+	
+	List<Temas> temasPorSesion (Long idsesion);
+	 
 }

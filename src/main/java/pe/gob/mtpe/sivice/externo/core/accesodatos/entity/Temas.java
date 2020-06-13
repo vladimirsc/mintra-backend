@@ -25,17 +25,14 @@ public class Temas implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBD_TEMAS") 
-	@SequenceGenerator(name="SEQ_TBD_TEMAS",sequenceName="DB_TRAMITE.SEQ_TBD_TEMAS", allocationSize=1) 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TBD_TEMAS")
+	@SequenceGenerator(name = "SEQ_TBD_TEMAS", sequenceName = "DB_TRAMITE.SEQ_TBD_TEMAS", allocationSize = 1)
 	@Column(name = "TEMA_ID_PK")
 	private Long tEmaidpk;
 
 	@Column(name = "SESION_FK")
 	private Long sEsionfk;
-
-	 
 
 	@Column(name = "V_DESCRIPCION")
 	private String vDescripcion;
@@ -55,7 +52,7 @@ public class Temas implements Serializable {
 
 	@Column(name = "C_FLGELIMINADO", length = 1)
 	private String cFlgeliminado;
-	
+
 	@Column(name = "D_FECELIMINA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecelimina;
@@ -73,50 +70,46 @@ public class Temas implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
-	
-	
+
 	@Column(name = "V_NOMBREARCHIVO1")
 	private String vNombrearchivo1;
-	
+
 	@Column(name = "V_UBIARCHIVO1")
 	private String vUbiarchivo1;
-	
+
 	@Column(name = "V_EXTARCHIVO1")
 	private String vExtarchivo1;
-	
-	
+
 	@Column(name = "V_NOMBREARCHIVO2")
 	private String vNombrearchivo2;
-	
+
 	@Column(name = "V_UBIARCHIVO2")
 	private String vUbiarchivo2;
-	
+
 	@Column(name = "V_EXTARCHIVO2")
 	private String vExtarchivo2;
-	
-	
+
 	@Column(name = "V_NOMBREARCHIVO3")
 	private String vNombrearchivo3;
-	
+
 	@Column(name = "V_UBIARCHIVO3")
 	private String vUbiarchivo3;
-	
+
 	@Column(name = "V_EXTARCHIVO3")
 	private String vExtarchivo3;
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "TIPOTEMA_FK")
 	private TipoTemas tIpotemafk;
-	
+
 	public Temas() {
 
 	}
-	
+
 	@PrePersist
 	protected void valoresIniciales() {
-	  this.dFecreg =new Date();
-	  this.cFlgeliminado="0";
+		this.dFecreg = new Date();
+		this.cFlgeliminado = "0";
 	}
 
 	public Long gettEmaidpk() {
@@ -134,8 +127,6 @@ public class Temas implements Serializable {
 	public void setsEsionfk(Long sEsionfk) {
 		this.sEsionfk = sEsionfk;
 	}
-
-	 
 
 	public String getvDescripcion() {
 		return vDescripcion;
@@ -305,6 +296,16 @@ public class Temas implements Serializable {
 		this.tIpotemafk = tIpotemafk;
 	}
 
-	 
-	 
+	public String obtenerRutaAbsolutaArchivoTema1() {
+		return this.getvUbiarchivo1()+ this.getvNombrearchivo1() + "." + this.getvExtarchivo1();
+	}
+
+	public String obtenerRutaAbsolutaArchivoTema2() {
+		return this.getvUbiarchivo2() + this.getvNombrearchivo2() + "." + this.getvExtarchivo2();
+	}
+
+	public String obtenerRutaAbsolutaArchivoTema3() {
+		return this.getvUbiarchivo3() + this.getvNombrearchivo3() + "." + this.getvExtarchivo3();
+	}
+
 }

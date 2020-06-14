@@ -2,6 +2,7 @@ package pe.gob.mtpe.sivice.externo.integracion.api;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Firmantes;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.FijasDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ActaService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -46,17 +52,137 @@ public class ControladorActas {
 
 	@Autowired
 	private ArchivoUtilitarioService archivoUtilitarioService;
+	
+	@Autowired
+	private FijasDao fijasDao;
+
 
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
+	
+ 
 
-	@GetMapping("/")
-	public List<Actas> listarActas() {
+	@GetMapping("/{idsesion}")  //CABECERA DEL ACTA (INFORMACION DE LA SESION)
+	public ResponseEntity<?> cabeceraActa(@PathVariable Long idsesion) {
 		logger.info("==========LISTAR ACTAS=============== ");
-		return actaService.listar();
-	}
+		Sesiones generico = new Sesiones();
+		Map<String, Object> response = new HashMap<>();
+		try {
+			generico.setsEsionidpk(idsesion);
+			generico = actaService.cabeceraActa(generico);
+			if(generico==null) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.ACTAS_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.ACTAS_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+	
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,
+					e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-	@GetMapping("/{id}")
+		return new ResponseEntity<Sesiones>(generico, HttpStatus.OK);
+		 
+	}
+	
+ 
+	@GetMapping("/actaporsesion/{idsesion}")   //CUERPO DEL ACTA POR SESION
+	ResponseEntity<?> actasPorSesion(@PathVariable Long idsesion){
+		Actas acta = new Actas();
+		Map<String, Object> response = new HashMap<>();
+		try {
+			//buscamos el acta de la sesion
+			acta = actaService.buscarActaPorIdSesion(idsesion);
+			 if(acta==null) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.ACTAS_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.ACTAS_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ENTIDAD, acta);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
+			 }
+
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD,acta);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Actas>(acta, HttpStatus.OK);
+	}
+	
+	@GetMapping("/listaracuerdosporacta/{idsesion}")  //CUERPO LISTA DE ACUERDOS POR ACTA
+	List<Acuerdos> listaAcuerdosPorActa(
+			@PathVariable Long idsesion
+	 ){
+		Actas acta = new Actas();
+		acta.setsEsionfk(idsesion);
+		List<Acuerdos> listarAcuerdos =  actaService.listaAcuerdosPorActa(acta);
+		
+		return listarAcuerdos;
+	}
+	
+	 
+	
+	@PostMapping("/registraracuerdos")               //REGISTRAR LOS ACUERDOS
+	public ResponseEntity<?> registrarAcuerdo(
+			@RequestParam("actafk")        Long actafk,
+			@RequestParam("vResponsable")  String vResponsable,
+			@RequestParam("vDesacuerdo")   String vDesacuerdo,
+			@RequestParam("entidadfk")       Long entidadfk,
+			@RequestParam("dFecatencion")  String dFecatencion
+			){
+		
+		
+		Map<String, Object> response = new HashMap<>();
+		Acuerdos acuerdo = new Acuerdos();
+		try {
+			Actas acta = new Actas();
+			acta.setaCtaidpk(actafk);
+			acta=actaService.buscarPorId(acta);
+			if(acta==null) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.ACTAS_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.ACTAS_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ENTIDAD, acta);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			Entidades entidad = new Entidades();
+			entidad.seteNtidadidpk(entidadfk);
+			entidad = fijasDao.buscarPorEntidad(entidad);
+			
+			acuerdo.setActa(acta);
+			acuerdo.setvResponsable(vResponsable);
+			acuerdo.setEntidad(entidad);
+			acuerdo.setvDesacuerdo(vDesacuerdo);
+			acuerdo.setdFecatencion(FechasUtil.convertStringToDate(dFecatencion));
+			acuerdo = actaService.registrarAcueros(acuerdo);
+			
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,
+					e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, acuerdo);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Acuerdos>(acuerdo, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/listarfirmantesporacta/{idsesion}") 
+	List<Firmantes> listarFirmantesPorActa(@PathVariable Long idsesion){
+		List<Firmantes>listarFirmantes = new ArrayList<Firmantes>();
+		
+		listarFirmantes = actaService.listarFirmentes(idsesion);
+		return listarFirmantes;
+	}
+	
+
+	@GetMapping("/infoacta/{id}")
 	public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
 		logger.info("========== BUSCAR ACTA ID=============== ");
 		Actas actas = new Actas();
@@ -151,14 +277,17 @@ public class ControladorActas {
 	}
 
 	@PostMapping("/registrar")
-	public ResponseEntity<?> registrar(@RequestParam("file") MultipartFile file,
-			@RequestParam("sesionfk") Long sesionfk, @RequestParam("fecha_acta") String fecha_acta) {
+	public ResponseEntity<?> registrar(
+			@RequestParam("docacta") MultipartFile docacta,
+			@RequestParam("sesionfk") Long sesionfk,
+			@RequestParam("fecha_acta") String fecha_acta
+	) {
 		Actas generico = new Actas();
 		Archivos archivo = new Archivos();
 
 		Map<String, Object> response = new HashMap<>();
 		try {
-			archivo = archivoUtilitarioService.cargarArchivo(file, ConstantesUtil.ACTA_ALIAS_CORRELATIVO);
+			archivo = archivoUtilitarioService.cargarArchivo(docacta, ConstantesUtil.ACTA_ALIAS_CORRELATIVO);
 
 			if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
 				generico.setsEsionfk(sesionfk);

@@ -70,7 +70,7 @@ public class ControladorAcuerdos {
 		return acuerdoService.buscar(buscar);
 	}
 
-	@PostMapping("/acuerdos")
+	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar(@RequestBody Acuerdos acuerdos) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Map<String, Object> response = new HashMap<>();

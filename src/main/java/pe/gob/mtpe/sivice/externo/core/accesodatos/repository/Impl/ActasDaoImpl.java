@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ActasDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
@@ -65,5 +66,37 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 		manager.close();
 		return StrcorrelativoFinal;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Actas buscarActaPorIdSesion(Long idSesion) {
+		Actas acta = new Actas();
+		EntityManager manager = createEntityManager();
+		List<Actas> lista = manager
+				.createQuery("FROM Actas b WHERE b.sEsionfk=:sesion AND b.cFlagelimina=:eliminado ORDER BY b.aCtaidpk DESC")
+				.setParameter("sesion", idSesion)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		 if(lista.isEmpty()) {
+			 acta =null;
+		 }else {
+			 acta = lista.get(0);
+		 }
+		return acta;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Acuerdos> listaAcuerdosPorActa(Actas actas) {
+		EntityManager manager = createEntityManager();
+		List<Acuerdos> lista = manager
+				.createQuery("FROM Acuerdos a INNER  JOIN a.acta ac WHERE ac.aCtaidpk=:actafk AND a.cFlgeliminado=:eliminado ORDER BY a.aCuerdoidpk DESC")
+				.setParameter("actafk", actas.getaCtaidpk())
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
+	}
+
+	 
 
 }

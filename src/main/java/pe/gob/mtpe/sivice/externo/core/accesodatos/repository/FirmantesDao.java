@@ -17,4 +17,6 @@ public interface FirmantesDao {
 	public Firmantes Actualizar(Firmantes firmantes);
 
 	public Firmantes Eliminar(Firmantes firmantes);
+	
+	List<Firmantes> listarFirmantesPorActa(Long idacta);
 }

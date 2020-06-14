@@ -2,12 +2,13 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne; 
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -29,15 +30,14 @@ public class Acuerdos implements Serializable {
 	@SequenceGenerator(name="SEQ_TBS_ACUERDOS",sequenceName="DB_TRAMITE.SEQ_TBS_ACUERDOS", allocationSize=1) 
 	@Column(name = "ACUERDO_ID_PK")
 	private Long aCuerdoidpk;
-
-	@Column(name = "CONSEJERO_FK")
-	private Long cOnsejerofk;
-
-	@Column(name = "ENTIDAD_FK")
-	private Long eNtidadfk;
-
-	@Column(name = "ACTA_FK")
-	private Long aCtafk;
+ 
+	@ManyToOne
+	@JoinColumn(name = "ACTA_FK",nullable = false, insertable = true, updatable = true)
+	private Actas acta;
+	
+	@ManyToOne
+	@JoinColumn(name = "ENTIDAD_FK",nullable = false, insertable = true, updatable = true)
+	private Entidades entidad;
 
 	@Column(name = "V_DESACUERDO")
 	private String vDesacuerdo;
@@ -70,6 +70,9 @@ public class Acuerdos implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+	@Column(name = "V_RESPONSABLE")
+	private String vResponsable;
 
 	public Acuerdos() {
 
@@ -89,28 +92,20 @@ public class Acuerdos implements Serializable {
 		this.aCuerdoidpk = aCuerdoidpk;
 	}
 
-	public Long getcOnsejerofk() {
-		return cOnsejerofk;
+	public Actas getActa() {
+		return acta;
 	}
 
-	public void setcOnsejerofk(Long cOnsejerofk) {
-		this.cOnsejerofk = cOnsejerofk;
+	public void setActa(Actas acta) {
+		this.acta = acta;
 	}
 
-	public Long geteNtidadfk() {
-		return eNtidadfk;
+	public Entidades getEntidad() {
+		return entidad;
 	}
 
-	public void seteNtidadfk(Long eNtidadfk) {
-		this.eNtidadfk = eNtidadfk;
-	}
-
-	public Long getaCtafk() {
-		return aCtafk;
-	}
-
-	public void setaCtafk(Long aCtafk) {
-		this.aCtafk = aCtafk;
+	public void setEntidad(Entidades entidad) {
+		this.entidad = entidad;
 	}
 
 	public String getvDesacuerdo() {
@@ -185,5 +180,14 @@ public class Acuerdos implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
+	public String getvResponsable() {
+		return vResponsable;
+	}
+
+	public void setvResponsable(String vResponsable) {
+		this.vResponsable = vResponsable;
+	}
+
+	 
 	 
 }

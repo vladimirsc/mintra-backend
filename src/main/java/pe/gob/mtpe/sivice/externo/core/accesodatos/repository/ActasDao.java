@@ -3,6 +3,7 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository;
 import java.util.List;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos; 
 
 public interface ActasDao {
 
@@ -17,4 +18,9 @@ public interface ActasDao {
 	public Actas Actualizar(Actas actas);
 
 	public Actas Eliminar(Actas actas);
+	
+	Actas buscarActaPorIdSesion(Long idSesion);
+	
+	List<Acuerdos> listaAcuerdosPorActa(Actas actas);
+	 
 }

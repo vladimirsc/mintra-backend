@@ -56,4 +56,16 @@ public class FirmantesDaoImpl extends BaseDao<Long, Firmantes> implements Firman
 		return firmantes;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Firmantes> listarFirmantesPorActa(Long idacta) {
+		EntityManager manager = createEntityManager();
+		List<Firmantes> lista = manager
+				.createQuery("FROM Firmantes b WHERE b.aCtafk=:actapk AND b.cFlgelimino=:eliminado ORDER BY b.fIrmanteidpk DESC")
+				.setParameter("actapk", idacta)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
+	}
+
 }

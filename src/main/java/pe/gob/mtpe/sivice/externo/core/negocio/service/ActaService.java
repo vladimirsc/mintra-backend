@@ -33,4 +33,5 @@ public interface ActaService {
 	
 	Acuerdos registrarAcueros(Acuerdos acuerdos);
 	
+	Firmantes actualizarFirmante(Firmantes firmantes);
 }

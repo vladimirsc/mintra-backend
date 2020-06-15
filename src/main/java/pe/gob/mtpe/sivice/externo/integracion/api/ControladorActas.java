@@ -173,13 +173,47 @@ public class ControladorActas {
 	}
 	
 	
-	@GetMapping("/listarfirmantesporacta/{idsesion}") 
+	@GetMapping("/listarfirmantesporacta/{idsesion}")           //LISTAMOS LOS FIRMANTES O REGISTRAMOS
 	List<Firmantes> listarFirmantesPorActa(@PathVariable Long idsesion){
 		List<Firmantes>listarFirmantes = new ArrayList<Firmantes>();
-		
 		listarFirmantes = actaService.listarFirmentes(idsesion);
 		return listarFirmantes;
 	}
+	
+	
+	@PutMapping("/actualizarfirmante")
+	public ResponseEntity<?> actualizar(
+			@RequestParam("fIrmanteidpk")     Long   fIrmanteidpk,
+			@RequestParam("actas")            Long   actas,
+			@RequestParam("vEntidad")         String vEntidad,
+			@RequestParam("vTipodocumento")   String vTipodocumento,
+			@RequestParam("vNumerodocumento") String vNumerodocumento,
+			@RequestParam("vNombre")          String vNombre,
+			@RequestParam("vTipo")            String vTipo,
+			@RequestParam("cFlgasistio")      String cFlgasistio
+	 ) {
+		Firmantes generico = new Firmantes();
+		Map<String, Object> response = new HashMap<>();
+		try {
+			 
+			generico.setfIrmanteidpk(fIrmanteidpk);
+			generico.setcFlgasistio(cFlgasistio);
+			generico = actaService.actualizarFirmante(generico);
+			
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,
+					e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Firmantes>(generico, HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
 	
 
 	@GetMapping("/infoacta/{id}")

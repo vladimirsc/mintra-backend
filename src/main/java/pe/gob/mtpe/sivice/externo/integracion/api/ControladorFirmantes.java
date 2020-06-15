@@ -94,7 +94,7 @@ public class ControladorFirmantes {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 
-			firmantes.setnUsureg(generico.getnUsureg());
+			//firmantes.setnUsureg(generico.getnUsureg());
 			firmantes.setdFecreg(generico.getdFecreg());
 			generico = firmanteService.Actualizar(firmantes);
 

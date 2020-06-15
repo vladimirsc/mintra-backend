@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -30,36 +32,49 @@ public class Firmantes implements Serializable {
 	@Column(name = "FIRMANTE_ID_PK")
 	private Long fIrmanteidpk;
 
-	@Column(name = "CONSEJERO_FK")
-	private Long cOnsejerofk;
-
-	@Column(name = "ACTA_FK")
-	private Long aCtafk;
-
-	@Column(name = "C_FLGASISTIO", length = 1)
+	@ManyToOne
+	@JoinColumn(name = "ACTA_FK",nullable = false, insertable = true, updatable = true)
+	private Actas actas;
+	
+	@Column(name = "V_ENTIDAD")
+	private String vEntidad;
+	
+	@Column(name = "V_TIPO_DOCUMENTO")
+	private String vTipodocumento;
+	
+	@Column(name = "V_NUMERO_DOCUMENTO")
+	private String vNumerodocumento;
+	
+	@Column(name = "V_NOMBRE")
+	private String vNombre;
+	
+	@Column(name = "V_TIPO")
+	private String vTipo;
+	
+	@Column(name = "C_FLGASISTIO")
 	private String cFlgasistio;
-
-	@Column(name = "C_FLGELIMINO", length = 1)
+	
+	@Column(name = "C_FLGELIMINO")
 	private String cFlgelimino;
 	
-	@Column(name = "D_FECELIMINA")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dFecelimina;
-
 	@Column(name = "N_USUREG")
-	private Long nUsureg;
-
+	private String nFsureg;
+	
+	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	@Column(name = "D_FECREG")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecreg;
-
+	
 	@Column(name = "N_USUMODIFICA")
-	private Long nUsumodifica;
-
-	@Column(name = "D_FECMODIFICA")
+	private String nUsumodifica;
+	
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	@Column(name = "D_FECMODIFICA")
 	private Date dFecmodifica;
-
+	
+	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	@Column(name = "D_FECELIMINA")
+	private Date dFecelimina;
+ 
 	public Firmantes() {
 
 	}
@@ -78,20 +93,52 @@ public class Firmantes implements Serializable {
 		this.fIrmanteidpk = fIrmanteidpk;
 	}
 
-	public Long getcOnsejerofk() {
-		return cOnsejerofk;
+	public Actas getActas() {
+		return actas;
 	}
 
-	public void setcOnsejerofk(Long cOnsejerofk) {
-		this.cOnsejerofk = cOnsejerofk;
+	public void setActas(Actas actas) {
+		this.actas = actas;
 	}
 
-	public Long getaCtafk() {
-		return aCtafk;
+	public String getvEntidad() {
+		return vEntidad;
 	}
 
-	public void setaCtafk(Long aCtafk) {
-		this.aCtafk = aCtafk;
+	public void setvEntidad(String vEntidad) {
+		this.vEntidad = vEntidad;
+	}
+
+	public String getvTipodocumento() {
+		return vTipodocumento;
+	}
+
+	public void setvTipodocumento(String vTipodocumento) {
+		this.vTipodocumento = vTipodocumento;
+	}
+
+	public String getvNumerodocumento() {
+		return vNumerodocumento;
+	}
+
+	public void setvNumerodocumento(String vNumerodocumento) {
+		this.vNumerodocumento = vNumerodocumento;
+	}
+
+	public String getvNombre() {
+		return vNombre;
+	}
+
+	public void setvNombre(String vNombre) {
+		this.vNombre = vNombre;
+	}
+
+	public String getvTipo() {
+		return vTipo;
+	}
+
+	public void setvTipo(String vTipo) {
+		this.vTipo = vTipo;
 	}
 
 	public String getcFlgasistio() {
@@ -110,20 +157,12 @@ public class Firmantes implements Serializable {
 		this.cFlgelimino = cFlgelimino;
 	}
 
-	public Date getdFecelimina() {
-		return dFecelimina;
+	public String getnFsureg() {
+		return nFsureg;
 	}
 
-	public void setdFecelimina(Date dFecelimina) {
-		this.dFecelimina = dFecelimina;
-	}
-
-	public Long getnUsureg() {
-		return nUsureg;
-	}
-
-	public void setnUsureg(Long nUsureg) {
-		this.nUsureg = nUsureg;
+	public void setnFsureg(String nFsureg) {
+		this.nFsureg = nFsureg;
 	}
 
 	public Date getdFecreg() {
@@ -134,11 +173,11 @@ public class Firmantes implements Serializable {
 		this.dFecreg = dFecreg;
 	}
 
-	public Long getnUsumodifica() {
+	public String getnUsumodifica() {
 		return nUsumodifica;
 	}
 
-	public void setnUsumodifica(Long nUsumodifica) {
+	public void setnUsumodifica(String nUsumodifica) {
 		this.nUsumodifica = nUsumodifica;
 	}
 
@@ -148,6 +187,14 @@ public class Firmantes implements Serializable {
 
 	public void setdFecmodifica(Date dFecmodifica) {
 		this.dFecmodifica = dFecmodifica;
+	}
+
+	public Date getdFecelimina() {
+		return dFecelimina;
+	}
+
+	public void setdFecelimina(Date dFecelimina) {
+		this.dFecelimina = dFecelimina;
 	}
 
 	 

@@ -103,24 +103,19 @@ public class ControladorAsistencia {
 
 		Map<String, Object> response = new HashMap<>();
 		Asistencias generico = new Asistencias();
-
 		try {
-
 			generico.setaSistenciaidpk(idAsistencia);
 			generico = asistenciaService.buscarPorId(generico);
-
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CALENDARIO_MSG_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.CALENDARIO_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-
 			generico.setcFlgasistio(cFlgasistio);
 			generico.setvHoentrada(vHoentrada);
 			generico.setvHosalida(vHosalida);
 			generico = asistenciaService.Actualizar(generico);
-
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,
@@ -128,7 +123,6 @@ public class ControladorAsistencia {
 			response.put(ConstantesUtil.X_ENTIDAD, generico);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 		return new ResponseEntity<Asistencias>(generico, HttpStatus.OK);
 	}
 
@@ -165,8 +159,7 @@ public class ControladorAsistencia {
 					infoAsistencia.setEntidad(generico.getConsejero().getvEntidad());
 					infoAsistencia.setTipoDocumento(generico.getConsejero().getvTipdocumento());
 					infoAsistencia.setNumeroDocumento(generico.getConsejero().getvNumdocumento());
-					infoAsistencia.setApellidosNombre(
-							generico.getConsejero().getvDesnombre() + "," + generico.getConsejero().getvDesappaterno()
+					infoAsistencia.setApellidosNombre( generico.getConsejero().getvDesnombre() + "," + generico.getConsejero().getvDesappaterno()
 									+ " " + generico.getConsejero().getvDesapmaterno());
 				}
 

@@ -90,7 +90,7 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 	public List<Acuerdos> listaAcuerdosPorActa(Actas actas) {
 		EntityManager manager = createEntityManager();
 		List<Acuerdos> lista = manager
-				.createQuery("FROM Acuerdos a INNER  JOIN a.acta ac WHERE ac.aCtaidpk=:actafk AND a.cFlgeliminado=:eliminado ORDER BY a.aCuerdoidpk DESC")
+				.createQuery("SELECT a FROM Acuerdos a INNER  JOIN a.acta ac WHERE ac.aCtaidpk=:actafk AND a.cFlgeliminado=:eliminado ORDER BY a.aCuerdoidpk DESC")
 				.setParameter("actafk", actas.getaCtaidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();

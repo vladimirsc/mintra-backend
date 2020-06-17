@@ -97,9 +97,11 @@ public class ControladorAsistencia {
 	}
 
 	@PutMapping("/actualizar")
-	public ResponseEntity<?> actualizarHoraAsistencia(@RequestParam(value = "idAsistencia") Long idAsistencia,
-			@RequestParam(value = "asistio") String cFlgasistio, @RequestParam(value = "horaEntrada") String vHoentrada,
-			@RequestParam(value = "horaSalida") String vHosalida) {
+	public ResponseEntity<?> actualizarHoraAsistencia(
+			@RequestParam(value = "idAsistencia") Long idAsistencia,
+			@RequestParam(value = "asistio")      String cFlgasistio,
+			@RequestParam(value = "horaEntrada")  String vHoentrada,
+			@RequestParam(value = "horaSalida")   String vHosalida) {
 
 		Map<String, Object> response = new HashMap<>();
 		Asistencias generico = new Asistencias();
@@ -183,12 +185,13 @@ public class ControladorAsistencia {
 
 	@PostMapping("/registrarinvitado")
 	public ResponseEntity<?> grabarInvitado(@RequestParam(value = "entidad") Long entidad,
-			@RequestParam(value = "sEsionfk") Long sEsionfk, @RequestParam(value = "tipodocumento") Long tipodocumento,
-			@RequestParam(value = "vNumerodocumento") String vNumerodocumento,
-			@RequestParam(value = "vNombre") String vNombre,
+			@RequestParam(value = "sEsionfk")          Long sEsionfk, 
+			@RequestParam(value = "tipodocumento")     Long tipodocumento,
+			@RequestParam(value = "vNumerodocumento")  String vNumerodocumento,
+			@RequestParam(value = "vNombre")           String vNombre,
 			@RequestParam(value = "vApellido_paterno") String vApellido_paterno,
 			@RequestParam(value = "vApellido_materno") String vApellido_materno,
-			@RequestParam(value = "vNumerocelular") String vNumerocelular) {
+			@RequestParam(value = "vNumerocelular")    String vNumerocelular) {
 		Invitados generico = new Invitados();
 		Map<String, Object> response = new HashMap<>();
 		try {

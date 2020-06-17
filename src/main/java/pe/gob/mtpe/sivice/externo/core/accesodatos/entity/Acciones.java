@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -15,8 +17,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "TBS_SEGUIMIENTOS")
-public class Seguimientos implements Serializable {
+@Table(name = "TBS_ACCIONES")
+public class Acciones implements Serializable {
 
 	/**
 	 * 
@@ -25,17 +27,22 @@ public class Seguimientos implements Serializable {
 
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBS_SEGUIMIENTOS") 
-	@SequenceGenerator(name="SEQ_TBS_SEGUIMIENTOS",sequenceName="DB_TRAMITE.SEQ_TBS_SEGUIMIENTOS", allocationSize=1) 
-	@Column(name = "SEGIMIENTO_ID_PK")
-	private Long sEgimientoidpk;
-
-	@Column(name = "CONSEJERO_FK")
-	private Long cOnsejerofk;
-
-	@Column(name = "ACUERDO_FK")
-	private Long aCuerdofk;
-
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBS_ACCIONES") 
+	@SequenceGenerator(name="SEQ_TBS_ACCIONES",sequenceName="DB_TRAMITE.SEQ_TBS_ACCIONES", allocationSize=1) 
+	@Column(name = "ACCIONES_ID_PK")
+	private Long aCcionesidpk;
+ 
+	@ManyToOne
+	@JoinColumn(name="ACUERDO_FK")
+	private Acuerdos acuerdo;
+	
+	@ManyToOne
+	@JoinColumn(name="ENTIDAD_FK")
+	private Entidades entidad;
+ 
+	@Column(name = "V_RESPONSABLE")
+	private String vResponsable;
+ 
 	@Column(name = "V_DESACCION")
 	private String vDesaccion;
 
@@ -49,9 +56,15 @@ public class Seguimientos implements Serializable {
 	@Column(name = "D_FECEJECUTO")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecejecuto;
-
+	
+	@Column(name = "V_NOMBREARCHIVO")
+	private String vNombrearchivo;
+	
 	@Column(name = "V_UBIARCH")
 	private String vUbiarch;
+
+	@Column(name = "V_EXTARCHIVO")
+	private String vExtarchivo;
 
 	@Column(name = "D_FECREACION")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
@@ -77,8 +90,10 @@ public class Seguimientos implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+ 
 
-	public Seguimientos() {
+	public Acciones() {
 
 	}
 	
@@ -88,28 +103,36 @@ public class Seguimientos implements Serializable {
 	  this.cFlgeliminado="0";
 	}
 
-	public Long getsEgimientoidpk() {
-		return sEgimientoidpk;
+	public Long getaCcionesidpk() {
+		return aCcionesidpk;
 	}
 
-	public void setsEgimientoidpk(Long sEgimientoidpk) {
-		this.sEgimientoidpk = sEgimientoidpk;
+	public void setaCcionesidpk(Long aCcionesidpk) {
+		this.aCcionesidpk = aCcionesidpk;
 	}
 
-	public Long getcOnsejerofk() {
-		return cOnsejerofk;
+	public Acuerdos getAcuerdo() {
+		return acuerdo;
 	}
 
-	public void setcOnsejerofk(Long cOnsejerofk) {
-		this.cOnsejerofk = cOnsejerofk;
+	public void setAcuerdo(Acuerdos acuerdo) {
+		this.acuerdo = acuerdo;
 	}
 
-	public Long getaCuerdofk() {
-		return aCuerdofk;
+	public Entidades getEntidad() {
+		return entidad;
 	}
 
-	public void setaCuerdofk(Long aCuerdofk) {
-		this.aCuerdofk = aCuerdofk;
+	public void setEntidad(Entidades entidad) {
+		this.entidad = entidad;
+	}
+
+	public String getvResponsable() {
+		return vResponsable;
+	}
+
+	public void setvResponsable(String vResponsable) {
+		this.vResponsable = vResponsable;
 	}
 
 	public String getvDesaccion() {
@@ -144,12 +167,28 @@ public class Seguimientos implements Serializable {
 		this.dFecejecuto = dFecejecuto;
 	}
 
+	public String getvNombrearchivo() {
+		return vNombrearchivo;
+	}
+
+	public void setvNombrearchivo(String vNombrearchivo) {
+		this.vNombrearchivo = vNombrearchivo;
+	}
+
 	public String getvUbiarch() {
 		return vUbiarch;
 	}
 
 	public void setvUbiarch(String vUbiarch) {
 		this.vUbiarch = vUbiarch;
+	}
+
+	public String getvExtarchivo() {
+		return vExtarchivo;
+	}
+
+	public void setvExtarchivo(String vExtarchivo) {
+		this.vExtarchivo = vExtarchivo;
 	}
 
 	public Date getdFecreacion() {
@@ -208,6 +247,6 @@ public class Seguimientos implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
-	 
+	  
 
 }

@@ -70,6 +70,8 @@ public class Actas implements Serializable {
 	@Column(name = "V_ARCHIVOEXTENSION")
 	private String vArchivoextension;
 	
+	private transient String vCodigoSesion;
+	
 
 	public Actas() {
 
@@ -187,6 +189,14 @@ public class Actas implements Serializable {
 	
 	public String obtenerRutaAbsoluta() {
 		return this.getvUbiarch()+this.getvNombrearchivo()+"."+this.vArchivoextension;
+	}
+
+	public String getvCodigoSesion() {
+		return vCodigoSesion;
+	}
+
+	public void setvCodigoSesion(String vCodigoSesion) {
+		this.vCodigoSesion = vCodigoSesion;
 	}
 
 	 

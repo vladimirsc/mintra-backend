@@ -1,8 +1,10 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.BandejaActas;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.AcuerdoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -65,9 +74,32 @@ public class ControladorAcuerdos {
 
 	}
 
-	@PostMapping("/buscar")
-	public List<Acuerdos> buscar(@RequestBody Acuerdos buscar) {
-		return acuerdoService.buscar(buscar);
+	@PostMapping("/buscaracuerdosporsesion")
+	public List<BandejaActas> buscar(
+			@RequestParam("codigosesion")  String codigosesion,
+			@RequestParam("tiposesion")    Long   tiposesion,
+			@RequestParam("fechainicio")   String fechainicio,
+			@RequestParam("fechafin")      String fechafin
+	) {
+		
+		Sesiones sesionbuscar = new Sesiones();
+		List<BandejaActas> listarBandejaActas = new ArrayList<BandejaActas>();
+		try {
+			if(tiposesion!=null) {
+				 TipoSesiones tiposesiones = new TipoSesiones();
+				 tiposesiones.settIposesionidpk(tiposesion); 
+			  }
+
+			 sesionbuscar.setvCodsesion(codigosesion); 
+			 sesionbuscar.setdFechaInicio(FechasUtil.convertStringToDate(fechainicio));
+			 sesionbuscar.setdFechaFin(FechasUtil.convertStringToDate(fechafin));
+			 
+			 listarBandejaActas = acuerdoService.buscarAcuerdosPorSesion(sesionbuscar);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return  listarBandejaActas;
+ 	 
 	}
 
 	@PostMapping("/registrar")
@@ -143,4 +175,16 @@ public class ControladorAcuerdos {
 
 		return new ResponseEntity<Acuerdos>(generico,HttpStatus.OK);
 	}
+	
+	
+	@GetMapping("/acuerdosporacta/{idacta}")
+	public List<Acuerdos> listarAcuerdosPorActas(@PathVariable Long idacta){
+		Actas acta = new Actas();
+		acta.setaCtaidpk(idacta);
+		return acuerdoService.listarAcuerdosPorActa(acta);
+	}
+	
+	
+	
+	
 }

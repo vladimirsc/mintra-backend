@@ -1,8 +1,10 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,33 +19,42 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Seguimientos;
-import pe.gob.mtpe.sivice.externo.core.negocio.service.SeguimientoService;
+import org.springframework.web.multipart.MultipartFile;
+
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acciones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.AccionesService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping({ "api/seguimientos" })
-public class ControladorSeguimiento {
+@RequestMapping({ "api/acciones" })
+public class ControladorAcciones {
 
-	private static final Logger logger = LoggerFactory.getLogger(ControladorSeguimiento.class);
+	private static final Logger logger = LoggerFactory.getLogger(ControladorAcciones.class);
 
 	@Autowired
-	private SeguimientoService seguimientoService;
+	private AccionesService accionesService;
+	
+	@Autowired
+	private ArchivoUtilitarioService archivoUtilitarioService;
 
 	@GetMapping("/")
-	public List<Seguimientos> listar() {
-		return seguimientoService.listar();
+	public List<Acciones> listar() {
+		return accionesService.listar();
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarSeguimientos(@PathVariable Long id) {
-		Seguimientos generico = new Seguimientos();
-		generico.setsEgimientoidpk(id);
+		Acciones generico = new Acciones();
+		generico.setaCcionesidpk(id);
 		Map<String, Object> response = new HashMap<>();
 		try {
-			generico = seguimientoService.buscarPorId(generico);
+			generico = accionesService.buscarPorId(generico);
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.SEGUIMIENTO_MSG_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.SEGUIMIENTO_ERROR_BUSCAR);
@@ -58,66 +69,89 @@ public class ControladorSeguimiento {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		return new ResponseEntity<Seguimientos>(generico,HttpStatus.OK);
+		return new ResponseEntity<Acciones>(generico,HttpStatus.OK);
 	}
 
 	@PostMapping("/buscar")
-	public List<Seguimientos> buscar(@RequestBody Seguimientos buscar) {
-		return seguimientoService.buscar(buscar);
+	public List<Acciones> buscar(@RequestBody Acciones buscar) {
+		return accionesService.buscar(buscar);
 	}
 
 	
 
-	@PostMapping("/seguimientos")
-	public ResponseEntity<?> registrar(@RequestBody Seguimientos generico) {
+	@PostMapping("/registrar")
+	public ResponseEntity<?> registrar(
+	     @RequestParam(value = "idacuerdo")          Long idacuerdo,
+	     @RequestParam(value = "identidad")          Long identidad,
+	     @RequestParam(value = "responsable")        String responsable,
+	     @RequestParam(value = "descripcionaccion")  String descripcionaccion,
+	     @RequestParam(value = "fecha_ejecutara")    String fecha_ejecutara,
+	     @RequestParam(value = "fecha_ejecuto")      String fecha_ejecuto,
+	     @RequestParam(value = "docaccion")          MultipartFile docaccion
+	) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
+		Acciones generico = new Acciones();
 		Map<String, Object> response = new HashMap<>();
 		try {
-			generico = seguimientoService.Registrar(generico);
+			generico = accionesService.Registrar(idacuerdo,identidad,responsable,descripcionaccion,fecha_ejecutara,fecha_ejecuto,docaccion);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			response.put(ConstantesUtil.X_ENTIDAD, generico);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Seguimientos>(generico,HttpStatus.CREATED);
+		return new ResponseEntity<Acciones>(generico,HttpStatus.CREATED);
 	}
 
-	@PutMapping("/seguimientos")
-	public ResponseEntity<?> actualizar(@RequestBody Seguimientos seguimientos) {
-		Seguimientos generico = null;
+	@PutMapping("/actualizar")
+	public ResponseEntity<?> actualizar(
+			@RequestParam(value = "idaccion")      Long idaccion, 
+			@RequestParam(value = "fecha_ejecuto") String fecha_ejecuto,
+			@RequestParam(value = "docaccion")      MultipartFile docaccion
+			) {
+		Acciones generico = new Acciones();
 		Map<String, Object> response = new HashMap<>();
 		try {
-			generico = seguimientoService.buscarPorId(seguimientos);
+			generico.setaCcionesidpk(idaccion);
+			
+			generico = accionesService.buscarPorId(generico);
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.SEGUIMIENTO_MSG_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.SEGUIMIENTO_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ENTIDAD, seguimientos);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
 			}
-			seguimientos.setnUsureg(generico.getnUsureg());
-			seguimientos.setdFecreg(generico.getdFecreg());
-			generico = seguimientoService.Actualizar(seguimientos);
+			 if(!docaccion.isEmpty()) {
+				 Archivos archivo = new Archivos();
+				 archivo = archivoUtilitarioService.cargarArchivo(docaccion, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION);
+				 if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
+					 generico.setvNombrearchivo(archivo.getNombre());
+					 generico.setvUbiarch(archivo.getUbicacion());
+					 generico.setvExtarchivo(archivo.getExtension());
+				 }
+			 }
+			generico.setdFecejecuto(FechasUtil.convertStringToDate(fecha_ejecuto));
+			generico = accionesService.Actualizar(generico);
 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			response.put(ConstantesUtil.X_ENTIDAD, seguimientos);
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}  
 		
-		return new ResponseEntity<Seguimientos>(generico,HttpStatus.OK);
+		return new ResponseEntity<Acciones>(generico,HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(@PathVariable Long id) {
 		logger.info("==========  insertarConsejeros  ===========");
-		Seguimientos generico = new Seguimientos();
-		generico.setsEgimientoidpk(id);
+		Acciones generico = new Acciones();
+		generico.setaCcionesidpk(id);
 		
 		Map<String, Object> response = new HashMap<>();
 		try {
-			generico = seguimientoService.buscarPorId(generico);
+			generico = accionesService.buscarPorId(generico);
 			
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.SEGUIMIENTO_MSG_ERROR_BUSCAR);
@@ -126,7 +160,7 @@ public class ControladorSeguimiento {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
-			generico = seguimientoService.Eliminar(generico);
+			generico = accionesService.Eliminar(generico);
 			
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -135,8 +169,16 @@ public class ControladorSeguimiento {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		return new ResponseEntity<Seguimientos>(generico,HttpStatus.OK);
+		return new ResponseEntity<Acciones>(generico,HttpStatus.OK);
 
 	}
+	
+	@GetMapping("/accionesporacuerdo/{idacuerdo}")
+	public List<Acciones> listarAccionesPorAcuerdo(@PathVariable Long idacuerdo){
+		List<Acciones> listaAcciones = new ArrayList<Acciones>();
+		listaAcciones = accionesService.listarAccionesPorAcuerdo(idacuerdo);
+		return listaAcciones;
+	}
+	
 
 }

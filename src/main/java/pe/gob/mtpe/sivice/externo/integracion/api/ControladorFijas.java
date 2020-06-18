@@ -3,6 +3,7 @@ package pe.gob.mtpe.sivice.externo.integracion.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoComisiones;
@@ -37,7 +40,7 @@ public class ControladorFijas {
 	
 	
 	// ==================    PROFESIONES          ===========================	
-	@GetMapping({"/listarprofesiones/"})
+	@GetMapping({"/listarprofesiones"})
 	public List<Profesiones> listarProfesiones() {
 		logger.info("============  LISTAR PROFESIONES =================");
 		return fijasService.listarProfesiones();
@@ -73,7 +76,7 @@ public class ControladorFijas {
 	
 	
 	// ==================    TIPOS DE DOCUMENTOS  ===========================
-	@GetMapping({"/listartipodocumentos/"})
+	@GetMapping({"/listartipodocumentos"})
 	public List<TipoDocumentos> listarTipoDocumentos() {
 		logger.info("============  LISTAR listarTipoDocumentos =================");
 		return fijasService.listarTipoDocumentos();
@@ -106,7 +109,7 @@ public class ControladorFijas {
 	
 	
 	// ==================    TIPOS DE CONSEJEROS  ===========================
-	@GetMapping({"/listartipoconsejeros/"})
+	@GetMapping({"/listartipoconsejeros"})
 	public List<Tipoconsejero> listarConsejeros() {
 		logger.info("============  LISTAR listarConsejeros =================");
 		return fijasService.listarTipoConsejeros();
@@ -139,7 +142,7 @@ public class ControladorFijas {
     }
 
 	// ==================    TIPOS DE REGIONES    ===========================
-	@GetMapping({"/listaregiones/"})
+	@GetMapping({"/listaregiones"})
 	public List<Regiones> listarRegiones() {
 		logger.info("============  LISTAR listarRegiones =================");
 		return fijasService.listarTipoRegiones();
@@ -171,7 +174,7 @@ public class ControladorFijas {
     }
 	
 	// ==================   listar tipo CONSEJO     ===========================
-	@GetMapping({"/listartipoconsejo/"})
+	@GetMapping({"/listartipoconsejo"})
 	public List<Consejos> listarConsejos() {
 		logger.info("============  LISTAR listarConsejos =================");
 		return fijasService.listarConsejos();
@@ -205,7 +208,7 @@ public class ControladorFijas {
     }
 	
 	// ==================    TIPOS DE COMISIONES  ===========================
-	@GetMapping({"/listartipocomisiones/"})
+	@GetMapping({"/listartipocomisiones"})
 	public List<TipoComisiones> listarTipoComisiones() {
 		logger.info("============  LISTAR listarTipoComisiones =================");
 		return fijasService.listarTipoComisiones();
@@ -239,7 +242,7 @@ public class ControladorFijas {
     }
 	
 	// ==================    TIPOS DE SESION      ===========================
-	@GetMapping({"/listartiposesion/"})
+	@GetMapping({"/listartiposesion"})
 	public List<TipoSesiones> listarTipoSesion() {
 		logger.info("============  LISTAR listarTipoSesion =================");
 		return fijasService.listarTipoSesion();
@@ -275,7 +278,7 @@ public class ControladorFijas {
 	
 	
 	// ==================    TIPOS DE TEMAS       ===========================
-	@GetMapping({"/listartemas/"})
+	@GetMapping({"/listartemas"})
 	public List<TipoTemas> listarTipoTemas() {
 		logger.info("============  LISTAR listarTipoTemas =================");
 		return fijasService.listarTipoTemas();
@@ -307,6 +310,32 @@ public class ControladorFijas {
     	return new ResponseEntity<TipoTemas>(generico,HttpStatus.OK);
     	 
     }
+	
+	
+	
+	// ==================    ENTIDADES       ===========================
+	@GetMapping({"/listarentidades"})
+	public List<Entidades> listarEntidades() {
+		logger.info("============  LISTAR listarTipoTemas =================");
+		return fijasService.listarEntidades();
+	} 
+	
+	@GetMapping("/buscarentidad/{id}")
+    public ResponseEntity<?> buscarPorIdEntidad(@PathVariable Long id) {
+		Entidades entidad = new Entidades();
+		entidad.seteNtidadidpk(id);
+		Map<String,Object> response = new HashMap<>();
+		try {
+			entidad = fijasService.buscarPorEntidad(entidad);
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, entidad);
+    		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Entidades>(entidad,HttpStatus.OK);
+	}
 	  
 
 }

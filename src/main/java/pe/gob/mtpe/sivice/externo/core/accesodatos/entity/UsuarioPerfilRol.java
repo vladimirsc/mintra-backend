@@ -2,12 +2,13 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -23,21 +24,23 @@ public class UsuarioPerfilRol implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_USUPERFROL") 
-	@SequenceGenerator(name="SEQ_TBX_USUPERFROL",sequenceName="DB_TRAMITE.SEQ_TBX_USUPERFROL", allocationSize=1) 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TBX_USUPERFROL")
+	@SequenceGenerator(name = "SEQ_TBX_USUPERFROL", sequenceName = "DB_TRAMITE.SEQ_TBX_USUPERFROL", allocationSize = 1)
 	@Column(name = "USUPERFROL_ID_PK")
 	private Long uSuperfrolidpk;
 
-	@Column(name = "USUARIO_FK")
-	private Long uSuariofk;
+	@ManyToOne
+	@JoinColumn(name = "USUARIO_FK",nullable = false, insertable = true, updatable = true)
+	private Usuarios usuario;
 
-	@Column(name = "ROL_FK")
-	private Long rOlfk;
+	@ManyToOne
+	@JoinColumn(name = "ROL_FK",nullable = false, insertable = true, updatable = true)
+	private Roles roles;
 
-	@Column(name = "PERFIL_FK")
-	private Long pErfilfk;
+	@ManyToOne
+	@JoinColumn(name = "PERFIL_FK",nullable = false, insertable = true, updatable = true)
+	private Perfiles Perfil;
 
 	@Column(name = "D_FECREGISTRO")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
@@ -45,7 +48,7 @@ public class UsuarioPerfilRol implements Serializable {
 
 	@Column(name = "C_FLGELIMINO", length = 1)
 	private String cFlgelimino;
-	
+
 	@Column(name = "D_FECELIMINA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecelimina;
@@ -64,14 +67,17 @@ public class UsuarioPerfilRol implements Serializable {
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
 
+	@Column(name = "C_FLGACTIVO")
+	private String cFlgactivo;
+
 	public UsuarioPerfilRol() {
 
 	}
-	
+
 	@PrePersist
 	protected void valoresIniciales() {
-	  this.dFecreg =new Date();
-	  this.cFlgelimino="0";
+		this.dFecreg = new Date();
+		this.cFlgelimino = "0";
 	}
 
 	public Long getuSuperfrolidpk() {
@@ -82,28 +88,28 @@ public class UsuarioPerfilRol implements Serializable {
 		this.uSuperfrolidpk = uSuperfrolidpk;
 	}
 
-	public Long getuSuariofk() {
-		return uSuariofk;
+	public Usuarios getUsuario() {
+		return usuario;
 	}
 
-	public void setuSuariofk(Long uSuariofk) {
-		this.uSuariofk = uSuariofk;
+	public void setUsuario(Usuarios usuario) {
+		this.usuario = usuario;
 	}
 
-	public Long getrOlfk() {
-		return rOlfk;
+	public Roles getRoles() {
+		return roles;
 	}
 
-	public void setrOlfk(Long rOlfk) {
-		this.rOlfk = rOlfk;
+	public void setRoles(Roles roles) {
+		this.roles = roles;
 	}
 
-	public Long getpErfilfk() {
-		return pErfilfk;
+	public Perfiles getPerfil() {
+		return Perfil;
 	}
 
-	public void setpErfilfk(Long pErfilfk) {
-		this.pErfilfk = pErfilfk;
+	public void setPerfil(Perfiles perfil) {
+		Perfil = perfil;
 	}
 
 	public Date getdFecregistro() {
@@ -162,6 +168,15 @@ public class UsuarioPerfilRol implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
+	public String getcFlgactivo() {
+		return cFlgactivo;
+	}
+
+	public void setcFlgactivo(String cFlgactivo) {
+		this.cFlgactivo = cFlgactivo;
+	}
+
 	 
+	
 
 }

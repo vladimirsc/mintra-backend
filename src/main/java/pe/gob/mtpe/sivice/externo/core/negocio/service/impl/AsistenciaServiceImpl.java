@@ -90,7 +90,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		List<AsistenciaConsejeros> generica = new ArrayList<AsistenciaConsejeros>();
 		List<Asistencias> listAsistencia = new ArrayList<Asistencias>();
 
-		try {
+		 
 			// OBTENEMOS INFORMACION DE LA SESSION
 			sesiones.setsEsionidpk(idsesion);
 			sesiones = SesionDao.buscarPorId(sesiones);
@@ -189,12 +189,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 				
 			}
 			
-			
-
-		} catch (Exception e) {
-			generica = null;
-			logger.info("==========" + e.getMessage() + "***" + e.getCause());
-		}
 		return generica;
 	}
 

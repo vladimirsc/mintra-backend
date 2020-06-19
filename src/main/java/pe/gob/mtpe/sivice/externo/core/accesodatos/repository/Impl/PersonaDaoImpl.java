@@ -1,12 +1,9 @@
 package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
-
 import org.springframework.stereotype.Component;
-
-import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao; 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Personas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.PersonaDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -21,49 +18,51 @@ public class PersonaDaoImpl extends BaseDao<Long, Personas> implements PersonaDa
 
 	@Override
 	public Personas Registrar(Personas persona) {
-		 guardar(persona);
-		 return persona;
+		guardar(persona);
+		return persona;
 	}
 
-	 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Personas buscarTipoDocNumero(Personas personas) {
+		Personas persona = new Personas();
 		EntityManager manager = createEntityManager();
-		try {
-			 Personas personaDao = (Personas) manager
-						.createQuery("FROM Personas c WHERE c.tPdocumentofk=:tipodocuemnto AND  c.vNumdocumento=:numerodocumento AND  c.cFlgeliminado=:eliminado ORDER BY c.pErsonaidpk DESC")
-						.setParameter("tipodocuemnto",personas.gettPdocumentofk())
-						.setParameter("numerodocumento",personas.getvNumdocumento())
-						.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getSingleResult();
-				manager.close();
-				return personaDao;
-		} catch (Exception e) {
-			return null;
-		}
-				
+		List<Personas> lista = manager
+				.createQuery("SELECT p FROM Personas p INNER JOIN p.tipodocumento tpd  WHERE tpd.tPdocumentoidpk=:tipodocumentofk AND p.vNumdocumento=:numerodoc AND p.cFlgeliminado=:eliminado")
+				.setParameter("tipodocumentofk", personas.getTipodocumento().gettPdocumentoidpk())
+				.setParameter("numerodoc", personas.getvNumdocumento())
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		 if(lista.isEmpty()) {
+			 persona =null;
+		 }else {
+			 persona = lista.get(0);
+		 }
+		return persona;
+
 	}
 
 	@Override
 	public List<Personas> listar() {
-	
+
 		return null;
 	}
 
 	@Override
 	public List<Personas> buscar(Personas personas) {
-		
+
 		return null;
 	}
 
 	@Override
 	public Personas ActualizarPersona(Personas personas) {
-		
+
 		return null;
 	}
 
 	@Override
 	public Personas EliminarPersona(Personas personas) {
-		
+
 		return null;
 	}
 

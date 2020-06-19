@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -29,8 +31,9 @@ public class Usuarios implements Serializable {
 	@Column(name = "USUARIO_ID_PK")
 	private Long uSuarioidpk;
 
-	@Column(name = "PERSONSA_FK")
-	private Long pErsonsafk;
+	@ManyToOne
+	@JoinColumn(name ="PERSONSA_FK")
+	private Personas persona;
 
 	@Column(name = "V_DESUSUARIO")
 	private String vDesusuario;
@@ -84,12 +87,13 @@ public class Usuarios implements Serializable {
 		this.uSuarioidpk = uSuarioidpk;
 	}
 
-	public Long getpErsonsafk() {
-		return pErsonsafk;
+
+	public Personas getPersona() {
+		return persona;
 	}
 
-	public void setpErsonsafk(Long pErsonsafk) {
-		this.pErsonsafk = pErsonsafk;
+	public void setPersona(Personas persona) {
+		this.persona = persona;
 	}
 
 	public String getvDesusuario() {

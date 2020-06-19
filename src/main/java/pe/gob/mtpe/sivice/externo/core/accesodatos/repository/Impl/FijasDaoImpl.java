@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Perfiles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoComisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
@@ -20,7 +22,6 @@ import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 @Component
 public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao {
 
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Profesiones> listarProfesiones() {
@@ -30,7 +31,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -50,7 +51,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -75,7 +76,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -100,7 +101,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -111,7 +112,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		Regiones vregion = new Regiones();
 		Regiones vregionfinal = new Regiones();
 		EntityManager manager = createEntityManager();
-		vregionfinal=manager.find(vregion.getClass(), regiones.getrEgionidpk());
+		vregionfinal = manager.find(vregion.getClass(), regiones.getrEgionidpk());
 		manager.close();
 		return vregionfinal;
 	}
@@ -126,7 +127,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -137,8 +138,8 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		Consejos vconsejo = new Consejos();
 		Consejos vconsejofinal = new Consejos();
 		EntityManager manager = createEntityManager();
-		 vconsejofinal=manager.find(vconsejo.getClass(), consejos.getcOnsejoidpk());
-		 manager.close();
+		vconsejofinal = manager.find(vconsejo.getClass(), consejos.getcOnsejoidpk());
+		manager.close();
 		return vconsejofinal;
 	}
 
@@ -152,7 +153,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -163,8 +164,8 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		TipoComisiones vtipocomision = new TipoComisiones();
 		TipoComisiones vtipocomisionfinal = new TipoComisiones();
 		EntityManager manager = createEntityManager();
-		 vtipocomisionfinal=manager.find(vtipocomision.getClass(), tipoComisiones.gettIpocomsidpk());
-		 manager.close();
+		vtipocomisionfinal = manager.find(vtipocomision.getClass(), tipoComisiones.gettIpocomsidpk());
+		manager.close();
 		return vtipocomisionfinal;
 	}
 
@@ -177,7 +178,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -188,7 +189,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		TipoSesiones vtiposesion = new TipoSesiones();
 		TipoSesiones vtiposesionfinal = new TipoSesiones();
 		EntityManager manager = createEntityManager();
-		vtiposesionfinal=manager.find(vtiposesion.getClass(), tiposesion.gettIposesionidpk());
+		vtiposesionfinal = manager.find(vtiposesion.getClass(), tiposesion.gettIposesionidpk());
 		manager.close();
 		return vtiposesionfinal;
 	}
@@ -202,7 +203,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -227,7 +228,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista;
@@ -237,16 +238,58 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 	@Override
 	public Entidades buscarPorEntidad(Entidades entidad) {
 		EntityManager manager = createEntityManager();
-		List<Entidades> lista = manager
-				.createQuery("FROM Entidades p WHERE p.eNtidadidpk=:entidadfk AND  p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
-				.setParameter("entidadfk",entidad.geteNtidadidpk())
+		List<Entidades> lista = manager.createQuery(
+				"FROM Entidades p WHERE p.eNtidadidpk=:entidadfk AND  p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
+				.setParameter("entidadfk", entidad.geteNtidadidpk())
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-		if(lista.isEmpty()) {
+		if (lista.isEmpty()) {
 			return null;
 		}
 		return lista.get(0);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Roles> listaRoles() {
+		EntityManager manager = createEntityManager();
+		List<Roles> lista = manager
+				.createQuery("FROM Roles r WHERE r.cFlgactivo=:activo AND r.cFlgeliminado=:eliminado")
+				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		if (lista.isEmpty()) {
+			return null;
+		}
+		return lista;
+	}
+
+	@Override
+	public Roles buscaRoles(Roles rol) {
+		buscarId(rol.getrOlidpk());
+		return rol;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Perfiles> listaPerfiles() {
+		EntityManager manager = createEntityManager();
+		List<Perfiles> lista = manager
+				.createQuery("FROM Perfiles p WHERE p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
+				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		if (lista.isEmpty()) {
+			return null;
+		}
+		return lista;
+	}
+
+	@Override
+	public Perfiles BuscarPerfil(Perfiles perfil) {
+		buscarId(perfil.getpErfilidpk());
+		return perfil;
 	}
 
 }

@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -30,11 +32,9 @@ public class Personas implements Serializable {
 	@Column(name = "PERSONA_ID_PK")
 	private Long pErsonaidpk;
 
-	@Column(name = "TPDOCUMENTO_FK")
-	private Long tPdocumentofk;
-
-	@Column(name = "PROFESION_FK")
-	private Long pRofesionfk;
+	@ManyToOne
+	@JoinColumn(name ="TPDOCUMENTO_FK")
+	private TipoDocumentos tipodocumento;
 
 	@Column(name = "V_DESNOMBRE")
 	private String vDesnombre;
@@ -74,6 +74,11 @@ public class Personas implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+	private transient Long rol;
+    private transient Long perfil;
+    private transient String clave;
+    private transient Long tPdocumentofk;
 
 	public Personas() {
 
@@ -93,20 +98,14 @@ public class Personas implements Serializable {
 		this.pErsonaidpk = pErsonaidpk;
 	}
 
-	public Long gettPdocumentofk() {
-		return tPdocumentofk;
+	 
+
+	public TipoDocumentos getTipodocumento() {
+		return tipodocumento;
 	}
 
-	public void settPdocumentofk(Long tPdocumentofk) {
-		this.tPdocumentofk = tPdocumentofk;
-	}
-
-	public Long getpRofesionfk() {
-		return pRofesionfk;
-	}
-
-	public void setpRofesionfk(Long pRofesionfk) {
-		this.pRofesionfk = pRofesionfk;
+	public void setTipodocumento(TipoDocumentos tipodocumento) {
+		this.tipodocumento = tipodocumento;
 	}
 
 	public String getvDesnombre() {
@@ -203,6 +202,38 @@ public class Personas implements Serializable {
 
 	public void setdFecmodifica(Date dFecmodifica) {
 		this.dFecmodifica = dFecmodifica;
+	}
+
+	public Long getRol() {
+		return rol;
+	}
+
+	public void setRol(Long rol) {
+		this.rol = rol;
+	}
+
+	public Long getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Long perfil) {
+		this.perfil = perfil;
+	}
+
+	public String getClave() {
+		return clave;
+	}
+
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
+
+	public Long gettPdocumentofk() {
+		return tPdocumentofk;
+	}
+
+	public void settPdocumentofk(Long tPdocumentofk) {
+		this.tPdocumentofk = tPdocumentofk;
 	}
 
 	 

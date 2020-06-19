@@ -1,10 +1,13 @@
 package pe.gob.mtpe.sivice.externo.core.negocio.service;
 
 import java.util.List;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Perfiles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoComisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
@@ -48,5 +51,13 @@ public interface FijasService {
 	// ENTIDADES
 	public List<Entidades> listarEntidades();
 	public Entidades buscarPorEntidad(Entidades entidad);
+	
+	//ROLES
+	public List<Roles> listaRoles();
+	public Roles buscaRoles(Roles rol);
+	
+	//PEERFILES
+	public List<Perfiles> listaPerfiles();
+	public Perfiles BuscarPerfil(Perfiles perfil);
 
 }

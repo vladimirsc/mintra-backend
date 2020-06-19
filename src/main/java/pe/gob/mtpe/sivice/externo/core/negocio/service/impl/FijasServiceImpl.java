@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Perfiles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoComisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
@@ -118,6 +120,26 @@ public class FijasServiceImpl implements FijasService {
 	public Entidades buscarPorEntidad(Entidades entidad) {
 		
 		return fijasDao.buscarPorEntidad(entidad);
+	}
+
+	@Override
+	public List<Roles> listaRoles() { 
+		return fijasDao.listaRoles();
+	}
+
+	@Override
+	public Roles buscaRoles(Roles rol) { 
+		return fijasDao.buscaRoles(rol);
+	}
+
+	@Override
+	public List<Perfiles> listaPerfiles() { 
+		return fijasDao.listaPerfiles();
+	}
+
+	@Override
+	public Perfiles BuscarPerfil(Perfiles perfil) { 
+		return fijasDao.BuscarPerfil(perfil);
 	}
 
 	

@@ -9,6 +9,8 @@ public interface UsuarioDao {
 	List<Usuarios> listar();
 
 	Usuarios buscarPorId(Usuarios usuario);
+	
+	Usuarios buscarPorCorreo(String correo);
 
 	List<Usuarios> buscar(Usuarios usuario);
 

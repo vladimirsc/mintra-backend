@@ -9,10 +9,12 @@ public interface UsuarioService {
 	List<Usuarios> listar();
 
 	Usuarios buscarPorId(Usuarios usuario);
+	
+	Usuarios buscarPorCorreo(String correo);
 
 	List<Usuarios> buscar(Usuarios usuario);
 
-	public Usuarios Registrar(Usuarios usuario);
+	public Usuarios Registrar(Usuarios usuario,Long idtipodocumento,Long rol);
 
 	public Usuarios Actualizar(Usuarios usuario);
 

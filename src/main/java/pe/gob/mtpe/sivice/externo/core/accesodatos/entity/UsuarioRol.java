@@ -16,8 +16,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "TBX_USUPERFROL")
-public class UsuarioPerfilRol implements Serializable {
+@Table(name = "TBX_USUARIOROL")
+public class UsuarioRol implements Serializable {
 
 	/**
 	 * 
@@ -27,8 +27,8 @@ public class UsuarioPerfilRol implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TBX_USUPERFROL")
 	@SequenceGenerator(name = "SEQ_TBX_USUPERFROL", sequenceName = "DB_TRAMITE.SEQ_TBX_USUPERFROL", allocationSize = 1)
-	@Column(name = "USUPERFROL_ID_PK")
-	private Long uSuperfrolidpk;
+	@Column(name = "USUARIOROL_ID_PK")
+	private Long uSuariorolidpk;
 
 	@ManyToOne
 	@JoinColumn(name = "USUARIO_FK",nullable = false, insertable = true, updatable = true)
@@ -37,11 +37,7 @@ public class UsuarioPerfilRol implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "ROL_FK",nullable = false, insertable = true, updatable = true)
 	private Roles roles;
-
-	@ManyToOne
-	@JoinColumn(name = "PERFIL_FK",nullable = false, insertable = true, updatable = true)
-	private Perfiles Perfil;
-
+ 
 	@Column(name = "D_FECREGISTRO")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecregistro;
@@ -70,7 +66,7 @@ public class UsuarioPerfilRol implements Serializable {
 	@Column(name = "C_FLGACTIVO")
 	private String cFlgactivo;
 
-	public UsuarioPerfilRol() {
+	public UsuarioRol() {
 
 	}
 
@@ -78,14 +74,15 @@ public class UsuarioPerfilRol implements Serializable {
 	protected void valoresIniciales() {
 		this.dFecreg = new Date();
 		this.cFlgelimino = "0";
+		this.cFlgactivo="1";
+	}
+ 
+	public Long getuSuariorolidpk() {
+		return uSuariorolidpk;
 	}
 
-	public Long getuSuperfrolidpk() {
-		return uSuperfrolidpk;
-	}
-
-	public void setuSuperfrolidpk(Long uSuperfrolidpk) {
-		this.uSuperfrolidpk = uSuperfrolidpk;
+	public void setuSuariorolidpk(Long uSuariorolidpk) {
+		this.uSuariorolidpk = uSuariorolidpk;
 	}
 
 	public Usuarios getUsuario() {
@@ -104,14 +101,7 @@ public class UsuarioPerfilRol implements Serializable {
 		this.roles = roles;
 	}
 
-	public Perfiles getPerfil() {
-		return Perfil;
-	}
-
-	public void setPerfil(Perfiles perfil) {
-		Perfil = perfil;
-	}
-
+	 
 	public Date getdFecregistro() {
 		return dFecregistro;
 	}

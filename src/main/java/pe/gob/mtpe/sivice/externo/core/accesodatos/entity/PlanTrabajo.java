@@ -299,7 +299,7 @@ public class PlanTrabajo implements Serializable {
 	}
 
 	public String obtenerRutaAbsolutaAprobacion() {
-		return this.getvUbidocapr()+this.getvNomarchdocaprob()+"."+this.getvExtarchdocaprob();
+		return this.getvUbidocaprobacion()+this.getvNomarchdocaprob()+"."+this.getvExtarchdocaprob();
 	}
 	
 	public String obtenerRutaAbsolutaPlanTrabajo() {

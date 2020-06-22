@@ -107,6 +107,11 @@ public class AsistenciasArchivos implements Serializable {
 		this.vFlgeliminado = vFlgeliminado;
 	}
 	
+	
+	public String obtenerRutaAbsoluta() { 
+		return this.getuBicacionarchivo()+this.getnOmbrearchivo()+"."+this.geteXtensionarchivo();
+	}
+	
 
 
 }

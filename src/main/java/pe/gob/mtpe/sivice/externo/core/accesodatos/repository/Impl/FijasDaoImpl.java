@@ -6,8 +6,7 @@ import javax.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Perfiles;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
@@ -271,25 +270,6 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		return rol;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Perfiles> listaPerfiles() {
-		EntityManager manager = createEntityManager();
-		List<Perfiles> lista = manager
-				.createQuery("FROM Perfiles p WHERE p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
-				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
-				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
-		manager.close();
-		if (lista.isEmpty()) {
-			return null;
-		}
-		return lista;
-	}
-
-	@Override
-	public Perfiles BuscarPerfil(Perfiles perfil) {
-		buscarId(perfil.getpErfilidpk());
-		return perfil;
-	}
+	 
 
 }

@@ -2,22 +2,22 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository;
 
 import java.util.List;
 
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Personas;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
 
 public interface PersonaDao {
 	
-	List<Personas> listar();
+	List<Usuarios> listar();
 
-	Personas buscarPorId(Personas persona);
+	Usuarios buscarPorId(Usuarios persona);
 
-	List<Personas> buscar(Personas personas); 
+	List<Usuarios> buscar(Usuarios personas); 
 	
-	public Personas Registrar(Personas persona);
+	public Usuarios Registrar(Usuarios persona);
 
-	public Personas ActualizarPersona(Personas personas);
+	public Usuarios ActualizarPersona(Usuarios personas);
 
-	public Personas EliminarPersona(Personas personas);
+	public Usuarios EliminarPersona(Usuarios personas);
 	
-	public Personas buscarTipoDocNumero(Personas personas);
+	public Usuarios buscarTipoDocNumero(Usuarios personas);
 
 }

@@ -1,12 +1,18 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map; 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.AsistenciaConsejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Asistencias;
@@ -34,6 +41,7 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.AsistenciasArchivoService
 import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.InvitadoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -57,6 +65,11 @@ public class ControladorAsistencia {
 	@Autowired
 	private AsistenciasArchivoService asistenciasArchivoService;
 
+	
+	@Value("${rutaArchivo}")
+	private String rutaRaiz;
+	
+	
 	@GetMapping("/{idsesion}")
 	public ResponseEntity<?> buscarPorIdAsistencias(@PathVariable Long idsesion) {
 		// ONTENEMOS LOS DATOS DE LA SESSION
@@ -237,8 +250,6 @@ public class ControladorAsistencia {
 			@RequestParam(value = "docasistencia") MultipartFile docasistencia,
 			@RequestParam(value = "sesioncodigo") Long sesioncodigo) {
 
-		
-		 
 		AsistenciasArchivos asistenciasArchivos = new AsistenciasArchivos();
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -252,15 +263,23 @@ public class ControladorAsistencia {
 			
 			Archivos archivo = new Archivos();
 			archivo = archivoUtilitarioService.cargarArchivo(docasistencia, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION);
-			asistenciasArchivos.setnOmbrearchivo(archivo.getNombre());
-			asistenciasArchivos.seteXtensionarchivo(archivo.getExtension());
-			asistenciasArchivos.setuBicacionarchivo(archivo.getUbicacion());
-			asistenciasArchivos.setsEsionfk(sesioncodigo);
-			asistenciasArchivos.setvFlgeliminado("0");
+			
+			if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
+				asistenciasArchivos.setnOmbrearchivo(archivo.getNombre());
+				asistenciasArchivos.seteXtensionarchivo(archivo.getExtension());
+				asistenciasArchivos.setuBicacionarchivo(archivo.getUbicacion());
+				asistenciasArchivos.setsEsionfk(sesioncodigo);
+				asistenciasArchivos.setvFlgeliminado("0");
+			} else {
+				response.put(ConstantesUtil.X_MENSAJE, "ARCHIVO NO ADJUNTO");
+				response.put(ConstantesUtil.X_ERROR, "NO SE ENCONTRO EL ARCHIVO ADJUNTO");
+				response.put(ConstantesUtil.X_ENTIDAD, archivo);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+
+			}
+
 			asistenciasArchivos = asistenciasArchivoService.cargarArchivo(asistenciasArchivos);
-			
-			
-			
+
 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -273,5 +292,24 @@ public class ControladorAsistencia {
 		return new ResponseEntity<AsistenciasArchivos>(asistenciasArchivos, HttpStatus.OK);
  
 	}
+	
+	
+	
+	
+	@GetMapping("/descargar/{idsesion}")
+	public void descargarArchivo(@PathVariable Long idsesion, HttpServletResponse res) {
+		AsistenciasArchivos asistenciasArchivos = new AsistenciasArchivos(); 
+		String ruta = "";
+		try {
+			asistenciasArchivos = asistenciasArchivoService.descargarArchivo(idsesion);
+			ruta = rutaRaiz + asistenciasArchivos.obtenerRutaAbsoluta();
+			res.setHeader("Content-Disposition", "attachment; filename=" + asistenciasArchivos.getnOmbrearchivo()+"."+asistenciasArchivos.geteXtensionarchivo());
+			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
+		} catch (Exception e) {
+			
+		}
+
+	}
+	
 
 }

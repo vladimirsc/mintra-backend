@@ -3,13 +3,13 @@ package pe.gob.mtpe.sivice.externo.integracion.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,12 +34,14 @@ public class ControladorComisiones {
 	@Autowired
 	private ComisionService comisionService;
 
+	//@Secured({"ROLE_ADMCONSSAT","ROLE_ADMCORSSAT","ROLE_OPECONSSAT","ROLE_OPECORSSAT"})
 	@GetMapping("/")
 	public List<Comisiones> listarComisiones() {
 		logger.info("========== listarComisiones =============== ");
 		return comisionService.listar();
 	}
 
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorIdComision(@PathVariable Long id) {
 		Comisiones generico  = new Comisiones();

@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "TBX_USUARIOS")
 public class Usuarios implements Serializable {
+
 	/**
 	 * 
 	 */
@@ -32,29 +33,34 @@ public class Usuarios implements Serializable {
 	private Long uSuarioidpk;
 
 	@ManyToOne
-	@JoinColumn(name ="PERSONSA_FK")
-	private Personas persona;
+	@JoinColumn(name ="TPDOCUMENTO_FK")
+	private TipoDocumentos tipodocumento;
 
-	@Column(name = "V_DESUSUARIO")
-	private String vDesusuario;
+	@Column(name = "V_NOMBRE")
+	private String vNombre;
 
-	@Column(name = "V_DESCLAVE")
-	private String vDesclave;
+	@Column(name = "V_AP_PATERNO")
+	private String vAppaterno;
 
-	@Column(name = "D_FECREACION")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dFecreacion;
+	@Column(name = "V_AP_MATERNO")
+	private String vApmaterno;
 
-	@Column(name = "C_FLGACTIVO", length = 1)
-	private String cFlgactivo;
+	@Column(name = "V_NUMDOCUMENTO")
+	private String vNumdocumento;
+
+	@Column(name = "V_CORREO")
+	private String username;
+
+	@Column(name = "V_CLAVE")
+	private String password;
 
 	@Column(name = "C_FLGELIMINADO", length = 1)
 	private String cFlgeliminado;
-
+	
 	@Column(name = "D_FECELIMINA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecelimina;
-	
+
 	@Column(name = "N_USUREG")
 	private Long nUsureg;
 
@@ -68,6 +74,22 @@ public class Usuarios implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+	@Column(name = "C_FLGACTIVO", length = 1)
+	private  String enabled;
+	
+	@ManyToOne
+	@JoinColumn(name ="REGION_FK")
+	private Regiones regiones;
+
+
+	public Regiones getRegiones() {
+		return regiones;
+	}
+
+	public void setRegiones(Regiones regiones) {
+		this.regiones = regiones;
+	}
 
 	public Usuarios() {
 
@@ -77,6 +99,7 @@ public class Usuarios implements Serializable {
 	protected void valoresIniciales() {
 	  this.dFecreg =new Date();
 	  this.cFlgeliminado="0";
+	  this.enabled="1";
 	}
 
 	public Long getuSuarioidpk() {
@@ -87,45 +110,60 @@ public class Usuarios implements Serializable {
 		this.uSuarioidpk = uSuarioidpk;
 	}
 
-
-	public Personas getPersona() {
-		return persona;
+	public TipoDocumentos getTipodocumento() {
+		return tipodocumento;
 	}
 
-	public void setPersona(Personas persona) {
-		this.persona = persona;
+	public void setTipodocumento(TipoDocumentos tipodocumento) {
+		this.tipodocumento = tipodocumento;
 	}
 
-	public String getvDesusuario() {
-		return vDesusuario;
+	public String getvNombre() {
+		return vNombre;
 	}
 
-	public void setvDesusuario(String vDesusuario) {
-		this.vDesusuario = vDesusuario;
+	public void setvNombre(String vNombre) {
+		this.vNombre = vNombre;
 	}
 
-	public String getvDesclave() {
-		return vDesclave;
+	public String getvAppaterno() {
+		return vAppaterno;
 	}
 
-	public void setvDesclave(String vDesclave) {
-		this.vDesclave = vDesclave;
+	public void setvAppaterno(String vAppaterno) {
+		this.vAppaterno = vAppaterno;
 	}
 
-	public Date getdFecreacion() {
-		return dFecreacion;
+	public String getvApmaterno() {
+		return vApmaterno;
 	}
 
-	public void setdFecreacion(Date dFecreacion) {
-		this.dFecreacion = dFecreacion;
+	public void setvApmaterno(String vApmaterno) {
+		this.vApmaterno = vApmaterno;
 	}
 
-	public String getcFlgactivo() {
-		return cFlgactivo;
+	public String getvNumdocumento() {
+		return vNumdocumento;
 	}
 
-	public void setcFlgactivo(String cFlgactivo) {
-		this.cFlgactivo = cFlgactivo;
+	public void setvNumdocumento(String vNumdocumento) {
+		this.vNumdocumento = vNumdocumento;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getcFlgeliminado() {
@@ -176,6 +214,14 @@ public class Usuarios implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
-	 
+	public String getEnabled() {
+		return enabled;
+	}
 
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
+	}
+
+	 
+	 
 }

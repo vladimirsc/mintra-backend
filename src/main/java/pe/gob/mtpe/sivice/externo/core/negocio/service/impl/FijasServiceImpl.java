@@ -2,14 +2,11 @@ package pe.gob.mtpe.sivice.externo.core.negocio.service.impl;
 
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Perfiles;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
@@ -130,16 +127,6 @@ public class FijasServiceImpl implements FijasService {
 	@Override
 	public Roles buscaRoles(Roles rol) { 
 		return fijasDao.buscaRoles(rol);
-	}
-
-	@Override
-	public List<Perfiles> listaPerfiles() { 
-		return fijasDao.listaPerfiles();
-	}
-
-	@Override
-	public Perfiles BuscarPerfil(Perfiles perfil) { 
-		return fijasDao.BuscarPerfil(perfil);
 	}
 
 	

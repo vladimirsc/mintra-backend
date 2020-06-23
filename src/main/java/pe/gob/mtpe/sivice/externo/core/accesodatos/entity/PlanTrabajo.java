@@ -2,7 +2,6 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat; 
 
 @Entity
 @Table(name = "TBX_PLAN_TRABAJO")
@@ -114,6 +116,7 @@ public class PlanTrabajo implements Serializable {
 	  this.cFlgeliminado="0";
 	}
 
+	 
 	public Long getpLantrabidpk() {
 		return pLantrabidpk;
 	}

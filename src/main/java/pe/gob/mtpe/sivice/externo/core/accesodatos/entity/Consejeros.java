@@ -10,10 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table; 
-import javax.validation.constraints.Email; 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "TBX_CONSEJEROS")
@@ -65,7 +66,7 @@ public class Consejeros implements Serializable {
 	@Column(name = "V_DESEMAIL_1")
 	private String vDesemail1;
 	
-	@Email
+	
 	@Column(name = "V_DESEMAIL_2")
 	private String vDesemail2;
 
@@ -75,12 +76,14 @@ public class Consejeros implements Serializable {
 	@Column(name = "V_TPCONSEJERO")
 	private String vTpconsejero;
 
-	@Column(name = "D_FECINICIO")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	@Column(name = "D_FECINICIO") 
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/mm/yyyy")
 	private Date dFecinicio;
 
-	@Column(name = "D_FECFIN")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	@Column(name = "D_FECFIN") 
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/mm/yyyy")
 	private Date dFecfin;
 
 	@Column(name = "V_NUMDOCASIG")
@@ -99,7 +102,8 @@ public class Consejeros implements Serializable {
 	private String cFlgeliminado;
 
 	@Column(name = "D_FECELIMINA")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/mm/yyyy")
 	private Date dFecelimina;
 
 	@Column(name = "N_USUELIMINIA")
@@ -109,14 +113,16 @@ public class Consejeros implements Serializable {
 	private Long nUsureg;
 
 	@Column(name = "D_FECREG")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/mm/yyyy")
 	private Date dFecreg;
 
 	@Column(name = "N_USUMODIFICA")
 	private Long nUsumodifica;
 
 	@Column(name = "D_FECMODIFICA")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/mm/yyyy")
 	private Date dFecmodifica;
 	
     private  transient String vnombreComision;

@@ -1,11 +1,14 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping; 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
@@ -53,7 +57,7 @@ public class ControladorConsejeros {
 		logger.info("==========  listarConsejeros  ===========");
 		//OBTENEMOS LOS DATOS DE LA SESION
 		 Consejeros consejero= new Consejeros();
-		 consejero.setrEgionfk(Long.parseLong("2"));
+		 consejero.setrEgionfk(Long.parseLong("14"));
 		 consejero.setcOnsejofk(Long.parseLong("1"));
 		return consejeroService.listar(consejero);
 	}
@@ -184,7 +188,7 @@ public class ControladorConsejeros {
 
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarConsejeros(
-			@RequestParam(value="docaprob")        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  String vTipdocumento,
+			@RequestParam(value="docaprob", required=false)        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  String vTipdocumento,
 			@RequestParam(value="vNumdocumento")   String        vNumdocumento, @RequestParam(value="vDesnombre")     String vDesnombre,
 			@RequestParam(value="vDesappaterno")   String        vDesappaterno, @RequestParam(value="vDesapmaterno")  String vDesapmaterno,
 			@RequestParam(value="vProfesion")     String         vProfesion,   @RequestParam(value="vDesemail1" )    String  vDesemail1,
@@ -192,7 +196,7 @@ public class ControladorConsejeros {
 			@RequestParam(value="vTpconsejero")   String         vTpconsejero, @RequestParam(value="dFecinicio")     String  dFecinicio, 
 			@RequestParam(value="dFecfin")         String        dFecfin,       @RequestParam(value="vNumdocasig")    String vNumdocasig,
 			@RequestParam(value="rEgionfk")        Long          rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
-			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestParam(value="cOnsejeroidpk")  Long  cOnsejeroidpk){
+			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestParam(value="cOnsejeroidpk")  Long  cOnsejeroidpk) throws IOException{
 		
 		Archivos archivo = new Archivos();
 		Consejeros consejeroBuscar = new Consejeros();
@@ -224,12 +228,14 @@ public class ControladorConsejeros {
 			} 
  
 			
-			if(!docaprob.isEmpty()) {
+			if(docaprob!=null && docaprob.getSize()>0) {
 				archivo = archivoUtilitarioService.cargarArchivo(docaprob, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION); 
 				consejeroBuscar.setvNombredocasig(archivo.getNombre());
 				consejeroBuscar.setvUbidocasig(archivo.getUbicacion());
 				consejeroBuscar.setvExtdocasig(archivo.getExtension());
 			}
+			
+			
 			
 			consejeroBuscar.setvTipdocumento(vTipdocumento);
 			consejeroBuscar.setvNumdocumento(vNumdocumento);

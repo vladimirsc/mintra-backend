@@ -1,5 +1,6 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -87,11 +88,11 @@ public class ControladorPlanTrabajo {
  	
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarPlanTrabajo(
-			@RequestParam(value="docaprobacion") MultipartFile docaprobacion, @RequestParam(value="docplantrabajo") MultipartFile docplantrabajo,
+			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion , @RequestParam(value="docplantrabajo" ,required = false) MultipartFile docplantrabajo,
 			@RequestParam(value="comisionfk"   ) Long          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
 			@RequestParam(value="dFecinicio"   ) String        dFecinicio,    @RequestParam(value="dFecfin")        String  dFecfin,
 			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr
-			) {
+			) throws IOException{
 		
 		PlanTrabajo generico = new PlanTrabajo();
 		Archivos archivoDocAprobacion = new Archivos();
@@ -143,11 +144,11 @@ public class ControladorPlanTrabajo {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> actualizarPlanTrabajo(
-			@RequestParam(value="docaprobacion") MultipartFile docaprobacion, @RequestParam(value="docplantrabajo") MultipartFile docplantrabajo,
+			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion, @RequestParam(value="docplantrabajo",required = false) MultipartFile docplantrabajo,
 			@RequestParam(value="comisionfk"   ) Long          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
 			@RequestParam(value="dFecinicio"   ) String        dFecinicio,    @RequestParam(value="dFecfin")        String  dFecfin,
 			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,    @RequestParam(value="pLantrabidpk"   ) Long  pLantrabidpk
-			) {
+			) throws IOException {
 		logger.info("============  BUSCAR PROFESION =================");
 		PlanTrabajo generico = new PlanTrabajo();
 		Archivos archivoAprobacion = new Archivos();
@@ -163,15 +164,16 @@ public class ControladorPlanTrabajo {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
-			if(!docaprobacion.isEmpty()) {
+			
+			if(docaprobacion!=null && docaprobacion.getSize()>0) {
 				archivoAprobacion = archivoUtilitarioService.cargarArchivo(docaprobacion, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION); 
 				generico.setvNomarchdocaprob(archivoAprobacion.getNombre());
 				generico.setvUbidocaprobacion(archivoAprobacion.getUbicacion());
 				generico.setvExtarchdocaprob(archivoAprobacion.getExtension());
 			} 
 			
-			if(!docplantrabajo.isEmpty()) {
-				archivoPlanTrabajo = archivoUtilitarioService.cargarArchivo(docaprobacion, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION); 
+			if(docplantrabajo!=null && docplantrabajo.getSize()>0) {
+				archivoPlanTrabajo = archivoUtilitarioService.cargarArchivo(docplantrabajo, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION); 
 				generico.setvNomarchplan(archivoPlanTrabajo.getNombre());
 				generico.setvUbiarchplan(archivoPlanTrabajo.getUbicacion());
 				generico.setvExtarchplan(archivoPlanTrabajo.getExtension());

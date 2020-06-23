@@ -2,17 +2,22 @@ package pe.gob.mtpe.sivice.externo.core.negocio.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.PlanTrabajoDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.PlanTrabajoService;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
+import pe.gob.mtpe.sivice.externo.integracion.api.ControladorPlanTrabajo;
 
 @Service("PlanTrabajoService")
 @Transactional(readOnly = true)
 public class PlanTrabajoServiceImpl implements PlanTrabajoService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(PlanTrabajoServiceImpl.class);
 
 	@Autowired
 	private PlanTrabajoDao planTrabajoDao;
@@ -29,6 +34,19 @@ public class PlanTrabajoServiceImpl implements PlanTrabajoService {
 
 	@Override
 	public List<PlanTrabajo> buscar(PlanTrabajo planTrabajo) {
+		if(planTrabajo.getdFecaprobacion()!=null && planTrabajo.getdFecaprobacionfin()!=null) {
+			logger.info("xxxx"+FechasUtil.convertDateToString(planTrabajo.getdFecaprobacion()).substring(0,10));
+			logger.info("yyyy"+FechasUtil.convertStringToDate(FechasUtil.convertDateToString(planTrabajo.getdFecaprobacion()).substring(0,10)));
+			planTrabajo.setdFecaprobacion(FechasUtil.convertStringToDate(FechasUtil.convertDateToString(planTrabajo.getdFecaprobacion()).substring(0,10)));
+			planTrabajo.setdFecaprobacionfin(FechasUtil.convertStringToDate(FechasUtil.convertDateToString(planTrabajo.getdFecaprobacionfin()).substring(0,10)));
+		}
+		
+		if( planTrabajo.getdFecinicio()!=null && planTrabajo.getdFecfin()!=null ) {
+			planTrabajo.setdFecinicio(FechasUtil.convertStringToDate(FechasUtil.convertDateToString(planTrabajo.getdFecinicio()).substring(0,10)));
+			planTrabajo.setdFecfin(FechasUtil.convertStringToDate(FechasUtil.convertDateToString(planTrabajo.getdFecfin()).substring(0,10)));
+		}
+		
+		
 		return planTrabajoDao.buscar(planTrabajo);
 	}
 

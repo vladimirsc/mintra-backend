@@ -49,6 +49,17 @@ public class FechasUtil {
 	}
 	
 	
+	public static String convertDateToString(Date fecha){
+		DateFormat   formatoFecha = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss.SSSXX");	 
+		String fechaDate = null;
+		 try {			
+			   fechaDate = formatoFecha.format(fecha) ;	    
+		} catch (Exception e) {			
+		}	
+		return fechaDate;
+	}
+	
+	
 	
 	public static Date fechaActual() {
 		DateFormat format = new SimpleDateFormat("dd-MM-yyyy");

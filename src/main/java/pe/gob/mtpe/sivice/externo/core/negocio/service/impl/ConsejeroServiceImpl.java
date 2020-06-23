@@ -5,18 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ComisionDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ConsejeroDao;
-import pe.gob.mtpe.sivice.externo.core.negocio.service.ConsejeroService; ;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.ConsejeroService;
 
 @Service("ConsejeroService")
 @Transactional(readOnly = true)
 public class ConsejeroServiceImpl implements ConsejeroService {
 
- 
+	//private static final Logger logger = LoggerFactory.getLogger(ConsejeroServiceImpl.class);
+	
 	@Autowired
 	public ConsejeroDao consejeroDao;
 	
@@ -38,13 +38,18 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 	@Override
 	public List<Consejeros> buscar(Consejeros consejero) {
 		List<Consejeros> lista = new ArrayList<Consejeros>();
+		
 		lista = consejeroDao.buscar(consejero);
 		if(!lista.isEmpty()) {
 			Comisiones comision = new Comisiones();
 			for (Consejeros i : lista) {
-				comision.setcOmisionidpk(i.getcOmisionfk());
-				comision = comisionDao.buscarPorId(comision);
-				i.setVnombreComision(comision.getvCodcomision());
+				
+				if(i.getcOmisionfk()!=null) { 
+					comision.setcOmisionidpk(i.getcOmisionfk());
+					comision = comisionDao.buscarPorId(comision);
+					i.setVnombreComision(comision.getvCodcomision());	
+				}
+				
 			}
 			
 		}

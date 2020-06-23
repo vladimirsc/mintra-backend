@@ -53,8 +53,9 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 		
 		Predicate valor1 = builder.equal(root.get("vCodigoplantrab"), planTrabajo.getvCodigoplantrab());
 		Predicate valor2 = builder.between(root.get("dFecaprobacion"), planTrabajo.getdFecaprobacion(), planTrabajo.getdFecaprobacionfin());
-		Predicate valor3 = builder.between(root.get("dFecinicio"), planTrabajo.getdFecinicio(), planTrabajo.getdFecfin());
-		Predicate finalbusqueda=builder.or(valor1,valor2,valor3);
+		Predicate valor3 = builder.equal(root.get("dFecinicio"), planTrabajo.getdFecinicio());
+		Predicate valor4 = builder.equal(root.get("dFecfin"),planTrabajo.getdFecfin());
+		Predicate finalbusqueda=builder.or(valor1,valor2,valor3,valor4);
 		
 		criteriaQuery.where(finalbusqueda);
 		Query<PlanTrabajo> query = (Query<PlanTrabajo>) manager.createQuery(criteriaQuery);

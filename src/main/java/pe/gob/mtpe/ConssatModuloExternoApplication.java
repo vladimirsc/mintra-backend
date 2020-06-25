@@ -20,9 +20,7 @@ public class ConssatModuloExternoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// TODO Auto-generated method stub
 		String clave = "12346";
-		
 		for(int i= 0;i<2;i++) {
 			String claveEncriptada = encriptarclave.encode(clave);
 			System.out.println("=============="+claveEncriptada);

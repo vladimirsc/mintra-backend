@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
+import org.springframework.web.multipart.MultipartFile; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.AsistenciaConsejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Asistencias;
@@ -41,7 +37,6 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.AsistenciasArchivoService
 import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.InvitadoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
-import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController

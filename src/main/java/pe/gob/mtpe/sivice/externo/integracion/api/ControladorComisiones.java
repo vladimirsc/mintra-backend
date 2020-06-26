@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones; 
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ComisionService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
@@ -143,6 +144,14 @@ public class ControladorComisiones {
 
 		return new ResponseEntity<Comisiones>(generico,HttpStatus.OK);
 
+	}
+	
+	
+	@PostMapping("/buscarpornombre")
+	public List<Comisiones> buscarComision(
+			@RequestParam(value="nombrecomision")  String  nombrecomision 
+	      ){
+		return comisionService.buscarComision(nombrecomision);
 	}
 
 }

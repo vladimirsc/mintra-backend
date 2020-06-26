@@ -18,5 +18,7 @@ public interface SesionDao {
 
 	public Sesiones Eliminar(Sesiones sesion);
 	
+	List<Sesiones> buscarSesion(String nombresesion);
+	
 	
 }

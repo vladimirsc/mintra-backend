@@ -3,9 +3,16 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ComisionDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
@@ -65,6 +72,22 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.COMISION_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;
+	}
+
+	@Override
+	public List<Comisiones> buscarComision(String nombre_comision) {
+		EntityManager manager = createEntityManager();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		
+		CriteriaQuery<Comisiones> criteriaQuery = builder.createQuery(Comisiones.class);
+		Root<Comisiones> root = criteriaQuery.from(Comisiones.class);
+		
+		Predicate valor1 = builder.like(root.get("vCodcomision"), "%"+nombre_comision+"%");
+		criteriaQuery.where(valor1);
+		Query<Comisiones> query = (Query<Comisiones>) manager.createQuery(criteriaQuery);
+		List<Comisiones> resultado = query.getResultList();
+		manager.close();
+		return resultado;
 	}
 
 

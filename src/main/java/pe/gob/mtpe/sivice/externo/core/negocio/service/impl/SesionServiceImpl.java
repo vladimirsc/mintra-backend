@@ -101,4 +101,13 @@ public class SesionServiceImpl implements SesionService {
 		return sesionDao.Eliminar(sesion);
 	}
 
+	@Override
+	public List<Sesiones> buscarSesion(String nombresesion) {
+		 
+		if(nombresesion==null) {
+			return null;
+		}
+		return sesionDao.buscarSesion(nombresesion);
+	}
+
 }

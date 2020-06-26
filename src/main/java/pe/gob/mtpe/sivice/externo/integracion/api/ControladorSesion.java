@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
@@ -188,6 +189,15 @@ public class ControladorSesion {
  
 		return new ResponseEntity<Sesiones>(generico,HttpStatus.OK);
 
+	}
+	
+	
+	
+	@PostMapping("/buscarpornombre")
+	public List<Sesiones> buscarSesion(
+			@RequestParam(value="nombresesion")  String  nombresesion 
+	      ){
+		return sesionService.buscarSesion(nombresesion);
 	}
 	
  

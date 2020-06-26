@@ -96,6 +96,22 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 		return StrcorrelativoFinal;
 	}
 
+	@Override
+	public List<Sesiones> buscarSesion(String nombresesion) {
+		EntityManager manager = createEntityManager();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		
+		CriteriaQuery<Sesiones> criteriaQuery = builder.createQuery(Sesiones.class);
+		Root<Sesiones> root = criteriaQuery.from(Sesiones.class);
+		
+		Predicate valor1 = builder.like(root.get("vCodsesion"), "%"+nombresesion+"%");
+		criteriaQuery.where(valor1);
+		Query<Sesiones> query = (Query<Sesiones>) manager.createQuery(criteriaQuery);
+		List<Sesiones> resultado = query.getResultList();
+		manager.close();
+		return resultado;
+	}
+
 	 
 
 }

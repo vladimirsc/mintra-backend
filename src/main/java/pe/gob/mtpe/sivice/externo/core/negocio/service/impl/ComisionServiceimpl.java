@@ -48,4 +48,9 @@ public class ComisionServiceimpl implements ComisionService {
 		return ComisionDao.Eliminar(comisiones);
 	}
 
+	@Override
+	public List<Comisiones> buscarComision(String nombre_comision) { 
+		return ComisionDao.buscarComision(nombre_comision);
+	}
+
 }

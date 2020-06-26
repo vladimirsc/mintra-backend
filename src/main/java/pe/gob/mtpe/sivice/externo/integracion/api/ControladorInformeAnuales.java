@@ -1,9 +1,12 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos; 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InfAnuales;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.InformAnualService;
@@ -211,5 +215,26 @@ public class ControladorInformeAnuales {
 
 		return new ResponseEntity<InfAnuales>(generico,HttpStatus.OK);
 	}
+	
+	 
+	@GetMapping("/descargar/{id}")
+	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+		InfAnuales generico = new InfAnuales();
+		generico.setiNformeidpk(id);
+		String ruta = "";
+		try {
+			generico = informAnualService.buscarPorId(generico);
+			if(generico!=null) {
+				ruta = rutaRaiz + generico.obtenerRutaAbsolutaDocAprobacion();
+				res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNombreArchivo()+"."+generico.getvExtension());
+				res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
+			}
+		} catch (Exception e) {
+			
+		}
+
+	}
+	
+	 
 
 }

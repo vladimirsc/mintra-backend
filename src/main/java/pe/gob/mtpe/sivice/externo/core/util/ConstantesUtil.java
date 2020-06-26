@@ -13,7 +13,7 @@ public class ConstantesUtil {
 	public static final String SESION_ALIAS_CORRELATIVO = "SESION";
 	
 	public static final String C_CONSEJERO_DOC_ASIGNACION ="DOCASIGNACION";
-
+	public static final String C_BOLETINES ="BOLETIN";
 	public static final String GENERAL_MSG_ERROR_BASE = "Ocurrio un error en la Base de Datos";
 
 	// CINSTANTES JSON

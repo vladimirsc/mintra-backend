@@ -2,13 +2,11 @@ package pe.gob.mtpe.sivice.externo.core.negocio.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Asistencias;
@@ -96,14 +94,14 @@ public class ActaServiceImpl implements ActaService {
 	@Override
 	public List<Acuerdos> listaAcuerdosPorActa(Actas actas) {
 		// BUSCAMOS AL SESION
-		Sesiones sesion = new Sesiones();
-		sesion.setsEsionidpk(actas.getsEsionfk());
-		sesion = sesionDao.buscarPorId(sesion);
+		Actas actar= new Actas();
+ 
+		actar=actasDao.buscarActaPorIdSesion(actas.getSesionfk().getsEsionidpk()); 
 
 		Actas acta = new Actas();
 		List<Acuerdos> listarAcuerdos = new ArrayList<Acuerdos>();
-		if (sesion != null) {// BUSCAMOS EL ACTA
-			acta = actasDao.buscarActaPorIdSesion(sesion.getsEsionidpk());
+		if (actar != null) {// BUSCAMOS EL ACTA
+			acta = actasDao.buscarActaPorIdSesion(actas.getSesionfk().getsEsionidpk());
 			if (acta != null) {
 				// BUSCAMOS LOS ACUEROS
 				listarAcuerdos = actasDao.listaAcuerdosPorActa(acta);

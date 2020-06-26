@@ -118,8 +118,12 @@ public class ControladorActas {
 	List<Acuerdos> listaAcuerdosPorActa(
 			@PathVariable Long idsesion
 	 ){
+		
+		Sesiones sesion = new Sesiones();
+		sesion.setsEsionidpk(idsesion);
 		Actas acta = new Actas();
-		acta.setsEsionfk(idsesion);
+		acta.setSesionfk(sesion);
+		
 		List<Acuerdos> listarAcuerdos =  actaService.listaAcuerdosPorActa(acta);
 		
 		return listarAcuerdos;
@@ -324,7 +328,9 @@ public class ControladorActas {
 			archivo = archivoUtilitarioService.cargarArchivo(docacta, ConstantesUtil.ACTA_ALIAS_CORRELATIVO);
 
 			if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
-				generico.setsEsionfk(sesionfk);
+				Sesiones sesion = new Sesiones();
+				sesion.setsEsionidpk(sesionfk);
+				generico.setSesionfk(sesion);
 				generico.setdFecacta(FechasUtil.convertStringToDate(fecha_acta));
 				generico.setvNombrearchivo(archivo.getNombre());
 				generico.setvArchivoextension(archivo.getExtension());

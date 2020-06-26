@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -30,8 +32,9 @@ public class Actas implements Serializable {
 	@Column(name = "ACTA_ID_PK")
 	private Long aCtaidpk;
 
-	@Column(name = "SESION_FK")
-	private Long sEsionfk;
+	@ManyToOne
+	@JoinColumn(name="SESION_FK",nullable = false, insertable = true, updatable = true)
+	private Sesiones sesionfk;
 
 	@Column(name = "V_CODACTA")
 	private String vCodacta;
@@ -90,13 +93,14 @@ public class Actas implements Serializable {
 	public void setaCtaidpk(Long aCtaidpk) {
 		this.aCtaidpk = aCtaidpk;
 	}
+ 
 
-	public Long getsEsionfk() {
-		return sEsionfk;
+	public Sesiones getSesionfk() {
+		return sesionfk;
 	}
 
-	public void setsEsionfk(Long sEsionfk) {
-		this.sEsionfk = sEsionfk;
+	public void setSesionfk(Sesiones sesionfk) {
+		this.sesionfk = sesionfk;
 	}
 
 	public String getvCodacta() {

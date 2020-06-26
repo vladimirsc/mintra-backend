@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -30,19 +32,15 @@ public class InfAnuales implements Serializable {
 	@Column(name = "INFORME_ID_PK")
 	private Long iNformeidpk;
 
-	@Column(name = "SESION_FK")
-	private Long sEsionfk;
+	@Column(name = "V_SESION")
+	private String vSesion;
 
 	@Column(name = "COMISION_FK")
-	private Long cOmisionfk;
+	private String comision;
 
 	@Column(name = "V_CODINFORME")
 	private String vCodinforme;
-
-	@Column(name = "D_FECREGISTRO")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dFecregistro;
-
+ 
 	@Column(name = "V_NUMDOCAP")
 	private String vNumdocap;
 
@@ -59,17 +57,30 @@ public class InfAnuales implements Serializable {
 	@Column(name = "N_USUREG")
 	private Long nUsureg;
 
-	@Column(name = "D_FECREG")
+	@Column(name = "D_FECDESDE")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dFecreg;
-
+	private Date dFecdesde;
+ 
 	@Column(name = "N_USUMODIFICA")
 	private Long nUsumodifica;
 
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
-
+	
+	@Column(name = "V_EXTENSION")
+    private String vExtension;
+	
+	@Column(name = "D_FECREG")
+	private Date dFecreg;
+	
+	
+	@Column(name = "V_NOMARCHIVO")
+	 private String vNombreArchivo;
+	
+	private transient Date dFhasta;
+	
+	
 	public InfAnuales() {
 
 	}
@@ -92,23 +103,22 @@ public class InfAnuales implements Serializable {
 	}
 
 
-	public Long getsEsionfk() {
-		return sEsionfk;
+	public String getvSesion() {
+		return vSesion;
 	}
 
 
-	public void setsEsionfk(Long sEsionfk) {
-		this.sEsionfk = sEsionfk;
+	public void setvSesion(String vSesion) {
+		this.vSesion = vSesion;
+	}
+ 
+	public String getComision() {
+		return comision;
 	}
 
 
-	public Long getcOmisionfk() {
-		return cOmisionfk;
-	}
-
-
-	public void setcOmisionfk(Long cOmisionfk) {
-		this.cOmisionfk = cOmisionfk;
+	public void setComision(String comision) {
+		this.comision = comision;
 	}
 
 
@@ -121,16 +131,7 @@ public class InfAnuales implements Serializable {
 		this.vCodinforme = vCodinforme;
 	}
 
-
-	public Date getdFecregistro() {
-		return dFecregistro;
-	}
-
-
-	public void setdFecregistro(Date dFecregistro) {
-		this.dFecregistro = dFecregistro;
-	}
-
+ 
 
 	public String getvNumdocap() {
 		return vNumdocap;
@@ -182,16 +183,15 @@ public class InfAnuales implements Serializable {
 	}
 
 
-	public Date getdFecreg() {
-		return dFecreg;
+	public Date getdFecdesde() {
+		return dFecdesde;
 	}
 
 
-	public void setdFecreg(Date dFecreg) {
-		this.dFecreg = dFecreg;
+	public void setdFecdesde(Date dFecdesde) {
+		this.dFecdesde = dFecdesde;
 	}
-
-
+ 
 	public Long getnUsumodifica() {
 		return nUsumodifica;
 	}
@@ -211,5 +211,50 @@ public class InfAnuales implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
+
+	public String getvExtension() {
+		return vExtension;
+	}
+
+
+	public void setvExtension(String vExtension) {
+		this.vExtension = vExtension;
+	}
+
+
+	public Date getdFecreg() {
+		return dFecreg;
+	}
+
+
+	public void setdFecreg(Date dFecreg) {
+		this.dFecreg = dFecreg;
+	}
+
+
+	public String getvNombreArchivo() {
+		return vNombreArchivo;
+	}
+
+
+	public void setvNombreArchivo(String vNombreArchivo) {
+		this.vNombreArchivo = vNombreArchivo;
+	}
+
+
+	public String obtenerRutaAbsolutaDocAprobacion() {
+		return this.getvUbiarch()+this.getvNombreArchivo()+"."+this.getvExtension();
+	}
+
+
+	public Date getdFhasta() {
+		return dFhasta;
+	}
+
+
+	public void setdFhasta(Date dFhasta) {
+		this.dFhasta = dFhasta;
+	}
+ 
 	 
 }

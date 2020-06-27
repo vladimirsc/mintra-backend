@@ -54,15 +54,15 @@ public class ControladorSesion {
 		Sesiones sesionbuscar = new Sesiones();
 		
 		 try {
+			 TipoSesiones tiposesiones = new TipoSesiones();
 			 if(tiposesion!=null) {
-				 TipoSesiones tiposesiones = new TipoSesiones();
 				 tiposesiones.settIposesionidpk(tiposesion); 
 			  }
 
 			 sesionbuscar.setvCodsesion(codigosesion); 
 			 sesionbuscar.setdFechaInicio(FechasUtil.convertStringToDate(fechainicio));
 			 sesionbuscar.setdFechaFin(FechasUtil.convertStringToDate(fechafin));
-			 
+			 sesionbuscar.setTipoSesiones(tiposesiones);
 			 generico = sesionService.buscar(sesionbuscar);
 		} catch (Exception e) {
 			generico = null;

@@ -56,7 +56,7 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 		
 		Predicate valor1 = builder.equal(root.get("vCodsesion"), sesion.getvCodsesion()) ;
 		Predicate valor2 = builder.between(root.get("dFecreacion"), sesion.getdFechaInicio(), sesion.getdFechaFin());
-		Predicate valor3 = builder.equal(root.get("tipoSesiones") ,Long.parseLong("1"));
+		Predicate valor3 = builder.equal(root.get("tipoSesiones") ,sesion.getTipoSesiones().gettIposesionidpk());
 		Predicate finalbusqueda =builder.or(valor1,valor2,valor3);
 		
 		criteriaQuery.where(finalbusqueda);

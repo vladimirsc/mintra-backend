@@ -31,7 +31,7 @@ public class Calendarios implements Serializable {
 	private Long cAlendarioidpk;
 
 	@Column(name = "COMISION_FK")
-	private Long cOmisionfk;
+	private String cOmisionfk;
 
 	@Column(name = "V_DESACTIVIDAD")
 	private String vDesactividad;
@@ -40,13 +40,11 @@ public class Calendarios implements Serializable {
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecactividad;
 
-	@Column(name = "D_HORAINICIO")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dHorainicio;
+	@Column(name = "V_HORAINICIO") 
+	private String vHorainicio;
 
-	@Column(name = "D_HORAFIN")
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
-	private Date dHorafin;
+	@Column(name = "V_HORAFIN") 
+	private String vHorafin;
 
 	@Column(name = "C_FLGEJECUTO", length = 1)
 	private String cFlgejecuto;
@@ -78,6 +76,8 @@ public class Calendarios implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+	private transient String vFechaActividad;
 
 	public Calendarios() {
 
@@ -97,11 +97,11 @@ public class Calendarios implements Serializable {
 		this.cAlendarioidpk = cAlendarioidpk;
 	}
 
-	public Long getcOmisionfk() {
+	public String getcOmisionfk() {
 		return cOmisionfk;
 	}
 
-	public void setcOmisionfk(Long cOmisionfk) {
+	public void setcOmisionfk(String cOmisionfk) {
 		this.cOmisionfk = cOmisionfk;
 	}
 
@@ -121,20 +121,20 @@ public class Calendarios implements Serializable {
 		this.dFecactividad = dFecactividad;
 	}
 
-	public Date getdHorainicio() {
-		return dHorainicio;
+	public String getvHorainicio() {
+		return vHorainicio;
 	}
 
-	public void setdHorainicio(Date dHorainicio) {
-		this.dHorainicio = dHorainicio;
+	public void setvHorainicio(String vHorainicio) {
+		this.vHorainicio = vHorainicio;
 	}
 
-	public Date getdHorafin() {
-		return dHorafin;
+	public String getvHorafin() {
+		return vHorafin;
 	}
 
-	public void setdHorafin(Date dHorafin) {
-		this.dHorafin = dHorafin;
+	public void setvHorafin(String vHorafin) {
+		this.vHorafin = vHorafin;
 	}
 
 	public String getcFlgejecuto() {
@@ -209,5 +209,14 @@ public class Calendarios implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
+	public String getvFechaActividad() {
+		return vFechaActividad;
+	}
+
+	public void setvFechaActividad(String vFechaActividad) {
+		this.vFechaActividad = vFechaActividad;
+	}
+
+	 
 	 
 }

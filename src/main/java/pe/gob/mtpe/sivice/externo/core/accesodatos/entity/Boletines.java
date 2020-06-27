@@ -75,6 +75,9 @@ public class Boletines implements Serializable {
 	
 	@Column(name = "V_ARCHIVOEXTENSION")
 	private String vArchivoextension;
+	
+	private transient String vFecdesde;
+	private transient String vFechasta;
 
 	public Boletines() {
 
@@ -201,5 +204,24 @@ public class Boletines implements Serializable {
 	public String obtenerRutaAbsoluta() {
 		return this.getvUbiarch()+this.getvNombrearchivo()+"."+this.vArchivoextension;
 	}
+
+	public String getvFecdesde() {
+		return vFecdesde;
+	}
+
+	public void setvFecdesde(String vFecdesde) {
+		this.vFecdesde = vFecdesde;
+	}
+
+	public String getvFechasta() {
+		return vFechasta;
+	}
+
+	public void setvFechasta(String vFechasta) {
+		this.vFechasta = vFechasta;
+	}
+	
+	
+	
 
 }

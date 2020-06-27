@@ -2,7 +2,6 @@ package pe.gob.mtpe.sivice.externo.integracion.api;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,29 +54,11 @@ public class ControladorBoletines {
 		return boletinService.listar();
 	}
 
-	
-	/*
-	@PostMapping("/boletin")
-	public ResponseEntity<?> registrarBoletin(@RequestBody Boletines boletin) {
-		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
-		Boletines generico = new Boletines();
-		Map<String, Object> response = new HashMap<>();
-		try {
-			generico = boletinService.Registrar(boletin);
-		} catch (DataAccessException e) {
-			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
-			response.put(ConstantesUtil.X_ERROR, e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			response.put(ConstantesUtil.X_ENTIDAD, boletin);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<Boletines>(generico,HttpStatus.CREATED);
-	}
-	*/
+ 
 	
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarBoletin(
-			@RequestParam("file") MultipartFile file,
-			@RequestParam("numero") String numeroBoletin,
+			@RequestParam("archivoboletin") MultipartFile archivoboletin, 
 			@RequestParam("fecha") String fecha_boletin) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Boletines generico = new Boletines();
@@ -86,10 +67,9 @@ public class ControladorBoletines {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			
-			archivo = archivoUtilitarioService.cargarArchivo(file, ConstantesUtil.BOLETIN_ALIAS_CORRELATIVO);
+			archivo = archivoUtilitarioService.cargarArchivo(archivoboletin, ConstantesUtil.BOLETIN_ALIAS_CORRELATIVO);
 
-			if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
-				generico.setvNumbol(numeroBoletin);
+			if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) { 
 				generico.setdFecboletin(FechasUtil.convertStringToDate(fecha_boletin));
 				generico.setvNombrearchivo(archivo.getNombre());
 				generico.setvArchivoextension(archivo.getExtension());
@@ -114,29 +94,48 @@ public class ControladorBoletines {
 		return new ResponseEntity<Boletines>(generico,HttpStatus.CREATED);
 	}
 
-	@PutMapping("/boletin")
-	public ResponseEntity<?> actualizarBoletin(@RequestBody Boletines boletin) {
+	@PutMapping("/actualizar")
+	public ResponseEntity<?> actualizarBoletin(
+			@RequestParam(value="codigoboletin")                                 Long codigoboletin,
+			@RequestParam(value="archivoboletin",required = false) MultipartFile archivoboletin, 
+			@RequestParam(value="fecha")                                         String fecha_boletin
+			) {
 		logger.info("========== ACTUALIZAR A GRABAR BOLETINES=============== ");
+		Archivos archivo = new Archivos();
 		Boletines generico = new Boletines();
 		Map<String, Object> response = new HashMap<>();
 		try {
-			generico = boletinService.buscarPorId(boletin);
+			generico.setbOletinidpk(codigoboletin);
+			generico = boletinService.buscarPorId(generico);
+			
+			if(archivoboletin!=null && archivoboletin.getSize()>0) {
+				archivo = archivoUtilitarioService.cargarArchivo(archivoboletin, ConstantesUtil.C_BOLETINES);
+				generico.setvUbiarch(archivo.getUbicacion());
+				generico.setvNombrearchivo((archivo.getNombre()));
+				generico.setvArchivoextension(archivo.getExtension());
+			}
+			
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.BOLETIN_MSG_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.BOLETIN_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ENTIDAD, boletin);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-			boletin.setvNumbol(generico.getvNumbol());
-			boletin.setnUsureg(generico.getnUsureg());
-			boletin.setdFecreg(generico.getdFecreg());
+			
+			if(fecha_boletin!=null) {
+				generico.setdFecboletin(FechasUtil.convertStringToDate(fecha_boletin));
+			}
+			
 
-			generico = boletinService.Actualizar(boletin);
+			generico.setnUsureg(generico.getnUsureg());
+			generico.setdFecreg(generico.getdFecreg());
+
+			generico = boletinService.Actualizar(generico);
 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR, e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			response.put(ConstantesUtil.X_ENTIDAD, boletin);
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}  
 		
@@ -171,6 +170,8 @@ public class ControladorBoletines {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
+	
+	/*
 	@PostMapping("/buscar")
 	public List<Boletines> buscar(@RequestBody Boletines buscar) {
 		logger.info("========== INGRESO A LISTAR BUSCAR RANGO FECHAS =============== ");
@@ -186,6 +187,14 @@ public class ControladorBoletines {
 		}
 
 		return listaRegistros;
+	}
+	
+	*/
+	
+	@PostMapping("/buscar")
+	public List<Boletines> buscar(@RequestBody Boletines buscar) {
+		 
+		return boletinService.buscarBoletines(buscar);
 	}
 	
 	@GetMapping("/descargar/{id}")

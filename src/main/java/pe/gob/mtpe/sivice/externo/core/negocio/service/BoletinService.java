@@ -19,4 +19,6 @@ public interface BoletinService {
 	public Boletines Actualizar(Boletines boletines);
 
 	public Boletines Eliminar(Boletines boletines);
+	
+	List<Boletines> buscarBoletines(Boletines boletines);
 }

@@ -16,4 +16,6 @@ public interface ParticipaCalendarioDao {
 	public Particalen Actualizar(Particalen particalen);
 
 	public Particalen Eliminar(Particalen particalen);
+	
+	List<Particalen> listarParticipantesPorCalendario(Long codigocalendario);
 }

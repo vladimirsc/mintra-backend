@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Boletines;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.BoletinDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.BoletinService;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
  
 
 @Service("BoletinService")
@@ -51,6 +52,16 @@ public class BoletinServiceImpl implements BoletinService {
 	@Override
 	public List<Boletines> BuscarPorCodigo(Boletines boletines) {
 		return boletinDao.BuscarPorCodigo(boletines);
+	}
+
+	@Override
+	public List<Boletines> buscarBoletines(Boletines boletines) { 
+		
+		if(boletines.getvFecdesde()!=null && boletines.getvFechasta()!=null) {
+			boletines.setdFechaInicio(FechasUtil.convertStringToDate(boletines.getvFecdesde()));
+			boletines.setdFechaFin(FechasUtil.convertStringToDate(boletines.getvFechasta()));
+		}
+		return boletinDao.buscarBoletines(boletines);
 	}
 
 }

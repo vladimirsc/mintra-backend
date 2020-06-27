@@ -7,13 +7,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InfAnuales;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InfAnuales; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.InformAnualDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;

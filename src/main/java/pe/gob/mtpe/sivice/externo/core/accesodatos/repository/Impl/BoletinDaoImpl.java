@@ -3,16 +3,22 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Boletines;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.BoletinDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @Component
 public class BoletinDaoImpl extends BaseDao<Long, Boletines> implements BoletinDao {
-
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -56,7 +62,8 @@ public class BoletinDaoImpl extends BaseDao<Long, Boletines> implements BoletinD
 	public String GenerarCorrelativo() {
 		EntityManager manager = createEntityManager();
 		Long correlativo = (Long) manager.createQuery("SELECT COUNT(b)+1 FROM Boletines b").getSingleResult();
-		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo, ConstantesUtil.BOLETIN_ALIAS_CORRELATIVO);
+		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,
+				ConstantesUtil.BOLETIN_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;
 	}
@@ -85,6 +92,29 @@ public class BoletinDaoImpl extends BaseDao<Long, Boletines> implements BoletinD
 		manager.close();
 		return boletin;
 
+	}
+
+	@Override
+	public List<Boletines> buscarBoletines(Boletines boletines) {
+		EntityManager manager = createEntityManager();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+
+		CriteriaQuery<Boletines> criteriaQuery = builder.createQuery(Boletines.class);
+		Root<Boletines> root = criteriaQuery.from(Boletines.class);
+		
+		boletines.setdFechaInicio((boletines.getdFechaInicio()!= null) ?   boletines.getdFechaInicio() :FechasUtil.convertStringToDate("01-01-1880"));
+		boletines.setdFechaFin( (boletines.getdFechaFin()!=null)?            boletines.getdFechaFin()  :FechasUtil.convertStringToDate("01-01-1880"));
+
+		Predicate valor1 = builder.equal(root.get("vNumbol"), boletines.getvNumbol());
+		Predicate valor2 = builder.between(root.get("dFecboletin"), boletines.getdFechaInicio(), boletines.getdFechaFin());
+		
+		Predicate finalbusqueda = builder.or(valor1, valor2);
+
+		criteriaQuery.where(finalbusqueda);
+		Query<Boletines> query = (Query<Boletines>) manager.createQuery(criteriaQuery);
+		List<Boletines> resultado = query.getResultList();
+		manager.close();
+		return resultado;
 	}
 
 }

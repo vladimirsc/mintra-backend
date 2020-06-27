@@ -69,7 +69,7 @@ public class ControladorCalendarios {
 		return calendarioService.buscar(buscar);
 	}
 
-	@PostMapping("/calendario")
+	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar(@RequestBody Calendarios calendarios) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Map<String, Object> response = new HashMap<>();
@@ -85,7 +85,7 @@ public class ControladorCalendarios {
 		return new ResponseEntity<Calendarios>(calendarios,HttpStatus.CREATED);
 	}
 
-	@PutMapping("/calendario")
+	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(@RequestBody Calendarios calendarios) {
 		Calendarios generico = null;
 		Map<String, Object> response = new HashMap<>();
@@ -137,5 +137,8 @@ public class ControladorCalendarios {
 		
 		return new ResponseEntity<Calendarios>(generico,HttpStatus.OK);
 	}
+	
+	
+	
 
 }

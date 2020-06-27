@@ -71,7 +71,7 @@ public class Sesiones implements Serializable {
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "CONSEJOS_FK",nullable = false, insertable = true, updatable = true)
+	@JoinColumn(name = "CONSEJOS_FK",nullable = false, insertable = false, updatable = false)
 	private Consejos consejofk;
 	
 	@OneToOne

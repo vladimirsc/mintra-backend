@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Calendarios;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.CalendarioDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.CalendarioService;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @Service("CalendarioService")
 @Transactional(readOnly = true)
@@ -32,11 +33,17 @@ public class CalendarioServiceImpl implements CalendarioService {
 
 	@Override
 	public Calendarios Registrar(Calendarios calendarios) {
+		if(calendarios.getvFechaActividad()!=null) {
+			calendarios.setdFecactividad(FechasUtil.convertStringToDate(calendarios.getvFechaActividad()));
+		}
 		return calendarioDao.Registrar(calendarios);
 	}
 
 	@Override
 	public Calendarios Actualizar(Calendarios calendarios) {
+		if(calendarios.getvFechaActividad()!=null) {
+			calendarios.setdFecactividad(FechasUtil.convertStringToDate(calendarios.getvFechaActividad()));
+		}
 		return calendarioDao.Actualizar(calendarios);
 	}
 

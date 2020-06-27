@@ -19,7 +19,7 @@ public class ParticipaCalendarioDaoImpl extends BaseDao<Long, Particalen> implem
 	public List<Particalen> listar() {
 		EntityManager manager = createEntityManager();
 		List<Particalen> lista = manager
-				.createQuery("FROM Particalen c WHERE c.cFlgeliminado=:eliminado ORDER BY c.pArtcalendidpk DESC")
+				.createQuery("FROM Particalen p WHERE p.cFlgeliminado=:eliminado ORDER BY p.pArtcalendidpk DESC")
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -50,10 +50,22 @@ public class ParticipaCalendarioDaoImpl extends BaseDao<Long, Particalen> implem
 
 	@Override
 	public Particalen Eliminar(Particalen particalen) {
-		particalen.setdFecelimina(new Date());
+		particalen.setdFecElimina(new Date());
 		particalen.setcFlgeliminado(ConstantesUtil.C_INDC_ACTIVO);
 		actualizar(particalen);
 		return particalen;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Particalen> listarParticipantesPorCalendario(Long codigocalendario) {
+		EntityManager manager = createEntityManager();
+		List<Particalen> lista = manager
+				.createQuery("SELECT p FROM Particalen p INNER JOIN p.calendario c  WHERE c.cAlendarioidpk=:calendariofk AND  p.cFlgeliminado=:eliminado ORDER BY p.pArtcalendidpk DESC")
+				.setParameter("calendariofk", codigocalendario)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
 	}
 
 }

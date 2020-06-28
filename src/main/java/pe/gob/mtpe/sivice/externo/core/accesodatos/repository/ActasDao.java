@@ -22,5 +22,7 @@ public interface ActasDao {
 	Actas buscarActaPorIdSesion(Long idSesion);
 	
 	List<Acuerdos> listaAcuerdosPorActa(Actas actas);
+	
+	List<Actas> buscarActasPorSesion(Actas actas);
 	 
 }

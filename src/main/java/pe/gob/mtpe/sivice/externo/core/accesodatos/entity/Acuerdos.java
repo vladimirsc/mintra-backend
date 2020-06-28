@@ -73,6 +73,11 @@ public class Acuerdos implements Serializable {
 	
 	@Column(name = "V_RESPONSABLE")
 	private String vResponsable;
+	
+	private transient String  vCodigoSesion;
+	private transient Long    nTipoSesion;
+	private transient String  vfechaInicio;
+	private transient String  vfechafin;
 
 	public Acuerdos() {
 
@@ -186,6 +191,38 @@ public class Acuerdos implements Serializable {
 
 	public void setvResponsable(String vResponsable) {
 		this.vResponsable = vResponsable;
+	}
+
+	public String getvCodigoSesion() {
+		return vCodigoSesion;
+	}
+
+	public void setvCodigoSesion(String vCodigoSesion) {
+		this.vCodigoSesion = vCodigoSesion;
+	}
+
+	public Long getnTipoSesion() {
+		return nTipoSesion;
+	}
+
+	public void setnTipoSesion(Long nTipoSesion) {
+		this.nTipoSesion = nTipoSesion;
+	}
+
+	public String getVfechaInicio() {
+		return vfechaInicio;
+	}
+
+	public void setVfechaInicio(String vfechaInicio) {
+		this.vfechaInicio = vfechaInicio;
+	}
+
+	public String getVfechafin() {
+		return vfechafin;
+	}
+
+	public void setVfechafin(String vfechafin) {
+		this.vfechafin = vfechafin;
 	}
 
 	 

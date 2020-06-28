@@ -36,7 +36,7 @@ public class InformAnualDaoImpl extends BaseDao<Long, InfAnuales> implements Inf
 		InfAnuales informe = new InfAnuales();
 		EntityManager manager = createEntityManager();
 		List<InfAnuales> lista = manager
-				.createQuery("FROM InfAnuales b WHERE b.iNformeidpk=:codigoinforme AND b.cFlgeliminado=:eliminado ")
+				.createQuery("FROM InfAnuales i WHERE i.iNformeidpk=:codigoinforme AND i.cFlgeliminado=:eliminado ")
 				.setParameter("codigoinforme", infAnuales.getiNformeidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();

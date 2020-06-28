@@ -1,7 +1,6 @@
 package pe.gob.mtpe.sivice.externo.core.negocio.service;
 
-import java.util.List;
-
+import java.util.List; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Temas;
 
@@ -22,4 +21,6 @@ public interface TemaService {
 	Sesiones cabeceraSesion(Sesiones sesiones);
 	
 	List<Temas> temasPorSesion (Long idsesion);
+	 
+ 
 }

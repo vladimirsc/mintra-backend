@@ -86,6 +86,7 @@ public class ControladorAcciones {
 	     @RequestParam(value = "responsable")        String responsable,
 	     @RequestParam(value = "descripcionaccion")  String descripcionaccion,
 	     @RequestParam(value = "fecha_ejecutara")    String fecha_ejecutara,
+	     @RequestParam(value = "flgejecuto")         String flgejecuto,
 	     @RequestParam(value = "fecha_ejecuto")      String fecha_ejecuto,
 	     @RequestParam(value = "docaccion")          MultipartFile docaccion
 	) {
@@ -93,7 +94,7 @@ public class ControladorAcciones {
 		Acciones generico = new Acciones();
 		Map<String, Object> response = new HashMap<>();
 		try {
-			generico = accionesService.Registrar(idacuerdo,identidad,responsable,descripcionaccion,fecha_ejecutara,fecha_ejecuto,docaccion);
+			generico = accionesService.Registrar(idacuerdo,identidad,responsable,descripcionaccion,fecha_ejecutara,flgejecuto,fecha_ejecuto,docaccion);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
@@ -106,6 +107,7 @@ public class ControladorAcciones {
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(
 			@RequestParam(value = "idaccion")      Long idaccion, 
+			@RequestParam(value = "flgejecuto")         String flgejecuto,
 			@RequestParam(value = "fecha_ejecuto") String fecha_ejecuto,
 			@RequestParam(value = "docaccion")      MultipartFile docaccion
 			) {

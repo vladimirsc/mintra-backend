@@ -62,6 +62,7 @@ public class ActaServiceImpl implements ActaService {
 
 	@Override
 	public List<Actas> buscar(Actas actas) {
+ 
 		return actasDao.buscar(actas);
 	}
 
@@ -189,6 +190,11 @@ public class ActaServiceImpl implements ActaService {
 		generico = firmantesDao.buscarPorId(generico);
 		generico.setcFlgasistio(firmantes.getcFlgasistio());
 		return firmantesDao.Actualizar(generico);
+	}
+
+	@Override
+	public List<Actas> buscarActasPorSesion(Actas actas) { 
+		return actasDao.buscarActasPorSesion(actas);
 	}
 
 }

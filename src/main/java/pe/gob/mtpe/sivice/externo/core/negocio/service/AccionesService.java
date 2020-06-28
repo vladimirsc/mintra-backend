@@ -13,7 +13,7 @@ public interface AccionesService {
 
 	List<Acciones> buscar(Acciones acciones);
 
-	public Acciones Registrar(Long idacuerdo,Long identidad,String responsable,String descripcionaccion,String fecha_ejecutara,String fecha_ejecuto,MultipartFile docaccion);
+	public Acciones Registrar(Long idacuerdo,Long identidad,String responsable,String descripcionaccion,String fecha_ejecutara,String flgejecuto,String fecha_ejecuto,MultipartFile docaccion);
 
 	public Acciones Actualizar(Acciones acciones);
 

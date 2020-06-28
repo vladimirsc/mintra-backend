@@ -70,4 +70,6 @@ public class AcuerdoDaoImpl extends BaseDao<Long, Acuerdos> implements AcuerdoDa
 		return lista;
 	}
 
+	 
+
 }

@@ -51,7 +51,7 @@ public class AccionesServiceImpl implements AccionesService {
 	}
 
 	@Override
-	public Acciones Registrar(Long idacuerdo,Long identidad,String responsable,String descripcionaccion,String fecha_ejecutara,String fecha_ejecuto,MultipartFile docaccion) {
+	public Acciones Registrar(Long idacuerdo,Long identidad,String responsable,String descripcionaccion,String fecha_ejecutara,String flgejecuto,String fecha_ejecuto,MultipartFile docaccion) {
 		Acuerdos acuerdo = new Acuerdos();
 		acuerdo.setaCuerdoidpk(idacuerdo);
 		acuerdo = acuerdoDao.buscarPorId(acuerdo);
@@ -65,8 +65,9 @@ public class AccionesServiceImpl implements AccionesService {
 		accion.setEntidad(entidades);
 		accion.setvResponsable(responsable);
 		accion.setvDesaccion(descripcionaccion);
-		accion.setdFecejecutara(FechasUtil.convertStringToDate(fecha_ejecutara));
-		
+		accion.setdFecejecutara( (fecha_ejecutara!=null)? FechasUtil.convertStringToDate(fecha_ejecutara) : null );
+		accion.setcFlgejecuto(flgejecuto);
+		accion.setdFecejecuto( (fecha_ejecuto!=null)? FechasUtil.convertStringToDate(fecha_ejecuto) : null );
 		Archivos archivo = new Archivos();
 		
 		archivo = archivoUtilitarioService.cargarArchivo(docaccion, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION);

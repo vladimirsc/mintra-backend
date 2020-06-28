@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.web.multipart.MultipartFile; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Temas;
@@ -345,5 +342,5 @@ public class ControladorTemas {
 		return new ResponseEntity<Temas>(generico, HttpStatus.OK);
 	}
  
-
+ 
 }

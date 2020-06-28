@@ -1,6 +1,7 @@
 package pe.gob.mtpe.sivice.externo.core.negocio.service;
 
 import java.util.List;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.BandejaActas;
@@ -23,5 +24,5 @@ public interface AcuerdoService {
 	List<BandejaActas> buscarAcuerdosPorSesion(Sesiones sesiones);
 	
 	List<Acuerdos> listarAcuerdosPorActa(Actas acta);
-	
+ 
 }

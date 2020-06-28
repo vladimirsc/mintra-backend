@@ -12,8 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
+import javax.persistence.Table;  
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -73,8 +72,10 @@ public class Actas implements Serializable {
 	@Column(name = "V_ARCHIVOEXTENSION")
 	private String vArchivoextension;
 	
-	private transient String vCodigoSesion;
-	
+	private transient String vCodigoSesion; 
+	private transient Long nTipoSesion; 
+	private transient String vfechaInicio; 
+	private transient String vfechafin; 
 
 	public Actas() {
 
@@ -86,6 +87,7 @@ public class Actas implements Serializable {
 		this.cFlagelimina="0";
 	}
 
+ 
 	public Long getaCtaidpk() {
 		return aCtaidpk;
 	}
@@ -93,7 +95,6 @@ public class Actas implements Serializable {
 	public void setaCtaidpk(Long aCtaidpk) {
 		this.aCtaidpk = aCtaidpk;
 	}
- 
 
 	public Sesiones getSesionfk() {
 		return sesionfk;
@@ -190,7 +191,9 @@ public class Actas implements Serializable {
 	public void setvArchivoextension(String vArchivoextension) {
 		this.vArchivoextension = vArchivoextension;
 	}
-	
+
+	 
+
 	public String obtenerRutaAbsoluta() {
 		return this.getvUbiarch()+this.getvNombrearchivo()+"."+this.vArchivoextension;
 	}
@@ -203,5 +206,31 @@ public class Actas implements Serializable {
 		this.vCodigoSesion = vCodigoSesion;
 	}
 
-	 
+	public Long getnTipoSesion() {
+		return nTipoSesion;
+	}
+
+	public void setnTipoSesion(Long nTipoSesion) {
+		this.nTipoSesion = nTipoSesion;
+	}
+
+	public String getVfechaInicio() {
+		return vfechaInicio;
+	}
+
+	public void setVfechaInicio(String vfechaInicio) {
+		this.vfechaInicio = vfechaInicio;
+	}
+
+	public String getVfechafin() {
+		return vfechafin;
+	}
+
+	public void setVfechafin(String vfechafin) {
+		this.vfechafin = vfechafin;
+	}
+	
+	
+	
+  
 }

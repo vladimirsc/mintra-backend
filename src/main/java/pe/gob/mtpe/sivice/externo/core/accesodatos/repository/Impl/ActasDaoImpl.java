@@ -2,11 +2,11 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 
 import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManager; 
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ActasDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
@@ -34,7 +34,7 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 
 	@Override
 	public List<Actas> buscar(Actas actas) {
-		return null;
+		    return null;
 	}
 
 	@Override
@@ -97,6 +97,22 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 		return lista;
 	}
 
-	 
-
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Actas> buscarActasPorSesion(Actas actas) {
+		EntityManager manager = createEntityManager();
+		List<Actas> lista = manager
+				.createQuery("SELECT a  FROM Actas  a INNER JOIN  a.sesionfk s "
+						+ " WHERE s.vCodsesion=:codigosesion OR s.tipoSesiones.tIposesionidpk=:codtiposesion OR s.dFecreacion BETWEEN :fechainicio  AND :fechafin AND a.cFlagelimina=:eliminado")
+				.setParameter("codigosesion", actas.getvCodigoSesion())
+				.setParameter("codtiposesion", actas.getnTipoSesion())
+				.setParameter("fechainicio",  (actas.getVfechaInicio()!=null)? FechasUtil.convertStringToDate(actas.getVfechaInicio()) : FechasUtil.convertStringToDate("01-01-1880"))
+				.setParameter("fechafin",     (actas.getVfechafin()!=null)? FechasUtil.convertStringToDate(actas.getVfechafin()) : FechasUtil.convertStringToDate("01-01-1880"))
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
+	}
+ 
+	
+ 
 }

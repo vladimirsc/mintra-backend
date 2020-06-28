@@ -1,11 +1,9 @@
 package pe.gob.mtpe.sivice.externo.core.negocio.service.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Temas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.SesionDao;
@@ -39,6 +37,9 @@ public class TemaServiceImpl implements TemaService {
 
 	@Override
 	public Temas Registrar(Temas temas) {
+		Sesiones session = new Sesiones();
+		session.setsEsionidpk(temas.getsEsionfk());
+		temas.setSesion(session);
 		return temaDao.Registrar(temas);
 	}
 
@@ -61,5 +62,7 @@ public class TemaServiceImpl implements TemaService {
 	public List<Temas> temasPorSesion(Long idsesion) { 
 		return temaDao.temasPorSesion(idsesion);
 	}
+
+ 
 
 }

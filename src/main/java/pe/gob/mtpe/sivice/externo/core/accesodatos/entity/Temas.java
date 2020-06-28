@@ -31,8 +31,9 @@ public class Temas implements Serializable {
 	@Column(name = "TEMA_ID_PK")
 	private Long tEmaidpk;
 
-	@Column(name = "SESION_FK")
-	private Long sEsionfk;
+	@ManyToOne
+	@JoinColumn(name = "SESION_FK")
+	private Sesiones sesion;
 
 	@Column(name = "V_DESCRIPCION")
 	private String vDescripcion;
@@ -101,6 +102,10 @@ public class Temas implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "TIPOTEMA_FK")
 	private TipoTemas tIpotemafk;
+	
+	private transient Long   sEsionfk;
+	
+ 
 
 	public Temas() {
 
@@ -120,12 +125,14 @@ public class Temas implements Serializable {
 		this.tEmaidpk = tEmaidpk;
 	}
 
-	public Long getsEsionfk() {
-		return sEsionfk;
+	 
+
+	public Sesiones getSesion() {
+		return sesion;
 	}
 
-	public void setsEsionfk(Long sEsionfk) {
-		this.sEsionfk = sEsionfk;
+	public void setSesion(Sesiones sesion) {
+		this.sesion = sesion;
 	}
 
 	public String getvDescripcion() {
@@ -307,5 +314,15 @@ public class Temas implements Serializable {
 	public String obtenerRutaAbsolutaArchivoTema3() {
 		return this.getvUbiarchivo3() + this.getvNombrearchivo3() + "." + this.getvExtarchivo3();
 	}
+
+	public Long getsEsionfk() {
+		return sEsionfk;
+	}
+
+	public void setsEsionfk(Long sEsionfk) {
+		this.sEsionfk = sEsionfk;
+	}
+	
+	
 
 }

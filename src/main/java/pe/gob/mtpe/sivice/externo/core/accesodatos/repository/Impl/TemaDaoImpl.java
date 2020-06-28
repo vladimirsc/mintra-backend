@@ -2,15 +2,12 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.EntityManager;
-
 import org.springframework.stereotype.Component;
-
-import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Temas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.TemaDao;
-import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil; 
 
 @Component
 public class TemaDaoImpl extends BaseDao<Long, Temas> implements TemaDao {
@@ -63,13 +60,13 @@ public class TemaDaoImpl extends BaseDao<Long, Temas> implements TemaDao {
 	public List<Temas> temasPorSesion(Long idsesion) {
 		EntityManager manager = createEntityManager();
 		List<Temas> lista = manager
-				.createQuery("FROM Temas c WHERE c.sEsionfk=:sesion  AND c.cFlgeliminado=:eliminado ORDER BY c.tEmaidpk DESC")
+				.createQuery("SELECT t FROM Temas t INNER JOIN t.sesion s  WHERE s.sEsionidpk=:sesion  AND t.cFlgeliminado=:eliminado ORDER BY t.tEmaidpk DESC")
 				.setParameter("sesion", idsesion)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
 	}
-	
-	
 
+ 
+ 
 }

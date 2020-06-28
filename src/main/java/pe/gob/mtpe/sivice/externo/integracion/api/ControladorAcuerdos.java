@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.BandejaActas;
@@ -30,7 +28,6 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.AcuerdoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
-
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -70,36 +67,33 @@ public class ControladorAcuerdos {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		return new ResponseEntity<Acuerdos>(generico,HttpStatus.OK);
+		return new ResponseEntity<Acuerdos>(generico, HttpStatus.OK);
 
 	}
 
 	@PostMapping("/buscaracuerdosporsesion")
-	public List<BandejaActas> buscar(
-			@RequestParam("codigosesion")  String codigosesion,
-			@RequestParam("tiposesion")    Long   tiposesion,
-			@RequestParam("fechainicio")   String fechainicio,
-			@RequestParam("fechafin")      String fechafin
-	) {
-		
+	public List<BandejaActas> buscar(@RequestParam("codigosesion") String codigosesion,
+			@RequestParam("tiposesion") Long tiposesion, @RequestParam("fechainicio") String fechainicio,
+			@RequestParam("fechafin") String fechafin) {
+
 		Sesiones sesionbuscar = new Sesiones();
 		List<BandejaActas> listarBandejaActas = new ArrayList<BandejaActas>();
 		try {
-			if(tiposesion!=null) {
-				 TipoSesiones tiposesiones = new TipoSesiones();
-				 tiposesiones.settIposesionidpk(tiposesion); 
-			  }
+			if (tiposesion != null) {
+				TipoSesiones tiposesiones = new TipoSesiones();
+				tiposesiones.settIposesionidpk(tiposesion);
+			}
 
-			 sesionbuscar.setvCodsesion(codigosesion); 
-			 sesionbuscar.setdFechaInicio(FechasUtil.convertStringToDate(fechainicio));
-			 sesionbuscar.setdFechaFin(FechasUtil.convertStringToDate(fechafin));
-			 
-			 listarBandejaActas = acuerdoService.buscarAcuerdosPorSesion(sesionbuscar);
+			sesionbuscar.setvCodsesion(codigosesion);
+			sesionbuscar.setdFechaInicio(FechasUtil.convertStringToDate(fechainicio));
+			sesionbuscar.setdFechaFin(FechasUtil.convertStringToDate(fechafin));
+
+			listarBandejaActas = acuerdoService.buscarAcuerdosPorSesion(sesionbuscar);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return  listarBandejaActas;
- 	 
+		return listarBandejaActas;
+
 	}
 
 	@PostMapping("/registrar")
@@ -110,11 +104,12 @@ public class ControladorAcuerdos {
 			acuerdos = acuerdoService.Registrar(acuerdos);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
-			response.put(ConstantesUtil.X_ERROR, e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ERROR,
+					e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			response.put(ConstantesUtil.X_ENTIDAD, acuerdos);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Acuerdos>(acuerdos,HttpStatus.CREATED);
+		return new ResponseEntity<Acuerdos>(acuerdos, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/acuerdos")
@@ -142,7 +137,7 @@ public class ControladorAcuerdos {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		return new ResponseEntity<Acuerdos>(generico,HttpStatus.OK);
+		return new ResponseEntity<Acuerdos>(generico, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
@@ -173,18 +168,17 @@ public class ControladorAcuerdos {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		return new ResponseEntity<Acuerdos>(generico,HttpStatus.OK);
+		return new ResponseEntity<Acuerdos>(generico, HttpStatus.OK);
 	}
-	
-	
+
 	@GetMapping("/acuerdosporacta/{idacta}")
-	public List<Acuerdos> listarAcuerdosPorActas(@PathVariable Long idacta){
+	public List<Acuerdos> listarAcuerdosPorActas(@PathVariable Long idacta) {
 		Actas acta = new Actas();
 		acta.setaCtaidpk(idacta);
 		return acuerdoService.listarAcuerdosPorActa(acta);
 	}
 	
 	
-	
-	
+	 
+
 }

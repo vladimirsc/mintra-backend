@@ -1,5 +1,5 @@
 package pe.gob.mtpe.sivice.externo.core.accesodatos.repository;
-
+ 
 import java.util.List;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
@@ -18,5 +18,5 @@ public interface AcuerdoDao {
 
 	public Acuerdos Eliminar(Acuerdos acuerdos);
 	
-	List<Acuerdos> listarAcuerdosPorActa(Actas acta);
+	List<Acuerdos> listarAcuerdosPorActa(Actas acta); 
 }

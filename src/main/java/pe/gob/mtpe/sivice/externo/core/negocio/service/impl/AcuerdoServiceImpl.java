@@ -8,10 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.BandejaActas;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.BandejaActas; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ActasDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.AcuerdoDao;
@@ -98,4 +97,10 @@ public class AcuerdoServiceImpl implements pe.gob.mtpe.sivice.externo.core.negoc
 		return acuerdoDao.listarAcuerdosPorActa(acta);
 	}
 
+	 
+	 
+
+ 
+
+ 
 }

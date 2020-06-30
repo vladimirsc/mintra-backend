@@ -128,6 +128,8 @@ public class ConstantesUtil {
 	public static final String COMISION_CONSEJERO_MSG_EXITO_ELIMINAR = "La Comision Consejero fue eliminado con \u00e9xito con con codigo de Acta N° ";
 
 	// ***** COMISION ******
+	
+	public static final String C_COMISIONES ="COMISION";
 
 	// busquedas
 	public static final String COMISION_MSG_ERROR_BUSCAR = "No se encontro el Acuerdo";
@@ -352,5 +354,21 @@ public class ConstantesUtil {
 	
     public static final String C_ARCHIVO_MENSAJE ="Archivo";
     public static final String C_ARCHIVO_ERROR_MENSAJE ="No se encontro el Archivo";
+    
+    public static final String C_ROLE_ADMCONSSAT="ROLE_ADMCONSSAT";
+    public static final String C_ROLE_ADMCORSSAT="ROLE_ADMCORSSAT";
+    public static final String C_ROLE_OPECONSSAT="ROLE_OPECONSSAT";
+    public static final String C_ROLE_OPECORSSAT="ROLE_OPECORSSAT";
+    
+    public static final String c_rolusuario   ="ROLE_ADMCONSSAT";
+    public static final Long   c_codigoregion =Long.parseLong("14");
+    public static final Long   c_usuariologin =Long.parseLong("21");
+    
+    public static final Long   c_consejero =Long.parseLong("133");
+    
+    
+    //private static final Long C_TIPO_COMISION_TEMPORAL = Long.parseLong("1");
+    //private static final Long C_TIPO_COMISION_ABIERTA = Long.parseLong("2");
+ 
 
 }

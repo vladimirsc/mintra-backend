@@ -2,14 +2,17 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table; 
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat; 
 
@@ -102,7 +105,20 @@ public class PlanTrabajo implements Serializable {
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private transient Date dFecaprobacionfin;
 	
-
+	
+	@ManyToOne
+	@JoinColumn(name="REGION_FK",nullable = false, insertable = true, updatable = true)
+	private Regiones region;
+	 
+	@ManyToOne
+	@JoinColumn(name="CONSEJO_FK",nullable = false, insertable = true, updatable = true)
+	private Consejos consejo;
+	
+	
+	@Column(name = "N_USUELIMINIA")
+	private Long nUsuelimina;
+	
+	
 	public PlanTrabajo() {
 
 	}
@@ -296,6 +312,33 @@ public class PlanTrabajo implements Serializable {
 
 	public void setdFecaprobacionfin(Date dFecaprobacionfin) {
 		this.dFecaprobacionfin = dFecaprobacionfin;
+	}
+
+  
+	public Regiones getRegion() {
+		return region;
+	}
+
+	public void setRegion(Regiones region) {
+		this.region = region;
+	}
+
+	public Consejos getConsejo() {
+		return consejo;
+	}
+
+	public void setConsejo(Consejos consejo) {
+		this.consejo = consejo;
+	}
+
+	
+	
+	public Long getnUsuelimina() {
+		return nUsuelimina;
+	}
+
+	public void setnUsuelimina(Long nUsuelimina) {
+		this.nUsuelimina = nUsuelimina;
 	}
 
 	public String obtenerRutaAbsolutaAprobacion() {

@@ -79,6 +79,7 @@ public class InformAnualDaoImpl extends BaseDao<Long, InfAnuales> implements Inf
 	@Override
 	public InfAnuales Registrar(InfAnuales infAnuales) {
 		infAnuales.setvCodinforme(GenerarCorrelativo());
+		infAnuales.setdFecreg(new Date());
 		guardar(infAnuales);
 		return infAnuales;
 	}

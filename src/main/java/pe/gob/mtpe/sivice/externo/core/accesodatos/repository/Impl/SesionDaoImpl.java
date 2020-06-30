@@ -36,6 +36,21 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 		Sesiones infosesion = buscarId(sesion.getsEsionidpk());
 		return infosesion;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Sesiones buscarPorIdAsistencia(Sesiones sesion) {
+		EntityManager manager = createEntityManager();
+		List<Sesiones> lista = manager
+				.createQuery("FROM Sesiones c WHERE c.sEsionidpk=:idsesion AND c.cFlgeliminado=:eliminado ORDER BY c.sEsionidpk DESC")
+				.setParameter("idsesion", sesion.getsEsionidpk())
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		if(!lista.isEmpty()) {
+			sesion = lista.get(0);
+		} 
+		return sesion;
+	}
 
 	@Override
 	public List<Sesiones> buscar(Sesiones sesion) {

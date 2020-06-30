@@ -45,9 +45,6 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	@Autowired
 	private InvitadosDao invitadosDao;
 
- 
-	
-
 	@Override
 	public List<Asistencias> listar() {
 		return asistenciaDao.listar();
@@ -80,32 +77,34 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Override
 	public Sesiones buscarSesion(Sesiones sesiones) {
-		
-		return SesionDao.buscarPorId(sesiones);
+
+		return SesionDao.buscarPorIdAsistencia(sesiones);
 	}
 
 	@Override
 	public List<AsistenciaConsejeros> listarConsejerosAsistencia(Long idsesion) {
+
 		Sesiones sesiones = new Sesiones();
 		List<AsistenciaConsejeros> generica = new ArrayList<AsistenciaConsejeros>();
 		List<Asistencias> listAsistencia = new ArrayList<Asistencias>();
 
-		 
-			// OBTENEMOS INFORMACION DE LA SESSION
-			sesiones.setsEsionidpk(idsesion);
-			sesiones = SesionDao.buscarPorId(sesiones);
+		// OBTENEMOS INFORMACION DE LA SESSION
+		sesiones.setsEsionidpk(idsesion);
+		sesiones = SesionDao.buscarPorIdAsistencia(sesiones);
+
+		if (sesiones != null) {
 
 			Long cantdadAsistentes = asistenciaDao.cantidadAsistentesPorSesion(idsesion); // CANTIDAD DE ASISTENTES DE
-																							// LA SESION
-			int tipoConsejo = sesiones.getConsejofk().getcOnsejoidpk().intValue();
+			// LA SESION
+			Long tipoConsejo = sesiones.getConsejofk().getcOnsejoidpk();
 
 			if (tipoConsejo == 1 || tipoConsejo == 2) {
 
 				if (cantdadAsistentes == 0) { // registramos
 					List<Consejeros> listaConsejeros = new ArrayList<Consejeros>();
-					listaConsejeros = consejeroDao.listarConsejerosPorConsejo(Long.valueOf(tipoConsejo));
+					listaConsejeros = consejeroDao.listarConsejerosPorConsejo(tipoConsejo);
 
-					// INSERTAMOS LOS CONSEJEROS
+// INSERTAMOS LOS CONSEJEROS
 					for (Consejeros i : listaConsejeros) {
 						Consejeros filaconsejero = new Consejeros();
 						filaconsejero.setcOnsejeroidpk(i.getcOnsejeroidpk());
@@ -122,7 +121,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			} else if (tipoConsejo == 3 || tipoConsejo == 4) {
 
 				if (cantdadAsistentes == 0) {
-					// BUSCAMOS EN LA TABLA CONSEJERO COMISION
+// BUSCAMOS EN LA TABLA CONSEJERO COMISION
 					List<ComiConsej> listaComicionConsejero = new ArrayList<ComiConsej>();
 					Long idcomision = sesiones.getComisionfk().getcOmisionidpk();
 
@@ -147,48 +146,49 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 			listAsistencia = asistenciaDao.listarConsejerosAsistencia(idsesion);
 
-			// LLENAMOS LA TABLA GENERICA
+            // LLENAMOS LA TABLA GENERICA
 			for (Asistencias i : listAsistencia) {
-				if(i.getConsejero()!=null) {
+				if (i.getConsejero() != null) {
 					AsistenciaConsejeros fila = new AsistenciaConsejeros();
 					fila.setIdAsistencia(i.getaSistenciaidpk());
 					fila.setAsistio(i.getcFlgasistio());
-					fila.setTipoDocumento(i.getConsejero().getvTipdocumento());
+					fila.setTipoDocumento(i.getConsejero().getTipodocumento().getvDesabreviado());
 					fila.setNumeroDocumento(i.getConsejero().getvNumdocumento());
 					fila.setApellidosNombre(i.getConsejero().getvDesnombre() + "," + i.getConsejero().getvDesappaterno()
 							+ " " + i.getConsejero().getvDesapmaterno());
-					fila.setEntidad(i.getConsejero().getvEntidad());
+					fila.setEntidad(i.getConsejero().getEntidad().getvDescripcion());
 					fila.setHoraEntrada(i.getvHoentrada());
 					fila.setHoraSalida(i.getvHosalida());
 					generica.add(fila);
-					
-				}else { //PARA LOS INVITADOS
-					if(i.getiNvitadosfk()!=null) {
+
+				} else { // PARA LOS INVITADOS
+					if (i.getiNvitadosfk() != null) {
 						TipoDocumentos tipoDocumentos = new TipoDocumentos();
-						Invitados invitado  = new Invitados();
+						Invitados invitado = new Invitados();
 						invitado.setiNvitadosidpk(i.getiNvitadosfk());
 						invitado.setTipodocumento(tipoDocumentos);
 						invitado = invitadosDao.buscarPorId(invitado);
-						if(invitado !=null) {
+						if (invitado != null) {
 							AsistenciaConsejeros fila = new AsistenciaConsejeros();
 							fila.setIdAsistencia(i.getaSistenciaidpk());
 							fila.setAsistio(i.getcFlgasistio());
 							fila.setTipoDocumento(invitado.getTipodocumento().getvDesabreviado());
 							fila.setNumeroDocumento(invitado.getvNumerodocumento());
-							fila.setApellidosNombre(invitado.getvNombre() + "," + invitado.getvApellido_paterno()
-									+ " " +invitado.getvApellido_materno());
+							fila.setApellidosNombre(invitado.getvNombre() + "," + invitado.getvApellido_paterno() + " "
+									+ invitado.getvApellido_materno());
 							fila.setEntidad(invitado.getEntidad().getvDesnombre());
 							fila.setHoraEntrada(i.getvHoentrada());
 							fila.setHoraSalida(i.getvHosalida());
 							generica.add(fila);
 						}
 					}
-					
-					
+
 				}
-				
+
 			}
-			
+
+		}
+
 		return generica;
 	}
 
@@ -202,21 +202,21 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 	public Invitados RegistrarInvitados(Invitados invitados) {
 		Invitados infoInvitados = new Invitados();
 		infoInvitados = invitadosDao.Registrar(invitados);
-		
-		if(infoInvitados!=null) {
+
+		if (infoInvitados != null) {
 			Asistencias asistencia = new Asistencias();
 			asistencia.setsEsionfk(infoInvitados.getsEsionfk());
 			asistencia.setiNvitadosfk(infoInvitados.getiNvitadosidpk());
 			asistencia.setcFlgasistio(ConstantesUtil.C_FLAG_ASISTIO_NO);
 			asistencia.setvHoentrada(ConstantesUtil.C_HORA_INICIO_DEFAULT);
 			asistencia.setvHosalida(ConstantesUtil.C_HORA_FINALDEFAULT);
-			asistencia=asistenciaDao.Registrar(asistencia);
-			
+			asistencia = asistenciaDao.Registrar(asistencia);
+
 			infoInvitados.setaSistenciafk(asistencia.getaSistenciaidpk());
 			invitadosDao.Actualizar(infoInvitados);
 		}
-		
-		 return infoInvitados; 
+
+		return infoInvitados;
 
 	}
 

@@ -6,7 +6,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +27,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.PlanTrabajoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
-import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -44,6 +50,9 @@ public class ControladorPlanTrabajo {
 	
 	@Autowired
 	private ArchivoUtilitarioService archivoUtilitarioService;
+	
+	@Autowired
+	private  FijasService fijasService;
 
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
@@ -112,6 +121,17 @@ public class ControladorPlanTrabajo {
 				 archivoDocAprobacion = archivoUtilitarioService.cargarArchivo(docaprobacion, ConstantesUtil.C_DOCAPROBACION_PLAN_TRABAJO_SIGLAS);
 				 archivoPlanTrabajo   = archivoUtilitarioService.cargarArchivo(docplantrabajo, ConstantesUtil.C_DOC_PLAN_TRABAJO_SIGLAS);
 				 
+				 
+				//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+				 Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+				  
+				 Consejos consejo = new Consejos();
+				 consejo.setcOnsejoidpk(codigoconsejo);
+				 				
+				 Regiones region = new Regiones();
+				 region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+				 //*******************************************************
+				 
 				 if ((archivoDocAprobacion.isVerificarCarga() == true && archivoDocAprobacion.isVerificarCarga() == true)
 						  && (archivoPlanTrabajo.isVerificarCarga() == true && archivoPlanTrabajo.isVerificarCarga() == true) ) {
 					 logger.info("=================== cargaron plandes de trabajo =================");
@@ -128,6 +148,10 @@ public class ControladorPlanTrabajo {
 					 generico.setvNomarchplan(archivoPlanTrabajo.getNombre());
 					 generico.setvUbiarchplan(archivoPlanTrabajo.getUbicacion());
 					 generico.setvExtarchplan(archivoPlanTrabajo.getExtension());
+					 
+					 generico.setRegion(region);
+					 generico.setConsejo(consejo);
+					 generico.setnUsureg(ConstantesUtil.c_usuariologin);
 
 					 generico =planTrabajoService.Registrar(generico);
 				 }
@@ -183,7 +207,7 @@ public class ControladorPlanTrabajo {
 			generico.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 			generico.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
 			generico.setvNumdocapr(vNumdocapr);
-			
+			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
 			generico =planTrabajoService.Actualizar(generico);
 			 
     		
@@ -213,7 +237,7 @@ public class ControladorPlanTrabajo {
 				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
- 
+            generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
 			generico =planTrabajoService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

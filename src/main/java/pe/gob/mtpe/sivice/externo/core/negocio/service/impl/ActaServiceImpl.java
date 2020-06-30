@@ -141,11 +141,11 @@ public class ActaServiceImpl implements ActaService {
 							consejero.setcOnsejeroidpk(i.getConsejero().getcOnsejeroidpk());
 							consejero = consejeroDao.buscarPorId(consejero);
 							firmantes.setActas(acta);
-							firmantes.setvEntidad(consejero.getvEntidad());
-							firmantes.setvTipodocumento(consejero.getvTipdocumento());
+							 firmantes.setvEntidad(consejero.getEntidad().getvDescripcion());
+							firmantes.setvTipodocumento(consejero.getTipodocumento().getvDesabreviado());
 							firmantes.setvNumerodocumento(consejero.getvNumdocumento());
 							firmantes.setvNombre(consejero.getvDesnombre()+" "+consejero.getvDesappaterno()+" "+consejero.getvDesapmaterno());
-							firmantes.setvTipo(consejero.getvTpconsejero());
+							firmantes.setvTipo(consejero.getTipoconsejero().getvDesnombre());
 							firmantes.setcFlgasistio("0");
 							firmantes = firmantesDao.Registrar(firmantes);
 							logger.info("============= CONSEJEROS ");

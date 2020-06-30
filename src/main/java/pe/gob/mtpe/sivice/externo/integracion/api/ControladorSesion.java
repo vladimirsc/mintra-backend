@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.SesionService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
@@ -35,6 +38,9 @@ public class ControladorSesion {
 
 	@Autowired
 	private SesionService sesionService;
+	
+	@Autowired
+	private  FijasService fijasService;
 
 	@GetMapping("/")
 	public List<Sesiones> listarSesion() {
@@ -110,6 +116,19 @@ public class ControladorSesion {
 		try {
 			
 			 
+			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+			 
+			Consejos consejo = new Consejos();
+			consejo.setcOnsejoidpk(codigoconsejo);
+							
+			Regiones region = new Regiones();
+			region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+			//*******************************************************
+			
+			generico.setRegion(region);
+			generico.setConsejofk(consejo);
+			generico.setnUsureg(ConstantesUtil.c_usuariologin);
 			 generico.setdFecreacion(FechasUtil.convertStringToDate(dFecreacion));
 			 generico.setdHorinicio(dHorinicio);
 			 generico.setdHorfin(dHorfin);
@@ -149,7 +168,7 @@ public class ControladorSesion {
 			generico.setdFecreacion(FechasUtil.convertStringToDate(dFecreacion));
 			 generico.setdHorinicio(dHorinicio);
 			 generico.setdHorfin(dHorfin); 
-			 generico.setnUsumodifica(codusuario);
+			 generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
 			generico = sesionService.Actualizar(cOmisionfk,tiposesion,generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -176,6 +195,8 @@ public class ControladorSesion {
 				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
+			
+			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
 			generico = sesionService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

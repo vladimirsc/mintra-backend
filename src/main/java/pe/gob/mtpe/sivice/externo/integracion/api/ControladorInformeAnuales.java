@@ -24,9 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos; 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InfAnuales;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.InformAnualService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
@@ -46,6 +49,9 @@ public class ControladorInformeAnuales {
 
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
+	
+	@Autowired
+	private  FijasService fijasService;
 
 	@GetMapping("/")
 	public List<InfAnuales> listar() {
@@ -125,6 +131,22 @@ public class ControladorInformeAnuales {
 				generico.setvExtension(archivo.getExtension());
 			}
 			
+			
+			
+			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+
+			Consejos consejo = new Consejos();
+			consejo.setcOnsejoidpk(codigoconsejo);
+			
+			Regiones region = new Regiones();
+			region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+			//*******************************************************
+			
+			generico.setRegion(region);
+			generico.setConsejo(consejo);
+			generico.setnUsureg(ConstantesUtil.c_usuariologin);
+			
 			generico.setvCodinforme(vCodinforme);
 			generico.setvSesion(vSesion);
 			generico.setComision(comision);
@@ -156,6 +178,8 @@ public class ControladorInformeAnuales {
 		InfAnuales generico = new InfAnuales();
 		Map<String, Object> response = new HashMap<>();
 		try {
+			generico.setiNformeidpk(iNformeidpk);
+			generico = informAnualService.buscarPorId(generico);
 			
 			if(docboletin!=null && docboletin.getSize()>0) {
 				Archivos archivo = new Archivos();
@@ -164,14 +188,13 @@ public class ControladorInformeAnuales {
 				generico.setvNombreArchivo(archivo.getNombre());
 				generico.setvExtension(archivo.getExtension());
 			}
-			 
-			
-			generico.setiNformeidpk(iNformeidpk);
+ 
 			generico.setvCodinforme(vCodinforme);
 			generico.setvSesion(vSesion);
 			generico.setComision(comision);
 			generico.setvNumdocap(vNumdocap);
 			generico.setdFecdesde(FechasUtil.convertStringToDate(dFecdesde)); 
+			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
 			generico = informAnualService.Actualizar(generico);  
 			
 			
@@ -203,6 +226,7 @@ public class ControladorInformeAnuales {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			 
+			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
 			generico = informAnualService.Eliminar(generico);
 
 		} catch (DataAccessException e) {

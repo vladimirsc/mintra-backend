@@ -141,6 +141,37 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		manager.close();
 		return vconsejofinal;
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Long BuscarConsejoPorNombre(String rolusuario) {
+       Long codigoconsejo = 0L;
+       
+       String consejo=null;
+       switch(rolusuario) {
+		case ConstantesUtil.C_ROLE_ADMCONSSAT: consejo="CONSSAT";     break;
+		case ConstantesUtil.C_ROLE_ADMCORSSAT: consejo="CONRSAT";     break; 
+		case ConstantesUtil.C_ROLE_OPECONSSAT: consejo="COMICONSSAT"; break; 
+		case ConstantesUtil.C_ROLE_OPECORSSAT: consejo="COMICORSAT";  break;
+		}
+       
+       
+		EntityManager manager = createEntityManager();
+		List<Consejos> lista = manager
+				.createQuery("SELECT p FROM Consejos p WHERE vDesnombre=:nombreconsejo  AND p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
+				.setParameter("nombreconsejo", consejo)
+				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		
+		if (lista.isEmpty()) {
+			return null;
+		}else {
+			codigoconsejo = lista.get(0).getcOnsejoidpk();
+		}
+		return codigoconsejo;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

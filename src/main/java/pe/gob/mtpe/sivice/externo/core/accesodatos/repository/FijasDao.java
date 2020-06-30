@@ -63,6 +63,8 @@ public interface FijasDao {
 	public List<Roles> listaRoles();
 
 	public Roles buscaRoles(Roles rol);
+ 
+	public Long BuscarConsejoPorNombre(String rolusuario); 
 
 	 
 

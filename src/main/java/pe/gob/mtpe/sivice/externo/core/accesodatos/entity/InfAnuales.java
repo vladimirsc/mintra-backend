@@ -7,7 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id; 
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -78,6 +80,17 @@ public class InfAnuales implements Serializable {
 	
 	private transient Date dFhasta;
 	
+	
+	@ManyToOne
+	@JoinColumn(name="REGION_FK",nullable = false, insertable = true, updatable = true)
+	private Regiones region;
+	 
+	@ManyToOne
+	@JoinColumn(name="CONSEJO_FK",nullable = false, insertable = true, updatable = true)
+	private Consejos consejo;
+	
+	@Column(name = "N_USUELIMINIA")
+	private Long nUsuelimina;
 	
 	public InfAnuales() {
 
@@ -253,6 +266,38 @@ public class InfAnuales implements Serializable {
 	public void setdFhasta(Date dFhasta) {
 		this.dFhasta = dFhasta;
 	}
+
+
+	public Regiones getRegion() {
+		return region;
+	}
+
+
+	public void setRegion(Regiones region) {
+		this.region = region;
+	}
+
+
+	public Consejos getConsejo() {
+		return consejo;
+	}
+
+
+	public void setConsejo(Consejos consejo) {
+		this.consejo = consejo;
+	}
+
+
+	public Long getnUsuelimina() {
+		return nUsuelimina;
+	}
+
+
+	public void setnUsuelimina(Long nUsuelimina) {
+		this.nUsuelimina = nUsuelimina;
+	}
+	
+	
  
 	 
 }

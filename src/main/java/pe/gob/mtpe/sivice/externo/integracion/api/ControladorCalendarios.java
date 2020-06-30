@@ -3,6 +3,7 @@ package pe.gob.mtpe.sivice.externo.integracion.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Calendarios;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.CalendarioService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
 
@@ -32,6 +37,9 @@ public class ControladorCalendarios {
 
 	@Autowired
 	private CalendarioService calendarioService;
+	
+	@Autowired
+	private  FijasService fijasService;
 
 	@GetMapping("/")
 	public List<Calendarios> listar() {
@@ -74,6 +82,21 @@ public class ControladorCalendarios {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Map<String, Object> response = new HashMap<>();
 		try {
+			
+			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+
+			Consejos consejo = new Consejos();
+			consejo.setcOnsejoidpk(codigoconsejo);
+			
+			Regiones region = new Regiones();
+			region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+			//*******************************************************
+			
+			calendarios.setRegion(region);
+			calendarios.setConsejo(consejo);
+			calendarios.setnUsureg(ConstantesUtil.c_usuariologin);
+			
 			calendarios = calendarioService.Registrar(calendarios);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -97,10 +120,9 @@ public class ControladorCalendarios {
 				response.put(ConstantesUtil.X_ENTIDAD, calendarios);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-			
-			calendarios.setnUsureg(generico.getnUsureg());
-			calendarios.setdFecreg(generico.getdFecreg());
-			generico = calendarioService.Actualizar(calendarios);
+ 
+			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
+			generico = calendarioService.Actualizar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR, e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
@@ -126,7 +148,8 @@ public class ControladorCalendarios {
 				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-		 
+ 
+			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
 			generico = calendarioService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

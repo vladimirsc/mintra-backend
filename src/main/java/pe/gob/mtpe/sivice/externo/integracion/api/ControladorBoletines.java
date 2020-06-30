@@ -26,8 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Boletines;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.BoletinService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
@@ -44,6 +47,9 @@ public class ControladorBoletines {
 	
 	@Autowired
 	private ArchivoUtilitarioService archivoUtilitarioService;
+	
+	@Autowired
+	private  FijasService fijasService;
 
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
@@ -54,8 +60,7 @@ public class ControladorBoletines {
 		return boletinService.listar();
 	}
 
- 
-	
+  
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarBoletin(
 			@RequestParam("archivoboletin") MultipartFile archivoboletin, 
@@ -70,10 +75,24 @@ public class ControladorBoletines {
 			archivo = archivoUtilitarioService.cargarArchivo(archivoboletin, ConstantesUtil.BOLETIN_ALIAS_CORRELATIVO);
 
 			if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) { 
+				
+				//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+				Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+ 
+				Consejos consejo = new Consejos();
+				consejo.setcOnsejoidpk(codigoconsejo);
+				
+				Regiones region = new Regiones();
+				region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+				//*******************************************************
+				
 				generico.setdFecboletin(FechasUtil.convertStringToDate(fecha_boletin));
 				generico.setvNombrearchivo(archivo.getNombre());
 				generico.setvArchivoextension(archivo.getExtension());
 				generico.setvUbiarch(archivo.getUbicacion());
+				generico.setConsejo(consejo);
+				generico.setRegion(region);
+				generico.setnUsureg(ConstantesUtil.c_usuariologin);
 				
 				generico = boletinService.Registrar(generico);
 			} else {
@@ -93,6 +112,8 @@ public class ControladorBoletines {
 		}
 		return new ResponseEntity<Boletines>(generico,HttpStatus.CREATED);
 	}
+	
+	
 
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarBoletin(
@@ -125,11 +146,9 @@ public class ControladorBoletines {
 			if(fecha_boletin!=null) {
 				generico.setdFecboletin(FechasUtil.convertStringToDate(fecha_boletin));
 			}
+ 
+			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
 			
-
-			generico.setnUsureg(generico.getnUsureg());
-			generico.setdFecreg(generico.getdFecreg());
-
 			generico = boletinService.Actualizar(generico);
 
 		} catch (DataAccessException e) {
@@ -158,6 +177,7 @@ public class ControladorBoletines {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
+			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
 			generico = boletinService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -170,26 +190,6 @@ public class ControladorBoletines {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
-	
-	/*
-	@PostMapping("/buscar")
-	public List<Boletines> buscar(@RequestBody Boletines buscar) {
-		logger.info("========== INGRESO A LISTAR BUSCAR RANGO FECHAS =============== ");
-		List<Boletines> listaRegistros = new ArrayList<Boletines>();
-		if (buscar.getvNumbol() != null) {
-			logger.info("=== BUSCAR POR CODIGO =====");
-			listaRegistros = boletinService.BuscarPorCodigo(buscar);
-		} else if (buscar.getdFechaInicio() != null && buscar.getdFechaFin() != null) {
-			logger.info("=== BUSCAR POR FECHAS =====");
-			listaRegistros = boletinService.buscarRangoFechas(buscar);
-		} else {
-			listaRegistros = null;
-		}
-
-		return listaRegistros;
-	}
-	
-	*/
 	
 	@PostMapping("/buscar")
 	public List<Boletines> buscar(@RequestBody Boletines buscar) {

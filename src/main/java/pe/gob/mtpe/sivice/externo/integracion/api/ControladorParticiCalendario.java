@@ -39,6 +39,13 @@ public class ControladorParticiCalendario {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Map<String, Object> response = new HashMap<>();
 		try {
+			
+			
+			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+			Long usuariologin = Long.parseLong("21");
+			//*******************************************************
+ 
+			generico.setnUsuregistra(usuariologin);
 			generico = participanteCalendarioService.Registrar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -74,6 +81,11 @@ public class ControladorParticiCalendario {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
+			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+			Long usuariologin = Long.parseLong("21");
+			//*******************************************************
+			
+			generico.setnUsuarioelimina(usuariologin);
 			generico = participanteCalendarioService.Eliminar(generico);
 
 		} catch (DataAccessException e) {

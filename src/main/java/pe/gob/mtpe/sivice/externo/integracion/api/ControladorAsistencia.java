@@ -95,12 +95,9 @@ public class ControladorAsistencia {
 	public List<AsistenciaConsejeros> buscarAsistencias(@PathVariable Long idsesion) {
 		List<AsistenciaConsejeros> lista = new ArrayList<AsistenciaConsejeros>();
 
-		try {
+		 
 			lista = asistenciaService.listarConsejerosAsistencia(idsesion);
-		} catch (Exception e) {
-
-			lista = null;
-		}
+		 
 		return lista;
 	}
 
@@ -142,7 +139,7 @@ public class ControladorAsistencia {
 		Map<String, Object> response = new HashMap<>();
 		AsistenciaConsejeros infoAsistencia = new AsistenciaConsejeros();
 		Asistencias generico = new Asistencias();
-
+ 
 		try {
 			generico.setaSistenciaidpk(idasistencia);
 			generico = asistenciaService.buscarPorId(generico);
@@ -166,8 +163,8 @@ public class ControladorAsistencia {
 					infoAsistencia.setApellidosNombre(invitados.getvNombre() + "," + invitados.getvApellido_paterno()
 							+ " " + invitados.getvApellido_materno());
 				} else {
-					infoAsistencia.setEntidad(generico.getConsejero().getvEntidad());
-					infoAsistencia.setTipoDocumento(generico.getConsejero().getvTipdocumento());
+					infoAsistencia.setEntidad(generico.getConsejero().getEntidad().getvDesnombre());
+					infoAsistencia.setTipoDocumento(generico.getConsejero().getEntidad().getvDesnombre());
 					infoAsistencia.setNumeroDocumento(generico.getConsejero().getvNumdocumento());
 					infoAsistencia.setApellidosNombre( generico.getConsejero().getvDesnombre() + "," + generico.getConsejero().getvDesappaterno()
 									+ " " + generico.getConsejero().getvDesapmaterno());
@@ -187,7 +184,7 @@ public class ControladorAsistencia {
 			response.put(ConstantesUtil.X_ENTIDAD, infoAsistencia);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
+ 
 		return new ResponseEntity<AsistenciaConsejeros>(infoAsistencia, HttpStatus.OK);
 	}
 

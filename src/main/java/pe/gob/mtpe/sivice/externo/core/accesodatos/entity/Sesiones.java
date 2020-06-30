@@ -2,7 +2,6 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,9 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat; 
 
 @Entity
 @Table(name = "TBC_SESIONES",schema="DB_TRAMITE")
@@ -68,10 +65,9 @@ public class Sesiones implements Serializable {
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
 	
-	
-	@JsonIgnore
+ 
 	@ManyToOne
-	@JoinColumn(name = "CONSEJOS_FK",nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "CONSEJOS_FK",nullable = false, insertable = true, updatable = true)
 	private Consejos consejofk;
 	
 	@OneToOne
@@ -81,6 +77,15 @@ public class Sesiones implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "TIPOSESION_FK",nullable = false, insertable = true, updatable = true)
 	private TipoSesiones tipoSesiones;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "REGION_FK",nullable = false, insertable = true, updatable = true)
+	private Regiones region;
+	
+	@Column(name = "N_USUELIMINIA")
+	private Long nUsuelimina;
+	
 	
 	private transient Date dFechaInicio;
 	
@@ -222,6 +227,22 @@ public class Sesiones implements Serializable {
 
 	public void setdFechaFin(Date dFechaFin) {
 		this.dFechaFin = dFechaFin;
+	}
+
+	public Regiones getRegion() {
+		return region;
+	}
+
+	public void setRegion(Regiones region) {
+		this.region = region;
+	}
+
+	public Long getnUsuelimina() {
+		return nUsuelimina;
+	}
+
+	public void setnUsuelimina(Long nUsuelimina) {
+		this.nUsuelimina = nUsuelimina;
 	}
 
 	 

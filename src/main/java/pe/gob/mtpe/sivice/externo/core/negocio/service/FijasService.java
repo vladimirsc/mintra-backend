@@ -34,6 +34,7 @@ public interface FijasService {
 	// TIPOS DE CONSEJO
 	public List<Consejos> listarConsejos();
 	public Consejos buscarPorCodigoConsejo(Consejos consejos);
+	public Long BuscarConsejoPorNombre(String rolusuario); 
 
 	// TIPOS DE COMISIONES
 	public List<TipoComisiones> listarTipoComisiones();

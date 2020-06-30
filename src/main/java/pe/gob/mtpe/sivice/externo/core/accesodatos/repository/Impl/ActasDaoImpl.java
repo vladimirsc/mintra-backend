@@ -73,7 +73,7 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 		Actas acta = new Actas();
 		EntityManager manager = createEntityManager();
 		List<Actas> lista = manager
-				.createQuery("SELECT b FROM Actas b INNER JOIN b.sesionfk s WHERE s.sEsionidpk=:sesion AND b.cFlagelimina=:eliminado ")
+				.createQuery("SELECT a FROM Actas a INNER JOIN a.sesionfk s WHERE s.sEsionidpk=:sesion AND a.cFlagelimina=:eliminado ")
 				.setParameter("sesion", idSesion)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();

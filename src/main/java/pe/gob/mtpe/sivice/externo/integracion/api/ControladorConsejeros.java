@@ -30,6 +30,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ConsejeroService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -98,12 +104,12 @@ public class ControladorConsejeros {
 	
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarConsejeros(
-			@RequestParam(value="docaprob")        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  String vTipdocumento,
+			@RequestParam(value="docaprob")        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  Long vTipdocumento,
 			@RequestParam(value="vNumdocumento")   String        vNumdocumento, @RequestParam(value="vDesnombre")     String vDesnombre,
 			@RequestParam(value="vDesappaterno")   String        vDesappaterno, @RequestParam(value="vDesapmaterno")  String vDesapmaterno,
-			@RequestParam(value="vProfesion")     String         vProfesion,   @RequestParam(value="vDesemail1" )    String  vDesemail1,
-			@RequestParam(value="vDesemail2")      String        vDesemail2,    @RequestParam(value="vEntidad")      String  vEntidad,
-			@RequestParam(value="vTpconsejero")   String         vTpconsejero, @RequestParam(value="dFecinicio")     String  dFecinicio, 
+			@RequestParam(value="vProfesion")      Long          vProfesion,    @RequestParam(value="vDesemail1" )    String  vDesemail1,
+			@RequestParam(value="vDesemail2")      String        vDesemail2,    @RequestParam(value="vEntidad")       Long  vEntidad,
+			@RequestParam(value="vTpconsejero")    Long          vTpconsejero,  @RequestParam(value="dFecinicio")     String  dFecinicio, 
 			@RequestParam(value="dFecfin")         String        dFecfin,       @RequestParam(value="vNumdocasig")    String vNumdocasig,
 			@RequestParam(value="rEgionfk")        Long          rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
 			@RequestParam(value="cOmisionfk")      Long          cOmisionfk
@@ -138,19 +144,32 @@ public class ControladorConsejeros {
 				if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
 					
 					// REGISTRAMOS AL CONSEJERO
-					generico.setrEgionfk(rEgionfk);
-					generico.setcOnsejofk(cOnsejofk);
-					generico.setcOmisionfk(cOmisionfk);
-					generico.setvTipdocumento(vTipdocumento);
+					Regiones       region         = new Regiones();
+					Consejos       consejo        = new Consejos();
+					Tipoconsejero  tipoconsejero = new Tipoconsejero(); 
+					TipoDocumentos tipodocumento  = new TipoDocumentos();
+					Profesiones    profesion      = new Profesiones();
+					Entidades      entidad        = new Entidades();
+					
+					if(rEgionfk!=null)      { region.setrEgionidpk(rEgionfk); }
+					if(cOnsejofk!=null)     { consejo.setcOnsejoidpk(cOnsejofk);} 
+					if(vTipdocumento!=null) { tipodocumento.settPdocumentoidpk(vTipdocumento); }
+					if(vProfesion!=null)    { profesion.setpRofesionidpk(vProfesion); }
+					if(vEntidad!=null)      { entidad.seteNtidadidpk(vEntidad); }
+					if(vTpconsejero!=null)  { tipoconsejero.settPconsejeroidpk(vTpconsejero); }
+					
+					generico.setRegion(region);
+					generico.setConsejo(consejo);
+					generico.setTipoconsejero(tipoconsejero); 
+					generico.setTipodocumento(tipodocumento);
+					generico.setProfesion(profesion);
+					generico.setEntidad(entidad);
 					generico.setvNumdocumento(vNumdocumento);
 					generico.setvDesnombre(vDesnombre);
 					generico.setvDesappaterno(vDesappaterno);
-					generico.setvDesapmaterno(vDesapmaterno);
-					generico.setvProfesion(vProfesion);
+					generico.setvDesapmaterno(vDesapmaterno); 
 					generico.setvDesemail1(vDesemail1);
 					generico.setvDesemail2(vDesemail2);
-					generico.setvEntidad(vEntidad);
-					generico.setvTpconsejero(vTpconsejero);
 					generico.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 					generico.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
 					generico.setvNumdocasig(vNumdocasig);
@@ -159,8 +178,6 @@ public class ControladorConsejeros {
 					generico.setvExtdocasig(archivo.getExtension());
 					
 					generico = consejeroService.Registrar(generico);
-					
-
 				}else {
 					response.put(ConstantesUtil.X_MENSAJE, "ARCHIVO NO ADJUNTO");
 					response.put(ConstantesUtil.X_ERROR, "NO SE ENCONTRO EL ARCHIVO ADJUNTO");
@@ -177,23 +194,19 @@ public class ControladorConsejeros {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		 
-
 		return new ResponseEntity<Consejeros>(generico,HttpStatus.CREATED);
-
 	}
-	
 	
 	
 
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarConsejeros(
-			@RequestParam(value="docaprob", required=false)        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  String vTipdocumento,
+			@RequestParam(value="docaprob",required = false)        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  Long vTipdocumento,
 			@RequestParam(value="vNumdocumento")   String        vNumdocumento, @RequestParam(value="vDesnombre")     String vDesnombre,
 			@RequestParam(value="vDesappaterno")   String        vDesappaterno, @RequestParam(value="vDesapmaterno")  String vDesapmaterno,
-			@RequestParam(value="vProfesion")     String         vProfesion,   @RequestParam(value="vDesemail1" )    String  vDesemail1,
-			@RequestParam(value="vDesemail2")      String        vDesemail2,    @RequestParam(value="vEntidad")      String  vEntidad,
-			@RequestParam(value="vTpconsejero")   String         vTpconsejero, @RequestParam(value="dFecinicio")     String  dFecinicio, 
+			@RequestParam(value="vProfesion")      Long          vProfesion,    @RequestParam(value="vDesemail1" )    String  vDesemail1,
+			@RequestParam(value="vDesemail2")      String        vDesemail2,    @RequestParam(value="vEntidad")       Long  vEntidad,
+			@RequestParam(value="vTpconsejero")    Long          vTpconsejero,  @RequestParam(value="dFecinicio")     String  dFecinicio, 
 			@RequestParam(value="dFecfin")         String        dFecfin,       @RequestParam(value="vNumdocasig")    String vNumdocasig,
 			@RequestParam(value="rEgionfk")        Long          rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
 			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestParam(value="cOnsejeroidpk")  Long  cOnsejeroidpk) throws IOException{
@@ -237,20 +250,20 @@ public class ControladorConsejeros {
 			
 			
 			
-			consejeroBuscar.setvTipdocumento(vTipdocumento);
+			//consejeroBuscar.setvTipdocumento(vTipdocumento); ??????
 			consejeroBuscar.setvNumdocumento(vNumdocumento);
 			consejeroBuscar.setvDesnombre(vDesnombre);
 			consejeroBuscar.setvDesappaterno(vDesappaterno);
 			consejeroBuscar.setvDesapmaterno(vDesapmaterno);
-			consejeroBuscar.setvProfesion(vProfesion);
+			//consejeroBuscar.setvProfesion(vProfesion); ??????
 			consejeroBuscar.setvDesemail1(vDesemail1);
 			consejeroBuscar.setvDesemail2(vDesemail2);
-			consejeroBuscar.setvEntidad(vEntidad);
-			consejeroBuscar.setvTpconsejero(vTpconsejero);
+			//consejeroBuscar.setvEntidad(vEntidad); ??????
+			//consejeroBuscar.setvTpconsejero(vTpconsejero); ??????
 			consejeroBuscar.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 			consejeroBuscar.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
 			consejeroBuscar.setvNumdocasig(vNumdocasig);
-			consejeroBuscar.setcOmisionfk(cOmisionfk);
+			//consejeroBuscar.setcOmisionfk(cOmisionfk); ??????
 			
 			consejeroBuscar = consejeroService.Actualizar(consejeroBuscar);
 			
@@ -265,6 +278,7 @@ public class ControladorConsejeros {
 		return new ResponseEntity<Consejeros>(consejeroBuscar,HttpStatus.OK);
 		
 	}
+
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminarBoletin(@PathVariable Long id) {
@@ -297,7 +311,7 @@ public class ControladorConsejeros {
 	@GetMapping("/comision/{id}")
 	public List<Consejeros> listarPorComision(@PathVariable Long id){
 		Consejeros consejero = new Consejeros();
-		consejero.setcOmisionfk(id);
+		//consejero.setcOmisionfk(id); ??????
 	  return consejeroService.listarConsejerosPorComision(consejero);
 	}
 	

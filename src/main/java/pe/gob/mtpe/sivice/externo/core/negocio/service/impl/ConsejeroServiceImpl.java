@@ -40,6 +40,7 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 		List<Consejeros> lista = new ArrayList<Consejeros>();
 		
 		lista = consejeroDao.buscar(consejero);
+		/*
 		if(!lista.isEmpty()) {
 			Comisiones comision = new Comisiones();
 			for (Consejeros i : lista) {
@@ -52,7 +53,7 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 				
 			}
 			
-		}
+		}*/
 		return lista;
 	}
 
@@ -85,7 +86,7 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 		lista = consejeroDao.listarConsejerosPorComision(consejero);
 		if(!lista.isEmpty()) {
 			Comisiones comision = new Comisiones();
-			comision.setcOmisionidpk(consejero.getcOmisionfk());
+			//comision.setcOmisionidpk(consejero.getcOmisionfk()); ????
 			comision = comisionDao.buscarPorId(comision);
 			
 			for (Consejeros i : lista) {

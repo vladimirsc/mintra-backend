@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -30,8 +32,9 @@ public class Comisiones implements Serializable {
 	@Column(name = "COMISION_ID_PK")
 	private Long cOmisionidpk;
 
-	@Column(name = "TIPOCOMS_FK")
-	private Long tIpocomsfk;
+	@ManyToOne
+	@JoinColumn(name="TIPOCOMS_FK",nullable = false, insertable = true, updatable = true)
+	private TipoComisiones tipocomision;
 
 	@Column(name = "V_CODCOMISION")
 	private String vCodcomision;
@@ -74,6 +77,24 @@ public class Comisiones implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
+	
+	@ManyToOne
+	@JoinColumn(name="REGION_FK",nullable = false, insertable = true, updatable = true)
+	private Regiones region;
+	 
+	@ManyToOne
+	@JoinColumn(name="CONSEJO_FK",nullable = false, insertable = true, updatable = true)
+	private Consejos consejo;
+	
+	@Column(name = "N_USUELIMINIA")
+	private Long nUsuelimina;
+	
+	@ManyToOne
+	@JoinColumn(name="CONSEJERO_FK",nullable = false, insertable = true, updatable = true)
+	private Consejeros consejero;
+	
+	@Column(name = "V_ARCHIVOEXTENSION")
+	private String vArchivoextension;
 
 	public Comisiones() {
 
@@ -93,12 +114,14 @@ public class Comisiones implements Serializable {
 		this.cOmisionidpk = cOmisionidpk;
 	}
 
-	public Long gettIpocomsfk() {
-		return tIpocomsfk;
+	 
+
+	public TipoComisiones getTipocomision() {
+		return tipocomision;
 	}
 
-	public void settIpocomsfk(Long tIpocomsfk) {
-		this.tIpocomsfk = tIpocomsfk;
+	public void setTipocomision(TipoComisiones tipocomision) {
+		this.tipocomision = tipocomision;
 	}
 
 	public String getvCodcomision() {
@@ -197,5 +220,46 @@ public class Comisiones implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
+	public Regiones getRegion() {
+		return region;
+	}
+
+	public void setRegion(Regiones region) {
+		this.region = region;
+	}
+
+	public Consejos getConsejo() {
+		return consejo;
+	}
+
+	public void setConsejo(Consejos consejo) {
+		this.consejo = consejo;
+	}
+
+	public Long getnUsuelimina() {
+		return nUsuelimina;
+	}
+
+	public void setnUsuelimina(Long nUsuelimina) {
+		this.nUsuelimina = nUsuelimina;
+	}
+
+	public Consejeros getConsejero() {
+		return consejero;
+	}
+
+	public void setConsejero(Consejeros consejero) {
+		this.consejero = consejero;
+	}
+
+	public String getvArchivoextension() {
+		return vArchivoextension;
+	}
+
+	public void setvArchivoextension(String vArchivoextension) {
+		this.vArchivoextension = vArchivoextension;
+	}
+
+	 
 	 
 }

@@ -129,5 +129,10 @@ public class FijasServiceImpl implements FijasService {
 		return fijasDao.buscaRoles(rol);
 	}
 
+	@Override
+	public Long BuscarConsejoPorNombre(String rolusuario) { 
+		return fijasDao.BuscarConsejoPorNombre(rolusuario);
+	}
+
 	
 }

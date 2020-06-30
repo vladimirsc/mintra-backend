@@ -24,9 +24,10 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 	public List<Consejeros> listar(Consejeros consejero) {
 		EntityManager manager = createEntityManager();
 		List<Consejeros> lista = manager
-				.createQuery("FROM Consejeros c WHERE c.rEgionfk=:region AND c.cOnsejofk=:consejo  AND c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
-				.setParameter("region", consejero.getrEgionfk())
-				.setParameter("consejo", consejero.getcOnsejofk())
+				.createQuery("FROM Consejeros c WHERE c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
+				//.createQuery("FROM Consejeros c WHERE c.rEgionfk=:region AND c.cOnsejofk=:consejo  AND c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
+				//.setParameter("region", consejero.getrEgionfk())
+				//.setParameter("consejo", consejero.getcOnsejofk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 
@@ -60,7 +61,7 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		consejero.setvDesnombre( (consejero.getvDesnombre()!=null)?      consejero.getvDesnombre()    : "");
 		consejero.setvDesappaterno( (consejero.getvDesappaterno()!=null)?consejero.getvDesappaterno() : "");
 		consejero.setvDesapmaterno((consejero.getvDesapmaterno()!=null)? consejero.getvDesapmaterno() : "");
-		consejero.setvEntidad((consejero.getvEntidad()!=null)?           consejero.getvEntidad()      : "");
+		consejero.setvEntidad((consejero.getvEntidad()!=null)?           consejero.getvEntidad()      : 0L);  
 		 
 		Predicate valor1 = builder.equal(root.get("vNumdocasig"), consejero.getvNumdocasig()) ;
 		Predicate valor2 = builder.between(root.get("dFecinicio"), consejero.getdFecinicio(), consejero.getdFecfin());
@@ -68,11 +69,11 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		Predicate valor4 = builder.equal(root.get("vDesnombre"), consejero.getvDesnombre()) ;
 		Predicate valor5 = builder.equal(root.get("vDesappaterno"), consejero.getvDesappaterno()) ;
 		Predicate valor6 = builder.equal(root.get("vDesapmaterno"), consejero.getvDesapmaterno()) ;
-		Predicate valor7 = builder.equal(root.get("vEntidad"),consejero.getvEntidad()) ;
-		Predicate valor8 = builder.equal(root.get("rEgionfk"),consejero.getrEgionfk()) ;
-		Predicate valor9 = builder.equal(root.get("cOnsejofk"),consejero.getcOnsejofk()) ;
+		Predicate valor7 = builder.equal(root.get("entidad"),consejero.getvEntidad()) ;   
+		Predicate valor8 = builder.equal(root.get("region"),consejero.getrEgionfk()) ;   
+		Predicate valor9 = builder.equal(root.get("consejo"),consejero.getcOnsejofk()) ;  
 		Predicate valor10 = builder.or(valor1,valor2,valor3,valor4,valor5,valor6,valor7); 
-		Predicate valor11 = builder.and(valor8,valor9);
+		Predicate valor11 = builder.and(valor8,valor9);  
 		Predicate finalbusqueda =builder.and(valor10,valor11);
 		
 		criteriaQuery.where(finalbusqueda);
@@ -110,9 +111,9 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Consejeros> listarConsejerosPorComision(Consejeros consejero) {
+		/*
 		EntityManager manager = createEntityManager();
 		List<Consejeros> lista = manager
 				.createQuery("FROM Consejeros c WHERE c.rEgionfk=:region AND c.cOmisionfk=:consejo  AND c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
@@ -124,8 +125,8 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		if (lista.isEmpty()) {
 			lista = null;
 		}
-
-		return lista;
+*/
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -153,8 +154,8 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 	public List<Consejeros> listarConsejerosPorConsejo(Long idconsejo) {
 		EntityManager manager = createEntityManager();
 		List<Consejeros> lista = manager
-				.createQuery("FROM Consejeros c WHERE  c.cOnsejofk=:consejo  AND c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
-				.setParameter("consejo", idconsejo)
+				.createQuery("SELECT c FROM Consejeros c INNER JOIN c.consejo co WHERE  co.cOnsejoidpk=:idconsejo  AND c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
+				.setParameter("idconsejo", idconsejo)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 

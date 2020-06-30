@@ -1,13 +1,17 @@
 package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 
+import java.util.Date;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.PlanTrabajoDao;
@@ -67,6 +71,7 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 	@Override
 	public PlanTrabajo Registrar(PlanTrabajo planTrabajo) {
 		planTrabajo.setvCodigoplantrab(GenerarCorrelativo());
+		planTrabajo.setdFecreg(new Date());
 		guardar(planTrabajo);
 		return planTrabajo;
 	}
@@ -74,6 +79,7 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 	@Override
 	public PlanTrabajo Actualizar(PlanTrabajo planTrabajo) {
 		planTrabajo.setdFecmodifica(FechasUtil.fechaActual());
+		planTrabajo.setdFecmodifica(new Date());
 		actualizar(planTrabajo);
 		return planTrabajo;
 	}
@@ -82,6 +88,7 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 	public PlanTrabajo Eliminar(PlanTrabajo planTrabajo) {
 		planTrabajo.setdFecelimina(FechasUtil.fechaActual());
 		planTrabajo.setcFlgeliminado(ConstantesUtil.C_INDC_ACTIVO);
+		planTrabajo.setdFecelimina(new Date());
 		actualizar(planTrabajo);
 		return planTrabajo;
 	}

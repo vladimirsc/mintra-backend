@@ -51,7 +51,7 @@ public class CalendarioDaoImpl extends BaseDao<Long, Calendarios> implements Cal
 	public Calendarios Eliminar(Calendarios calendarios) {
 		calendarios.setdFecelimina(new Date());
 		calendarios.setcFlgeliminado(ConstantesUtil.C_INDC_ACTIVO);
-		eliminar(calendarios);
+		actualizar(calendarios);
 		return calendarios;
 	}
 

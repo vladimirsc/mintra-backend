@@ -20,5 +20,5 @@ public interface SesionDao {
 	
 	List<Sesiones> buscarSesion(String nombresesion);
 	
-	
+	 Sesiones buscarPorIdAsistencia(Sesiones sesion);
 }

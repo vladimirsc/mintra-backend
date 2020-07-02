@@ -189,6 +189,34 @@ public class ControladorBoletines {
 		response.put(ConstantesUtil.X_ENTIDAD, generico);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
+		Boletines generico = new Boletines();
+		generico.setbOletinidpk(id);
+		Map<String, Object> response = new HashMap<>();
+		try { 
+			
+			generico = boletinService.buscarPorId(generico);
+			if (generico == null) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.BOLETIN_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.BOLETIN_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+	 
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR, e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		 
+		response.put(ConstantesUtil.X_ENTIDAD, generico);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
 
 	
 	@PostMapping("/buscar")

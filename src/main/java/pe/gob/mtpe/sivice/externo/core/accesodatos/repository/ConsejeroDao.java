@@ -24,4 +24,6 @@ public interface ConsejeroDao {
 	List<Consejeros> listarConsejerosPorComision(Consejeros consejero);
 	
 	List<Consejeros> listarConsejerosPorConsejo(Long idconsejo);
+	
+	List<Consejeros> listarConsejerosPorRegion(Long region);
 }

@@ -18,4 +18,6 @@ public interface ComisionDao {
 	public Comisiones Eliminar(Comisiones comisiones);
 	
 	List<Comisiones> buscarComision(String nombre_comision);
+	
+	Comisiones consultaPorId(Comisiones comisiones);
 }

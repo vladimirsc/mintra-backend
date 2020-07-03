@@ -48,7 +48,9 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 		manager.close();
 		if(!lista.isEmpty()) {
 			sesion = lista.get(0);
-		} 
+		}else {
+			sesion =null;
+		}
 		return sesion;
 	}
 

@@ -43,7 +43,7 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 
 	@Override
 	public Comisiones Registrar(Comisiones comisiones) {
-		comisiones.setvCodcomision(GenerarCorrelativo(comisiones.getRegion().getrEgionidpk()));
+		comisiones.setvCodcomision(GenerarCorrelativo());
 		guardar(comisiones); 
 		return comisiones;
 	}
@@ -64,10 +64,9 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 	}
 	
 	
-	public String GenerarCorrelativo(Long region) {
+	public String GenerarCorrelativo() {
 		EntityManager manager = createEntityManager();
-		Long correlativo = (Long) manager.createQuery("SELECT COUNT(c)+1 FROM Comisiones c INNER JOIN c.region r WHERE r.rEgionidpk=:codregion")
-				.setParameter("codregion", region)
+		Long correlativo = (Long) manager.createQuery("SELECT COUNT(c)+1 FROM Comisiones c")
 				.getSingleResult();
 		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.COMISION_ALIAS_CORRELATIVO);
 		manager.close();
@@ -89,6 +88,26 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 		manager.close();
 		return resultado;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Comisiones consultaPorId(Comisiones comisiones) {
+		Comisiones consultacomision = new Comisiones();
+		EntityManager manager = createEntityManager();
+		List<Comisiones> lista = manager
+				.createQuery("FROM Comisiones c WHERE c.cOmisionidpk=:idcomision  AND c.cFlgeliminado=:eliminado")
+				.setParameter("idcomision", comisiones.getcOmisionidpk())
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		
+		if(!lista.isEmpty()) {
+			consultacomision = lista.get(0);
+		}
+		
+		return consultacomision;
+	}
+	
+	
 
 
 }

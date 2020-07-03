@@ -158,12 +158,24 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 				.setParameter("idconsejo", idconsejo)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
-
+/*
 		if (lista.isEmpty()) {
 			List<Consejeros> listavacia  = new ArrayList<Consejeros>();
 			lista =listavacia;
 		}
+*/
+		return lista;
+	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Consejeros> listarConsejerosPorRegion(Long region) {
+		EntityManager manager = createEntityManager();
+		List<Consejeros> lista = manager
+				.createQuery("SELECT c FROM Consejeros c INNER JOIN c.region r WHERE  r.rEgionidpk=:idregion  AND c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
+				.setParameter("idregion", region)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
 		return lista;
 	}
 

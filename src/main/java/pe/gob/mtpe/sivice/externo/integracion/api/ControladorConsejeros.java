@@ -131,18 +131,16 @@ public class ControladorConsejeros {
 					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 				}
 			
-			if(docaprob.isEmpty()) {
-				
-				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CONSEJERO_MSG_DOCAPROBACION_VACIO);
-				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.CONSEJERO_ERROR_DOCAPROBACION_VACIO);
-				response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-				
-			}else {
-				
-				archivo = archivoUtilitarioService.cargarArchivo(docaprob, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION);
-				if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
-					
+		        if(docaprob!=null && docaprob.getSize()>0) {
+		        	archivo = archivoUtilitarioService.cargarArchivo(docaprob, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION);
+		        	
+		        	if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
+		        		generico.setvNombredocasig(archivo.getNombre());
+						generico.setvUbidocasig(archivo.getUbicacion());
+						generico.setvExtdocasig(archivo.getExtension());
+		        	}
+		        }
+ 
 					// REGISTRAMOS AL CONSEJERO
 					Regiones       region         = new Regiones();
 					Consejos       consejo        = new Consejos();
@@ -173,19 +171,10 @@ public class ControladorConsejeros {
 					generico.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 					generico.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
 					generico.setvNumdocasig(vNumdocasig);
-					generico.setvNombredocasig(archivo.getNombre());
-					generico.setvUbidocasig(archivo.getUbicacion());
-					generico.setvExtdocasig(archivo.getExtension());
+					
 					
 					generico = consejeroService.Registrar(generico);
-				}else {
-					response.put(ConstantesUtil.X_MENSAJE, "ARCHIVO NO ADJUNTO");
-					response.put(ConstantesUtil.X_ERROR, "NO SE ENCONTRO EL ARCHIVO ADJUNTO");
-					response.put(ConstantesUtil.X_ENTIDAD, generico);
-					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-				}
-				
-			}
+				 
 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

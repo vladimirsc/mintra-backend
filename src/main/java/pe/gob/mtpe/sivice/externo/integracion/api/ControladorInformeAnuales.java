@@ -125,7 +125,7 @@ public class ControladorInformeAnuales {
 		try {
 			
 			if(docboletin!=null && docboletin.getSize()>0) {
-				archivo = archivoUtilitarioService.cargarArchivo(docboletin, ConstantesUtil.C_BOLETINES);
+				archivo = archivoUtilitarioService.cargarArchivo(docboletin, ConstantesUtil.C_INFORME_ANUALES);
 				generico.setvUbiarch(archivo.getUbicacion());
 				generico.setvNombreArchivo(archivo.getNombre());
 				generico.setvExtension(archivo.getExtension());
@@ -183,13 +183,13 @@ public class ControladorInformeAnuales {
 			
 			if(docboletin!=null && docboletin.getSize()>0) {
 				Archivos archivo = new Archivos();
-				archivo = archivoUtilitarioService.cargarArchivo(docboletin, ConstantesUtil.C_BOLETINES);
+				archivo = archivoUtilitarioService.cargarArchivo(docboletin, ConstantesUtil.C_INFORME_ANUALES);
 				generico.setvUbiarch(archivo.getUbicacion());
 				generico.setvNombreArchivo(archivo.getNombre());
 				generico.setvExtension(archivo.getExtension());
 			}
  
-			generico.setvCodinforme(vCodinforme);
+			//generico.setvCodinforme(vCodinforme);
 			generico.setvSesion(vSesion);
 			generico.setComision(comision);
 			generico.setvNumdocap(vNumdocap);

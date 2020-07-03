@@ -32,11 +32,13 @@ public class ComiConsej implements Serializable {
 	@Column(name = "COMI_CONS_ID_PK")
 	private Long cOmiconsidpk;
 	
-	@Column(name="COMISION_FK")
-	private  Long comisionfk;
+	@ManyToOne
+	@JoinColumn(name="COMISION_FK",nullable = false, insertable = true, updatable = true)
+	private  Comisiones comision;
 
-	@Column(name = "TPCONSEJERO_FK")
-	private Long tPconsejerofk;
+	@ManyToOne
+	@JoinColumn(name="TPCONSEJERO_FK",nullable = false, insertable = true, updatable = true)
+	private Tipoconsejero tipoconsejero;
 
 	 @Column(name = "C_FLGELIMINADO", length = 1)
 	private String cFlgeliminado;
@@ -58,13 +60,13 @@ public class ComiConsej implements Serializable {
 	@Column(name = "D_FECMODIFICA")
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
-	
-	
+ 
 	@ManyToOne
 	@JoinColumn(name="CONSEJERO_FK")
 	private  Consejeros consejero;
 	 
-	
+	private transient Long tipoconsejeropk;
+	private transient Long comisionfk;
 	
 
 	public ComiConsej() {
@@ -85,14 +87,21 @@ public class ComiConsej implements Serializable {
 		this.cOmiconsidpk = cOmiconsidpk;
 	}
 
-	public Long gettPconsejerofk() {
-		return tPconsejerofk;
+	public Comisiones getComision() {
+		return comision;
 	}
 
-	public void settPconsejerofk(Long tPconsejerofk) {
-		this.tPconsejerofk = tPconsejerofk;
+	public void setComision(Comisiones comision) {
+		this.comision = comision;
 	}
- 
+
+	public Tipoconsejero getTipoconsejero() {
+		return tipoconsejero;
+	}
+
+	public void setTipoconsejero(Tipoconsejero tipoconsejero) {
+		this.tipoconsejero = tipoconsejero;
+	}
 
 	public String getcFlgeliminado() {
 		return cFlgeliminado;
@@ -150,6 +159,14 @@ public class ComiConsej implements Serializable {
 		this.consejero = consejero;
 	}
 
+	public Long getTipoconsejeropk() {
+		return tipoconsejeropk;
+	}
+
+	public void setTipoconsejeropk(Long tipoconsejeropk) {
+		this.tipoconsejeropk = tipoconsejeropk;
+	}
+
 	public Long getComisionfk() {
 		return comisionfk;
 	}
@@ -157,9 +174,6 @@ public class ComiConsej implements Serializable {
 	public void setComisionfk(Long comisionfk) {
 		this.comisionfk = comisionfk;
 	}
-
-	 
-	 
-
+ 
 	 
 }

@@ -30,9 +30,16 @@ public class ComisionConsejeroDaoImpl extends BaseDao<Long, ComiConsej> implemen
 		return comiconsejero;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ComiConsej> buscar(Long comision) {
-		return null;
+		EntityManager manager = createEntityManager();
+		List<ComiConsej> lista = manager
+				.createQuery("SELECT cj FROM ComiConsej cj INNER JOIN cj.comision c  WHERE c.cOmisionidpk=:codigocomision AND cj.cFlgeliminado=:eliminado ORDER BY cj.cOmiconsidpk DESC")
+				.setParameter("codigocomision", comision)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
 	}
 
 	@Override

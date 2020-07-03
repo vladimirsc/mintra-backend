@@ -1,8 +1,10 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +15,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.ComiConsej;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ComisionConsejeroService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
 
@@ -32,11 +36,39 @@ public class ControladorComisionConsejero {
 	
 	@Autowired
 	private ComisionConsejeroService ComisionConsejeroService;
+	
+	@Autowired
+	private FijasService fijasService;
 
+	/*
 	@GetMapping("/")
 	public List<ComiConsej> listar() {
 		return ComisionConsejeroService.listar();
 	}
+	
+	@PostMapping("/comisiconsej")
+	public ResponseEntity<?> registrar(@RequestBody ComiConsej generico) {
+		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
+		Map<String, Object> response = new HashMap<>();
+		try {
+			generico = ComisionConsejeroService.Registrar(generico);
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR, e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<ComiConsej>(generico,HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/buscar")
+	public List<ComiConsej> buscar(@RequestBody ComiConsej buscar) {
+		return null;
+	}
+
+	
+	*/
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscar(@PathVariable Long id) {
@@ -61,32 +93,25 @@ public class ControladorComisionConsejero {
 		return new ResponseEntity<ComiConsej>(generico,HttpStatus.OK);
 	}
 
-	@PostMapping("/buscar")
-	public List<ComiConsej> buscar(@RequestBody ComiConsej buscar) {
-		return null;
-	}
-
-	@PostMapping("/comisiconsej")
-	public ResponseEntity<?> registrar(@RequestBody ComiConsej generico) {
-		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
-		Map<String, Object> response = new HashMap<>();
-		try {
-			generico = ComisionConsejeroService.Registrar(generico);
-		} catch (DataAccessException e) {
-			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
-			response.put(ConstantesUtil.X_ERROR, e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			response.put(ConstantesUtil.X_ENTIDAD, generico);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	
+	
+	@GetMapping("/consejeroscomision/{idcomision}")
+	public List<ComiConsej> listarConsejerosComision(@PathVariable Long idcomision ){
 		
-		return new ResponseEntity<ComiConsej>(generico,HttpStatus.CREATED);
+ 
+		List<ComiConsej> listaconsejero = new ArrayList<ComiConsej>();
+		listaconsejero = ComisionConsejeroService.buscar(idcomision);
+		return listaconsejero;
 	}
+	
 
-	@PutMapping("/comisiconsej")
+	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(@RequestBody ComiConsej comisiconsej) {
 		ComiConsej generico = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
+             Tipoconsejero tipoconsejero= new Tipoconsejero();
+             tipoconsejero.settPconsejeroidpk(comisiconsej.getTipoconsejeropk()); 
 			generico = ComisionConsejeroService.buscarPorId(comisiconsej);
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.COMISION_CONSEJERO_MSG_ERROR_BUSCAR);
@@ -94,10 +119,15 @@ public class ControladorComisionConsejero {
 				response.put(ConstantesUtil.X_ENTIDAD, comisiconsej);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-
-			comisiconsej.setnUsureg(generico.getnUsureg());
-			comisiconsej.setdFecreg(generico.getdFecreg());
-			generico = ComisionConsejeroService.Actualizar(comisiconsej);
+			
+			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+			//*******************************************************
+ 
+            
+			generico.setTipoconsejero(tipoconsejero);
+			generico.setnUsureg(codigoconsejo);
+			generico = ComisionConsejeroService.Actualizar(generico);
 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -109,9 +139,13 @@ public class ControladorComisionConsejero {
 		return new ResponseEntity<ComiConsej>(generico,HttpStatus.OK);
 	}
 
+	
+	
+	
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar( @PathVariable Long id) {
-		logger.info("==========  insertarConsejeros  ===========");
+		logger.info("==========  ELIMINAR CONSEJERO  ===========");
 		ComiConsej generico = new ComiConsej();
 		generico.setcOmiconsidpk(id);
 		Map<String, Object> response = new HashMap<>();
@@ -123,9 +157,8 @@ public class ControladorComisionConsejero {
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.COMISION_CONSEJERO_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-			}
-			 
-			generico = ComisionConsejeroService.Actualizar(generico);
+			} 
+			generico = ComisionConsejeroService.Eliminar(generico);
 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -137,5 +170,8 @@ public class ControladorComisionConsejero {
 		return new ResponseEntity<ComiConsej>(generico,HttpStatus.OK);
 
 	}
+	
+	
+	
 
 }

@@ -1,19 +1,38 @@
 package pe.gob.mtpe.sivice.externo.core.negocio.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.ComiConsej;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ComisionConsejeroDao;
-import pe.gob.mtpe.sivice.externo.core.negocio.service.ComisionConsejeroService;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ComisionDao;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ConsejeroDao;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.ComisionConsejeroService; 
 
 @Service("ComisConsejeroService")
 @Transactional(readOnly = true)
 public class ComisionConsejeroServiceImpl implements ComisionConsejeroService {
+	
+	
+	private static final Logger logger = LoggerFactory.getLogger(ComisionConsejeroServiceImpl.class);
 
 	@Autowired
 	private ComisionConsejeroDao comisiConsejeDao;
+	
+	@Autowired
+	private ComisionDao comisiondao;
+	
+	@Autowired
+	private ConsejeroDao consejerodao;
 
 	@Override
 	public List<ComiConsej> listar() {
@@ -27,7 +46,53 @@ public class ComisionConsejeroServiceImpl implements ComisionConsejeroService {
 
 	@Override
 	public List<ComiConsej> buscar(Long comision) {
-		return comisiConsejeDao.buscar(comision);
+		
+		//PREGUNTAMOS SI TIENE CONSEJEROS ASIGNADOS
+		List<ComiConsej>  listaConsejeros  = new ArrayList<ComiConsej>();
+		listaConsejeros= comisiConsejeDao.buscar(comision); 
+		logger.info("==================="+listaConsejeros.size());
+		if(listaConsejeros.size()==0) {
+			//LISTO LOS CONSEJEROS POR REGION
+			
+			Comisiones comsiones = new Comisiones();
+			comsiones.setcOmisionidpk(comision);
+			comsiones = comisiondao.consultaPorId(comsiones);
+			
+			if(comsiones!=null) {
+				
+				List<Consejeros> lsconsejeros = consejerodao.listarConsejerosPorRegion(comsiones.getRegion().getrEgionidpk());
+				
+				if(lsconsejeros.size()>0) {
+					
+					for(Consejeros consejero:lsconsejeros) {
+						
+						ComiConsej insertarcomiconsejero = new ComiConsej();
+						
+						ComiConsej comiconsero = new ComiConsej();
+						comiconsero.setComision(comsiones);
+						
+						Tipoconsejero tipoconsejero = new Tipoconsejero();
+						tipoconsejero.settPconsejeroidpk(consejero.getTipoconsejero().gettPconsejeroidpk());
+						
+						insertarcomiconsejero.setComision(comsiones);
+						insertarcomiconsejero.setTipoconsejero(tipoconsejero);
+						insertarcomiconsejero.setConsejero(consejero);
+						
+						//insertamos el regostro
+						comisiConsejeDao.Registrar(insertarcomiconsejero);
+					}
+					
+				}
+				
+				//listamos los nuevos insertados
+				listaConsejeros= comisiConsejeDao.buscar(comision);
+			}
+			
+			
+		} 
+		 
+		
+		return listaConsejeros;
 	}
 
 	@Override

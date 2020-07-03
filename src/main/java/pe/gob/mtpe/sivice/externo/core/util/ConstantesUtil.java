@@ -14,6 +14,7 @@ public class ConstantesUtil {
 	
 	public static final String C_CONSEJERO_DOC_ASIGNACION ="DOCASIGNACION";
 	public static final String C_BOLETINES ="BOLETIN";
+	public static final String C_ENCARGADO_REGION ="ENCREGION";
 	public static final String GENERAL_MSG_ERROR_BASE = "Ocurrio un error en la Base de Datos";
 
 	// CINSTANTES JSON
@@ -238,6 +239,7 @@ public class ConstantesUtil {
 	public static final String INFORMES_MSG_ERROR_BUSCAR = "No se encontro el Informe Anual";
 	public static final String INFORMES_ERROR_BUSCAR = "Informe Anual no encontrada";
 	public static final String INFORMES_MSG_EXITO_BUSCAR = "Informe Anual encontrado ";
+	public static final String C_INFORME_ANUALES ="INFORME";
 
 	// creacion
 	public static final String INFORMES_MSG_EXITO_CREAR = "EL Informe Anual fue creada con \u00e9xito ";

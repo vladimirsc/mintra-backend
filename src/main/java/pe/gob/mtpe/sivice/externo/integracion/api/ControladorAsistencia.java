@@ -73,12 +73,7 @@ public class ControladorAsistencia {
 		try {
 			sesion.setsEsionidpk(idsesion);
 			sesion = asistenciaService.buscarSesion(sesion);
-			if (sesion == null) {
-				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.SESION_MSG_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.SESION_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ENTIDAD, sesion);
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-			}
+			 
 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

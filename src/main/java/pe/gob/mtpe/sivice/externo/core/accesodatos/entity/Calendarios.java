@@ -79,7 +79,14 @@ public class Calendarios implements Serializable {
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
 	private Date dFecmodifica;
 	
+	private transient String vCoidigoComision;
 	private transient String vFechaActividad;
+	private transient String vFechaInicioActividad;
+	private transient String vFechaFinActividad;
+	
+	private transient Date dFechaActividad;
+	private transient Date dFechaInicioActividad;
+	private transient Date dFechaFinActividad;
 	
 	@ManyToOne
 	@JoinColumn(name="REGION_FK",nullable = false, insertable = true, updatable = true)
@@ -253,6 +260,54 @@ public class Calendarios implements Serializable {
 
 	public void setnUsuelimina(Long nUsuelimina) {
 		this.nUsuelimina = nUsuelimina;
+	}
+
+	public String getvCoidigoComision() {
+		return vCoidigoComision;
+	}
+
+	public void setvCoidigoComision(String vCoidigoComision) {
+		this.vCoidigoComision = vCoidigoComision;
+	}
+
+	public String getvFechaInicioActividad() {
+		return vFechaInicioActividad;
+	}
+
+	public void setvFechaInicioActividad(String vFechaInicioActividad) {
+		this.vFechaInicioActividad = vFechaInicioActividad;
+	}
+
+	public String getvFechaFinActividad() {
+		return vFechaFinActividad;
+	}
+
+	public void setvFechaFinActividad(String vFechaFinActividad) {
+		this.vFechaFinActividad = vFechaFinActividad;
+	}
+
+	public Date getdFechaActividad() {
+		return dFechaActividad;
+	}
+
+	public void setdFechaActividad(Date dFechaActividad) {
+		this.dFechaActividad = dFechaActividad;
+	}
+
+	public Date getdFechaInicioActividad() {
+		return dFechaInicioActividad;
+	}
+
+	public void setdFechaInicioActividad(Date dFechaInicioActividad) {
+		this.dFechaInicioActividad = dFechaInicioActividad;
+	}
+
+	public Date getdFechaFinActividad() {
+		return dFechaFinActividad;
+	}
+
+	public void setdFechaFinActividad(Date dFechaFinActividad) {
+		this.dFechaFinActividad = dFechaFinActividad;
 	}
 
 	 

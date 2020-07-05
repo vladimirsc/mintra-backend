@@ -2,12 +2,21 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Calendarios;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.CalendarioDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @Component
 public class CalendarioDaoImpl extends BaseDao<Long, Calendarios> implements CalendarioDao {
@@ -31,7 +40,39 @@ public class CalendarioDaoImpl extends BaseDao<Long, Calendarios> implements Cal
 
 	@Override
 	public List<Calendarios> buscar(Calendarios calendarios) {
-		return null;
+		
+		EntityManager manager = createEntityManager();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		
+		CriteriaQuery<Calendarios> criteriaQuery = builder.createQuery(Calendarios.class);
+		Root<Calendarios> root = criteriaQuery.from(Calendarios.class);
+		
+		calendarios.setvCoidigoComision( (calendarios.getvCoidigoComision()!=null)? calendarios.getvCoidigoComision() : "");
+		calendarios.setvDesactividad( (calendarios.getvDesactividad()!=null)? "%"+calendarios.getvDesactividad()+"%" : "");
+		calendarios.setdFechaInicioActividad( (calendarios.getvFechaInicioActividad()!=null)? FechasUtil.convertStringToDate(calendarios.getvFechaInicioActividad()): FechasUtil.convertStringToDate("01-01-1880"));
+		calendarios.setdFechaFinActividad( (calendarios.getvFechaFinActividad()!=null)? FechasUtil.convertStringToDate(calendarios.getvFechaFinActividad()) : FechasUtil.convertStringToDate("01-01-1880") );
+		calendarios.setcFlgejecuto( (calendarios.getcFlgejecuto()!=null)?calendarios.getcFlgejecuto() : "" );
+		calendarios.setdFecejecuto( (calendarios.getvFechaActividad()!=null)? FechasUtil.convertStringToDate(calendarios.getvFechaActividad()) : FechasUtil.convertStringToDate("01-01-1880") );
+		
+		Predicate valor1 = builder.equal(root.get("cOmisionfk"),calendarios.getvCoidigoComision());
+		Predicate valor2 = builder.like(root.get("vDesactividad"),calendarios.getvDesactividad());
+		Predicate valor3 = builder.between(root.get("dFecactividad"),calendarios.getdFechaInicioActividad(),calendarios.getdFechaFinActividad());
+		Predicate valor4=null;
+		
+		if(!"".equals(calendarios.getcFlgejecuto()) && "1".equals(calendarios.getcFlgejecuto()) || ("1".equals(calendarios.getcFlgejecuto()))){
+			valor4 = builder.equal(root.get("dFecejecuto"), calendarios.getdFecejecuto()) ;  
+		}else {
+			calendarios.setdFecejecuto(FechasUtil.convertStringToDate("01-01-1880"));
+			valor4 =  builder.equal(root.get("dFecejecuto"), calendarios.getdFecejecuto()) ; 
+		}
+			
+		Predicate finalbusqueda =builder.or(valor1,valor2,valor3,valor4);
+		criteriaQuery.where(finalbusqueda);
+		Query<Calendarios> query = (Query<Calendarios>) manager.createQuery(criteriaQuery);
+		List<Calendarios> resultado = query.getResultList();
+		manager.close();
+		
+		return resultado;
 	}
 
 	@Override

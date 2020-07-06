@@ -121,8 +121,12 @@ public class ControladorCalendarios {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
  
-			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
-			generico = calendarioService.Actualizar(generico);
+			calendarios.setnUsureg(generico.getnUsureg());
+			calendarios.setdFecreg(generico.getdFecreg());
+			calendarios.setRegion(generico.getRegion());
+			calendarios.setConsejo(generico.getConsejo());
+			calendarios.setnUsumodifica(ConstantesUtil.c_usuariologin);
+			generico = calendarioService.Actualizar(calendarios);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR, e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));

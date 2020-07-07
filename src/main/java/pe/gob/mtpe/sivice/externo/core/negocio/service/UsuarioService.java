@@ -10,11 +10,11 @@ public interface UsuarioService {
 
 	Usuarios buscarPorId(Usuarios usuario);
 	
-	Usuarios buscarPorCorreo(String correo);
+	Usuarios buscarPorCorreo(Usuarios usuario);
 
 	List<Usuarios> buscar(Usuarios usuario);
 
-	public Usuarios Registrar(Usuarios usuario,Long idtipodocumento,Long rol);
+	public Usuarios Registrar(Usuarios usuario);
 
 	public Usuarios Actualizar(Usuarios usuario);
 

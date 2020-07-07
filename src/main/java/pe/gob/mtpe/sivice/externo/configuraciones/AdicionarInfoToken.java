@@ -22,7 +22,8 @@ public class AdicionarInfoToken implements TokenEnhancer {
 	public OAuth2AccessToken enhance(OAuth2AccessToken accestoken, OAuth2Authentication autentificacion) {
 	    Map<String,Object> informacion = new HashMap<>(); 
 	    Usuarios usuario = new Usuarios();
-	    usuario = usuarioService.buscarPorCorreo(autentificacion.getName());
+	    usuario.setUsername(autentificacion.getName());
+	    usuario = usuarioService.buscarPorCorreo(usuario);
 	    
 	    informacion.put("infousuario", autentificacion.getName());
 	    informacion.put("infonombre", usuario.getvNombre().concat(",").concat(usuario.getvAppaterno()).concat(" ").concat(usuario.getvApmaterno()));

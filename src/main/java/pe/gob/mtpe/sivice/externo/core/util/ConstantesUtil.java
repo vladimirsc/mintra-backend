@@ -347,7 +347,10 @@ public class ConstantesUtil {
 	// eliminacion
 	public static final String TEMA_MSG_EXITO_ELIMINAR = "El Tema fue eliminado con \u00e9xito con con codigo de Acta N° ";
 	
-	
+	//seguridad
+	public static final String C_USUARIO_EXISTE_ERROR ="Usuario registrado";
+	public static final String C_USUARIO_EXISTE_MENSAJE ="El usuario ya existe";
+ 
 	public static final String C_FLAG_ASISTIO_SI="1";
 	public static final String C_FLAG_ASISTIO_NO="0";
 	public static final String C_HORA_INICIO_DEFAULT="00:00 AM";
@@ -368,9 +371,7 @@ public class ConstantesUtil {
     
     public static final Long   c_consejero =Long.parseLong("133");
     
-    
-    //private static final Long C_TIPO_COMISION_TEMPORAL = Long.parseLong("1");
-    //private static final Long C_TIPO_COMISION_ABIERTA = Long.parseLong("2");
+  
  
 
 }

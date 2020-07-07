@@ -89,6 +89,10 @@ public class Particalen implements Serializable {
 	@Column(name = "COMISION")
 	private String comision;
 	
+	
+	@Column(name = "C_FLGPARTICIPO", length = 1) 
+	private String cFlgeparticipo;
+	
 	private transient long  nCalendiariofk;
 	private transient long nTipodocumento;
 	private transient long nEntidad;
@@ -102,6 +106,7 @@ public class Particalen implements Serializable {
 	protected void valoresIniciales() {
 		this.dFecregistro = new Date();
 		this.cFlgeliminado = "0";
+		this.cFlgeparticipo="1";
 	}
 
 	public Long getpArtcalendidpk() {
@@ -278,6 +283,14 @@ public class Particalen implements Serializable {
 
 	public void setvFechaActividad(String vFechaActividad) {
 		this.vFechaActividad = vFechaActividad;
+	}
+
+	public String getcFlgeparticipo() {
+		return cFlgeparticipo;
+	}
+
+	public void setcFlgeparticipo(String cFlgeparticipo) {
+		this.cFlgeparticipo = cFlgeparticipo;
 	}
 
 	 

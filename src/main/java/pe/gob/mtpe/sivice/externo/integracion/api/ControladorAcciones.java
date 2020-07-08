@@ -1,13 +1,18 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acciones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.AccionesService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
@@ -42,6 +48,10 @@ public class ControladorAcciones {
 	
 	@Autowired
 	private ArchivoUtilitarioService archivoUtilitarioService;
+	
+	
+	@Value("${rutaArchivo}")
+	private String rutaRaiz;
 
 	@GetMapping("/")
 	public List<Acciones> listar() {
@@ -180,6 +190,23 @@ public class ControladorAcciones {
 		List<Acciones> listaAcciones = new ArrayList<Acciones>();
 		listaAcciones = accionesService.listarAccionesPorAcuerdo(idacuerdo);
 		return listaAcciones;
+	}
+	
+	
+	@GetMapping("/descargar/{id}")
+	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+		Acciones generico = new Acciones();
+		generico.setaCcionesidpk(id);
+		String ruta = "";
+		try {
+			generico = accionesService.buscarPorId(generico);
+			ruta = rutaRaiz + generico.obtenerRutaAbsoluta();
+			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNombrearchivo()+"."+generico.getvExtarchivo());
+			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
+		} catch (Exception e) {
+			
+		}
+
 	}
 	
 

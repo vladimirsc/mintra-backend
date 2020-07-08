@@ -36,4 +36,6 @@ public interface ActaService {
 	Firmantes actualizarFirmante(Firmantes firmantes);
 	
 	List<Actas> buscarActasPorSesion(Actas actas);
+	 
+	List<Actas> listarActasPorSesion(Actas actas);
 }

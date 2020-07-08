@@ -24,5 +24,7 @@ public interface ActasDao {
 	List<Acuerdos> listaAcuerdosPorActa(Actas actas);
 	
 	List<Actas> buscarActasPorSesion(Actas actas);
+	
+	List<Actas> listarActasPorSesion(Actas actas);
 	 
 }

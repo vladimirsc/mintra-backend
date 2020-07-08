@@ -373,9 +373,13 @@ public class ControladorActas {
 	}
 	
 	@PostMapping("/buscartemasporsesion")
-	List<Actas> buscarTemasPorSesion(@RequestBody Actas actas){
+	public List<Actas> buscarTemasPorSesion(@RequestBody Actas actas){
 		return actaService.buscarActasPorSesion(actas);
 	}
- 
+	
+	@PostMapping("/listarActasPorSesion")
+	public List<Actas> listarActasPorSesion(@RequestBody Actas actas){
+		return actaService.listarActasPorSesion(actas);
+	}
 
 }

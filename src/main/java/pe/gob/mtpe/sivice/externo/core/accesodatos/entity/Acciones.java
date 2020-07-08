@@ -247,6 +247,9 @@ public class Acciones implements Serializable {
 		this.dFecmodifica = dFecmodifica;
 	}
 
+	public String obtenerRutaAbsoluta() {
+		return this.getvUbiarch()+this.getvNombrearchivo()+"."+this.getvExtarchivo();
+	}
 	  
 
 }

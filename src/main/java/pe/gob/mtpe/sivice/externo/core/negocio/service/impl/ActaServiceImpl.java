@@ -197,4 +197,9 @@ public class ActaServiceImpl implements ActaService {
 		return actasDao.buscarActasPorSesion(actas);
 	}
 
+	@Override
+	public List<Actas> listarActasPorSesion(Actas actas) { 
+		return actasDao.listarActasPorSesion(actas);
+	}
+
 }

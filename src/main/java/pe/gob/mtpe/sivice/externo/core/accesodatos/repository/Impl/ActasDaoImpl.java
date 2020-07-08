@@ -112,6 +112,18 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 		manager.close();
 		return lista;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Actas> listarActasPorSesion(Actas actas) {
+		EntityManager manager = createEntityManager();
+		List<Actas> lista = manager
+				.createQuery("SELECT a  FROM Actas  a INNER JOIN  a.sesionfk s INNER JOIN s.region r  WHERE r.rEgionidpk=:codigoregion AND a.cFlagelimina=:eliminado")
+				.setParameter("codigoregion", actas.getNregion())
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
+	}
  
 	
  

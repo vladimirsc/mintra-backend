@@ -79,9 +79,12 @@ public class Usuarios implements Serializable {
 	private  String enabled;
 	
 	@ManyToOne
-	@JoinColumn(name ="REGION_FK")
+	@JoinColumn(name ="REGION_FK",nullable = false, insertable = true, updatable = true)
 	private Regiones regiones;
-
+	
+	private transient String vrol;
+	
+	private transient String vregion;
 
 	public Regiones getRegiones() {
 		return regiones;
@@ -220,6 +223,22 @@ public class Usuarios implements Serializable {
 
 	public void setEnabled(String enabled) {
 		this.enabled = enabled;
+	}
+
+	public String getVrol() {
+		return vrol;
+	}
+
+	public void setVrol(String vrol) {
+		this.vrol = vrol;
+	}
+
+	public String getVregion() {
+		return vregion;
+	}
+
+	public void setVregion(String vregion) {
+		this.vregion = vregion;
 	}
 
 	 

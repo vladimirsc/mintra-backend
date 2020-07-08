@@ -10,6 +10,8 @@ public interface UsuarioRolDao {
 	UsuarioRol buscarPorId(UsuarioRol usuarioRol);
 	
 	UsuarioRol buscarPorCorreo(String correo);
+	
+	UsuarioRol buscarPorRol(UsuarioRol usuarioRol);
 
 	List<UsuarioRol> buscar(UsuarioRol usuarioRol);
 
@@ -18,4 +20,6 @@ public interface UsuarioRolDao {
 	public UsuarioRol Actualizar(UsuarioRol usuarioRol);
 
 	public UsuarioRol Eliminar(UsuarioRol usuarioRol);
+	
+	 
 }

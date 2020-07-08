@@ -6,7 +6,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
 
 public interface UsuarioService {
 	
-	List<Usuarios> listar();
+	public List<Usuarios> listar(Usuarios usuario);
 
 	Usuarios buscarPorId(Usuarios usuario);
 	

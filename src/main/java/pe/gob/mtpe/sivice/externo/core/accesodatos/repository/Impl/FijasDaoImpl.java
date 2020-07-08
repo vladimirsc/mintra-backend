@@ -118,6 +118,26 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public Regiones buscarPorNombreRegion(String nombreregion) {
+		Regiones vregion = new Regiones();
+		EntityManager manager = createEntityManager();
+		List<Regiones> lista = manager
+				.createQuery("FROM Regiones p WHERE p.vDesnombre=:nombreregion AND p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
+				.setParameter("nombreregion", nombreregion)
+				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		if (lista.isEmpty()) {
+			vregion = null;
+		}else {
+			vregion = lista.get(0);
+		}
+		return vregion;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<Consejos> listarConsejos() {
 
 		EntityManager manager = createEntityManager();
@@ -300,6 +320,8 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		buscarId(rol.getrOlidpk());
 		return rol;
 	}
+
+	
 
 	 
 

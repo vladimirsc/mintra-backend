@@ -6,7 +6,9 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
 
 public interface UsuarioDao {
 	
-	List<Usuarios> listar();
+	List<Usuarios> listar(Usuarios usuario);
+	
+	List<Usuarios> listarPorRegion(Usuarios usuario);
 
 	Usuarios buscarPorId(Usuarios usuario);
 	

@@ -11,6 +11,8 @@ public interface UsuarioRolService {
 	UsuarioRol buscarPorId(UsuarioRol usuarioperfil);
 	
 	UsuarioRol buscarPorCorreo(String correo);
+	
+	UsuarioRol buscarPorRol(UsuarioRol usuarioRol);
 
 	List<UsuarioRol> buscar(UsuarioRol usuarioperfil);
 
@@ -19,5 +21,7 @@ public interface UsuarioRolService {
 	public UsuarioRol Actualizar(UsuarioRol usuarioperfil);
 
 	public UsuarioRol Eliminar(UsuarioRol usuarioperfil);
+	
+	UsuarioRol deshabilitarrol(UsuarioRol usuarioRol);
 
 }

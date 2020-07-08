@@ -1,5 +1,6 @@
 package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Component;
@@ -23,10 +24,15 @@ public class UsuarioRolDaoImpl extends BaseDao<Long, UsuarioRol> implements Usua
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<UsuarioRol> buscar(UsuarioRol usuarioRol) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager manager = createEntityManager();
+		List<UsuarioRol> lista = manager
+				.createQuery("SELECT ur FROM UsuarioRol ur INNER JOIN ur.roles r INNER JOIN ur.usuario u WHERE u.uSuarioidpk=:idusuario")
+				.setParameter("idusuario", usuarioRol.getUsuario().getuSuarioidpk()).getResultList();
+		manager.close();
+		return lista;
 	}
 
 	@Override
@@ -37,9 +43,10 @@ public class UsuarioRolDaoImpl extends BaseDao<Long, UsuarioRol> implements Usua
 
 	@Override
 	public UsuarioRol Actualizar(UsuarioRol usuarioRol) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		usuarioRol.setdFecreg(new Date());
+		 actualizar(usuarioRol);
+		 return usuarioRol;
+	} 
 
 	@Override
 	public UsuarioRol Eliminar(UsuarioRol usuarioRol) {
@@ -67,5 +74,27 @@ public class UsuarioRolDaoImpl extends BaseDao<Long, UsuarioRol> implements Usua
 		
 		return usuariorol;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public UsuarioRol buscarPorRol(UsuarioRol usuarioRol) {
+		UsuarioRol usuariorol = new UsuarioRol();
+		EntityManager manager = createEntityManager();
+		List<UsuarioRol> lista = manager
+				.createQuery("SELECT ur FROM UsuarioRol ur INNER JOIN ur.roles r INNER JOIN ur.usuario u WHERE u.uSuarioidpk=:idusuario AND r.rOlidpk=:idrol")
+				.setParameter("idusuario", usuarioRol.getUsuario().getuSuarioidpk())
+				.setParameter("idrol", usuarioRol.getRoles().getrOlidpk()).getResultList();
+		manager.close();
+		if(lista.isEmpty()) {
+			usuariorol=null;
+		}else {
+			usuariorol=lista.get(0); 
+		}
+		
+		return usuariorol;
+	}
+
+	 
+	 
 
 }

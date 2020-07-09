@@ -1,14 +1,10 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.BandejaActas;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Boletines;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.AcuerdoService;
@@ -180,7 +175,8 @@ public class ControladorAcuerdos {
 
 		return new ResponseEntity<Acuerdos>(generico, HttpStatus.OK);
 	}
-
+	
+ 
 	@GetMapping("/acuerdosporacta/{idacta}")
 	public List<Acuerdos> listarAcuerdosPorActas(@PathVariable Long idacta) {
 		Actas acta = new Actas();

@@ -61,7 +61,7 @@ public class ControladorActas {
 	private String rutaRaiz;
 	
  
-
+ /*
 	@GetMapping("/{idsesion}")  //CABECERA DEL ACTA (INFORMACION DE LA SESION)
 	public ResponseEntity<?> cabeceraActa(@PathVariable Long idsesion) {
 		logger.info("==========LISTAR ACTAS=============== ");
@@ -114,6 +114,9 @@ public class ControladorActas {
 		return new ResponseEntity<Actas>(acta, HttpStatus.OK);
 	}
 	
+	
+	
+	
 	@GetMapping("/listaracuerdosporacta/{idsesion}")  //CUERPO LISTA DE ACUERDOS POR ACTA
 	List<Acuerdos> listaAcuerdosPorActa(
 			@PathVariable Long idsesion
@@ -127,9 +130,26 @@ public class ControladorActas {
 		List<Acuerdos> listarAcuerdos =  actaService.listaAcuerdosPorActa(acta);
 		
 		return listarAcuerdos;
+	}*/
+	
+	@GetMapping("/{idacta}")  //CABECERA DEL ACTA (INFORMACION DE LA SESION)
+	public ResponseEntity<?> cabeceraActa(@PathVariable Long idacta) {
+		Actas actas = new Actas();
+		Map<String, Object> response = new HashMap<>();
+		try {
+			actas.setaCtaidpk(idacta);
+			actas=actaService.buscarPorId(actas);
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,
+					e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, actas);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Actas>(actas, HttpStatus.OK); 
 	}
 	
-	 
 	
 	@PostMapping("/registraracuerdos")               //REGISTRAR LOS ACUERDOS
 	public ResponseEntity<?> registrarAcuerdo(
@@ -381,5 +401,7 @@ public class ControladorActas {
 	public List<Actas> listarActasPorSesion(@RequestBody Actas actas){
 		return actaService.listarActasPorSesion(actas);
 	}
+	
+	
 
 }

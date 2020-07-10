@@ -30,6 +30,7 @@ public class RecursosConfiguracionServidor extends ResourceServerConfigurerAdapt
 		CorsConfiguration configuracion = new CorsConfiguration();
 		configuracion.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
 		configuracion.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
+		configuracion.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "idUsuario", "urlBase"));
 		configuracion.setAllowCredentials(true);
 		configuracion.setAllowedHeaders(Arrays.asList("Content-Type","Authorization"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

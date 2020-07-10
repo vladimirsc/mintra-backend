@@ -7,10 +7,10 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
-import org.springframework.stereotype.Component;
-
+import org.springframework.stereotype.Component; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.UsuarioService;
+
 
 @Component
 public class AdicionarInfoToken implements TokenEnhancer {

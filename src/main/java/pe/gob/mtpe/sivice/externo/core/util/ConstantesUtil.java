@@ -360,6 +360,9 @@ public class ConstantesUtil {
     public static final String C_ARCHIVO_MENSAJE ="Archivo";
     public static final String C_ARCHIVO_ERROR_MENSAJE ="No se encontro el Archivo";
     
+    public static final String C_MSG_MENSAJE_USUARIOROL ="Error al cambiar estado del rol";
+    public static final String C_MSG_ERROR_USUARIOROL ="no realizo el cambio";
+    
     public static final String C_ROLE_ADMCONSSAT="ROLE_ADMCONSSAT";
     public static final String C_ROLE_ADMCORSSAT="ROLE_ADMCORSSAT";
     public static final String C_ROLE_OPECONSSAT="ROLE_OPECONSSAT";

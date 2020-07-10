@@ -88,7 +88,7 @@ public class ControladorActas {
 		return new ResponseEntity<Sesiones>(generico, HttpStatus.OK);
 		 
 	}
-	
+	*/
  
 	@GetMapping("/actaporsesion/{idsesion}")   //CUERPO DEL ACTA POR SESION
 	ResponseEntity<?> actasPorSesion(@PathVariable Long idsesion){
@@ -130,7 +130,7 @@ public class ControladorActas {
 		List<Acuerdos> listarAcuerdos =  actaService.listaAcuerdosPorActa(acta);
 		
 		return listarAcuerdos;
-	}*/
+	}
 	
 	@GetMapping("/{idacta}")  //CABECERA DEL ACTA (INFORMACION DE LA SESION)
 	public ResponseEntity<?> cabeceraActa(@PathVariable Long idacta) {

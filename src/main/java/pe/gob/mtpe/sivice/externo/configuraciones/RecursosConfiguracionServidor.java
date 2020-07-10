@@ -3,8 +3,10 @@ package pe.gob.mtpe.sivice.externo.configuraciones;
 import java.util.Arrays;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered; 
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -20,17 +22,17 @@ public class RecursosConfiguracionServidor extends ResourceServerConfigurerAdapt
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		//http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/plantrabajo/").permitAll()
-		http.authorizeRequests().antMatchers("/api/**").permitAll()
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/**").permitAll()
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfiguracion());
 		
 	}
 	
+	@Bean
 	public CorsConfigurationSource corsConfiguracion() {
 		CorsConfiguration configuracion = new CorsConfiguration();
 		configuracion.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
 		configuracion.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
-		configuracion.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "idUsuario", "urlBase"));
 		configuracion.setAllowCredentials(true);
 		configuracion.setAllowedHeaders(Arrays.asList("Content-Type","Authorization"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -38,6 +40,7 @@ public class RecursosConfiguracionServidor extends ResourceServerConfigurerAdapt
 		return source;
 	}
 	
+	@Bean
 	public FilterRegistrationBean<CorsFilter> CorsFiltro(){
 		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(corsConfiguracion()));
 		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);

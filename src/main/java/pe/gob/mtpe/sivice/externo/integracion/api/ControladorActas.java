@@ -42,7 +42,7 @@ import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping({ "/api/actas" })
+@RequestMapping({"/api/actas"})
 public class ControladorActas {
 
 	private static final Logger logger = LoggerFactory.getLogger(ControladorActas.class);

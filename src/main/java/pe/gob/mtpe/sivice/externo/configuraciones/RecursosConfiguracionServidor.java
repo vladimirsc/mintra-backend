@@ -23,9 +23,9 @@ public class RecursosConfiguracionServidor extends ResourceServerConfigurerAdapt
 	public void configure(HttpSecurity http) throws Exception {
 		//http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/plantrabajo/").permitAll()
 		http.authorizeRequests() 
-		.antMatchers(HttpMethod.POST, "/login").permitAll()
-		.antMatchers(HttpMethod.GET,"/api/**").permitAll()
-		.antMatchers(HttpMethod.POST,"/api/**").permitAll()
+		//.antMatchers(HttpMethod.POST, "/login").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/login").permitAll()
+		//.antMatchers(HttpMethod.POST,"/api/**").permitAll()
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfiguracion());
 		

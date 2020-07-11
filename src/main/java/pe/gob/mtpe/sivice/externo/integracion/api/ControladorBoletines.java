@@ -57,8 +57,7 @@ public class ControladorBoletines {
 
 	@GetMapping("/")
 	public List<Boletines> listarBoletines() {
-		logger.info("========== listarBoletines =============== ");
-		logger.info(""+request.getSession().getCreationTime());
+		logger.info("========== listarBoletines =============== "); 
 		return boletinService.listar();
 	}
 

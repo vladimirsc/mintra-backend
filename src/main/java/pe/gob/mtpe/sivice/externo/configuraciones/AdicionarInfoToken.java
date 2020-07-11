@@ -25,9 +25,11 @@ public class AdicionarInfoToken implements TokenEnhancer {
 	    usuario.setUsername(autentificacion.getName());
 	    usuario = usuarioService.buscarPorCorreo(usuario);
 	    
+	    
 	    informacion.put("infousuario", autentificacion.getName());
 	    informacion.put("infonombre", usuario.getvNombre().concat(",").concat(usuario.getvAppaterno()).concat(" ").concat(usuario.getvApmaterno()));
 	    informacion.put("inforegion",usuario.getRegiones().getvDesnombre());
+	    informacion.put("id_usuario", usuario.getuSuarioidpk().toString());
 	    informacion.put("inforegioncodigo",usuario.getRegiones().getrEgionidpk().toString());
 	    ((DefaultOAuth2AccessToken) accestoken).setAdditionalInformation(informacion);
 		return accestoken;

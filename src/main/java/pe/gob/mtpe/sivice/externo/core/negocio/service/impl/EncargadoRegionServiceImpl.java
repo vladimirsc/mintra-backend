@@ -41,4 +41,10 @@ public class EncargadoRegionServiceImpl implements EncargadoRegionService {
 		return encargadoRegionDao.buscarPorId(encargadoRegion);
 	}
 
+	@Override
+	public List<EncargadoRegion> buscar(EncargadoRegion encargadoRegion) {
+		// TODO Auto-generated method stub
+		return encargadoRegionDao.buscar(encargadoRegion);
+	}
+
 }

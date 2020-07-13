@@ -1,9 +1,13 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map; 
+import javax.servlet.http.HttpServletResponse; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
@@ -18,11 +22,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartFile; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.EncargadoRegion;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones; 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.EncargadoRegionService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -45,6 +50,29 @@ public class ControladorEncargadoRegion {
 	
 	
 	
+	@PostMapping("/buscar")
+	public List<EncargadoRegion> informacion(
+			@RequestParam(value = "regionpk")           Long    regionpk,
+			@RequestParam(value = "nombre") 			String  nombre, 
+			@RequestParam(value = "numerodocumento")    String  numerodocumento
+			){
+		EncargadoRegion generico = new EncargadoRegion();
+		List<EncargadoRegion> lsregiones= new ArrayList<EncargadoRegion>();
+		
+		Regiones region = new Regiones();
+		
+		if(regionpk!=null) {
+			region.setrEgionidpk(regionpk);
+		}
+		
+		generico.setRegion(region);
+		generico.setvNombre(nombre);
+		generico.setvNumdocaprobacion(numerodocumento);
+	
+		lsregiones = encargadoRegionService.buscar(generico);
+		return lsregiones;
+	}
+	
 	@GetMapping("/")
 	public List<EncargadoRegion> informacion(){
 		List<EncargadoRegion> generico= new ArrayList<EncargadoRegion>();
@@ -56,8 +84,13 @@ public class ControladorEncargadoRegion {
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar(
 			          @RequestParam(value = "regionpk")            Long          regionpk,
-			          @RequestParam(value = "consejeropk")         Long          consejeropk, 
-			          @RequestParam(value = "numerodocaprobacion") String        numerodocaprobacion, 
+			          @RequestParam(value = "entidad")             Long          entidad, 
+			          @RequestParam(value = "nombre") 			   String        nombre, 
+			          @RequestParam(value = "apellidopaterno")     String        apellidopaterno, 
+			          @RequestParam(value = "apellidomaterno")     String        apellidomaterno, 
+			          @RequestParam(value = "tipodoc")             Long          tipodoc, 
+			          @RequestParam(value = "numerodocumento")    String        numerodocumento, 
+			          @RequestParam(value = "numerocelular")       String        numerocelular,  
 			          @RequestParam(value = "fechadocaprobacion")  String        fechadocaprobacion, 
 			          @RequestParam(value="docaprob")              MultipartFile docaprob
 	 ) {
@@ -77,15 +110,24 @@ public class ControladorEncargadoRegion {
 				
 			}
 			
+			Entidades ventidad = new Entidades();
+			ventidad.seteNtidadidpk(entidad);
+			
+			TipoDocumentos tipodocumentos = new TipoDocumentos();
+			tipodocumentos.settPdocumentoidpk(tipodoc);
+			
 			Regiones region = new Regiones();
 			region.setrEgionidpk(regionpk);
 			
-			Consejeros consejero = new Consejeros();
-			consejero.setcOnsejeroidpk(consejeropk);
-			
+			 
 			generico.setRegion(region);
-			generico.setConsejero(consejero);
-			generico.setvNumdocaprobacion(numerodocaprobacion);
+			generico.setEntidades(ventidad);
+			generico.setvNombre(nombre);
+			generico.setvApellidopaterno(apellidopaterno);
+			generico.setvApellidomaterno(apellidomaterno);
+			generico.setTipoDocumentos(tipodocumentos);
+			generico.setvNumdocaprobacion(numerodocumento);
+			generico.setvNumerocelular(numerocelular);
 			generico.setdFechaprobacion((fechadocaprobacion!=null)? FechasUtil.convertStringToDate(fechadocaprobacion) : null  );
 			generico = encargadoRegionService.registrar(generico);
 			
@@ -104,8 +146,14 @@ public class ControladorEncargadoRegion {
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(
 			          @RequestParam(value = "eNcargadoregionidpk") Long          eNcargadoregionidpk,
-			          @RequestParam(value = "consejeropk")         Long          consejeropk, 
-			          @RequestParam(value = "numerodocaprobacion") String        numerodocaprobacion, 
+			          @RequestParam(value = "regionpk")            Long          regionpk,
+			          @RequestParam(value = "entidad")             Long          entidad, 
+			          @RequestParam(value = "nombre") 			   String        nombre, 
+			          @RequestParam(value = "apellidopaterno")     String        apellidopaterno, 
+			          @RequestParam(value = "apellidomaterno")     String        apellidomaterno, 
+			          @RequestParam(value = "tipodoc")             Long          tipodoc, 
+			          @RequestParam(value = "numerodocumento")    String        numerodocumento, 
+			          @RequestParam(value = "numerocelular")       String        numerocelular,  
 			          @RequestParam(value = "fechadocaprobacion")  String        fechadocaprobacion, 
 			          @RequestParam(value="docaprob")              MultipartFile docaprob
 	 ) {
@@ -130,11 +178,24 @@ public class ControladorEncargadoRegion {
 			}
 			
 			
-			Consejeros consejero = new Consejeros();
-			consejero.setcOnsejeroidpk(consejeropk);
- 
-			generico.setConsejero(consejero);
-			generico.setvNumdocaprobacion(numerodocaprobacion);
+			 
+			Entidades ventidad = new Entidades();
+			ventidad.seteNtidadidpk(entidad);
+			
+			TipoDocumentos tipodocumentos = new TipoDocumentos();
+			tipodocumentos.settPdocumentoidpk(tipodoc);
+			
+			Regiones region = new Regiones();
+			region.setrEgionidpk(regionpk);
+			
+			generico.setRegion(region);
+			generico.setEntidades(ventidad);
+			generico.setvNombre(nombre);
+			generico.setvApellidopaterno(apellidopaterno);
+			generico.setvApellidomaterno(apellidomaterno);
+			generico.setTipoDocumentos(tipodocumentos);
+			generico.setvNumdocaprobacion(numerodocumento);
+			generico.setvNumerocelular(numerocelular);
 			generico.setdFechaprobacion((fechadocaprobacion!=null)? FechasUtil.convertStringToDate(fechadocaprobacion) : null  );
 			generico = encargadoRegionService.actualizar(generico);
 			
@@ -187,6 +248,40 @@ public class ControladorEncargadoRegion {
 		}
 		
 		return new ResponseEntity<EncargadoRegion>(generico,HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/descargar/{id}")
+	public ResponseEntity<?>   descargarArchivo3Tema(@PathVariable Long id, HttpServletResponse res) {
+		EncargadoRegion generico = new EncargadoRegion(); 
+		String ruta = "";
+		Map<String, Object> response = new HashMap<>();
+		try {
+			generico.seteNcargadoregionidpk(id);
+			generico = encargadoRegionService.buscarPorId(generico);
+			if(generico==null) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.TEMA_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.TEMA_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+			ruta = rutaRaiz + generico.obtenerRutaAbsolutaArchivo();
+			File fichero = new File(ruta);
+			if(!fichero.exists()) {
+				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.C_ARCHIVO_MENSAJE);
+				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_ARCHIVO_ERROR_MENSAJE);
+				response.put(ConstantesUtil.X_ENTIDAD, generico);
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			} 
+			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNombreArchivo()+"."+generico.getvExtension());
+			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
+		} catch (Exception e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, generico);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<EncargadoRegion>(generico, HttpStatus.OK);
 	}
 	
 	

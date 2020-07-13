@@ -35,12 +35,29 @@ public class EncargadoRegion implements Serializable {
 	@JoinColumn(name="REGION_FK",nullable = false, insertable = true, updatable = true)  
 	private Regiones region;
 	
+	
 	@ManyToOne
-	@JoinColumn(name="CONSEJERO_FK",nullable = false, insertable = true, updatable = true) 
-	private Consejeros consejero;
-
-	@Column(name = "V_NUMDOCAPROBACION")  
+	@JoinColumn(name="ENTIDAD_FK",nullable = false, insertable = true, updatable = true) 
+	private Entidades entidades;
+	
+	@ManyToOne
+	@JoinColumn(name="TIPO_DOCUMENTO_FK",nullable = false, insertable = true, updatable = true) 
+	private TipoDocumentos tipoDocumentos;
+	
+	@Column(name = "V_NUMERODOCUMENTO")
 	private String vNumdocaprobacion;
+	
+	@Column(name = "V_NOMBRE")
+	private String vNombre;
+	
+	@Column(name = "V_APELLIDO_PATERNO")
+	private String vApellidopaterno;
+	
+	@Column(name = "V_APELLIDO_MATERNO")
+	private String vApellidomaterno;
+	
+	@Column(name = "V_NUMEROCELULAR")
+	private String vNumerocelular;
 
 	@Column(name = "D_FECDOCAPROBACION") 
 	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
@@ -108,12 +125,20 @@ public class EncargadoRegion implements Serializable {
 		this.region = region;
 	}
 
-	public Consejeros getConsejero() {
-		return consejero;
+	public Entidades getEntidades() {
+		return entidades;
 	}
 
-	public void setConsejero(Consejeros consejero) {
-		this.consejero = consejero;
+	public void setEntidades(Entidades entidades) {
+		this.entidades = entidades;
+	}
+
+	public TipoDocumentos getTipoDocumentos() {
+		return tipoDocumentos;
+	}
+
+	public void setTipoDocumentos(TipoDocumentos tipoDocumentos) {
+		this.tipoDocumentos = tipoDocumentos;
 	}
 
 	public String getvNumdocaprobacion() {
@@ -124,6 +149,38 @@ public class EncargadoRegion implements Serializable {
 		this.vNumdocaprobacion = vNumdocaprobacion;
 	}
 
+	public String getvNombre() {
+		return vNombre;
+	}
+
+	public void setvNombre(String vNombre) {
+		this.vNombre = vNombre;
+	}
+
+	public String getvApellidopaterno() {
+		return vApellidopaterno;
+	}
+
+	public void setvApellidopaterno(String vApellidopaterno) {
+		this.vApellidopaterno = vApellidopaterno;
+	}
+
+	public String getvApellidomaterno() {
+		return vApellidomaterno;
+	}
+
+	public void setvApellidomaterno(String vApellidomaterno) {
+		this.vApellidomaterno = vApellidomaterno;
+	}
+
+	public String getvNumerocelular() {
+		return vNumerocelular;
+	}
+
+	public void setvNumerocelular(String vNumerocelular) {
+		this.vNumerocelular = vNumerocelular;
+	}
+
 	public Date getdFechaprobacion() {
 		return dFechaprobacion;
 	}
@@ -132,7 +189,6 @@ public class EncargadoRegion implements Serializable {
 		this.dFechaprobacion = dFechaprobacion;
 	}
 
-	 
 	public String getvNombreArchivo() {
 		return vNombreArchivo;
 	}
@@ -229,6 +285,11 @@ public class EncargadoRegion implements Serializable {
 		this.consejeropk = consejeropk;
 	}
 	
+	public String obtenerRutaAbsolutaArchivo() {
+		return this.getvUbicacionarchivo()+this.getvNombreArchivo()+"."+this.getvExtension();
+	}
 	
+	
+
 	
 }

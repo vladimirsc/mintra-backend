@@ -64,6 +64,28 @@ public class ComiConsej implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="CONSEJERO_FK")
 	private  Consejeros consejero;
+	
+	
+	@Column(name = "D_FECINICIO" )
+	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	private Date dFecinicio;
+	
+	@Column(name = "D_FECFIN" )
+	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
+	private Date dFecfin;
+	
+	@Column(name = "V_NUMDOCUMENTO" )
+	private String vNumdocumento;
+	
+	@Column(name = "V_UBIDOCASIG" )
+	private String vUbicacion;
+	
+	@Column(name = "V_EXTDOCASIG")
+	private String vExtension;
+	
+	@Column(name = "V_NOMBREARCHIVO")
+	private String vNombrearchivo;
+	
 	 
 	private transient Long tipoconsejeropk;
 	private transient Long comisionfk;
@@ -174,6 +196,58 @@ public class ComiConsej implements Serializable {
 	public void setComisionfk(Long comisionfk) {
 		this.comisionfk = comisionfk;
 	}
- 
+
+	public Date getdFecinicio() {
+		return dFecinicio;
+	}
+
+	public void setdFecinicio(Date dFecinicio) {
+		this.dFecinicio = dFecinicio;
+	}
+
+	public Date getdFecfin() {
+		return dFecfin;
+	}
+
+	public void setdFecfin(Date dFecfin) {
+		this.dFecfin = dFecfin;
+	}
+
+	public String getvNumdocumento() {
+		return vNumdocumento;
+	}
+
+	public void setvNumdocumento(String vNumdocumento) {
+		this.vNumdocumento = vNumdocumento;
+	}
+
+	public String getvUbicacion() {
+		return vUbicacion;
+	}
+
+	public void setvUbicacion(String vUbicacion) {
+		this.vUbicacion = vUbicacion;
+	}
+
+	public String getvExtension() {
+		return vExtension;
+	}
+
+	public void setvExtension(String vExtension) {
+		this.vExtension = vExtension;
+	}
+
+	public String getvNombrearchivo() {
+		return vNombrearchivo;
+	}
+
+	public void setvNombrearchivo(String vNombrearchivo) {
+		this.vNombrearchivo = vNombrearchivo;
+	}
+
+	public String obtenerRutaAbsoluta() {
+		return this.getvUbicacion()+this.getvNombrearchivo()+"."+this.getvExtension();
+	}
+	
 	 
 }

@@ -156,7 +156,7 @@ public class ControladorComisiones {
 		return new ResponseEntity<Comisiones>(generico, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarComisiones(
 			@RequestParam(value="codigocomision")       Long          codigocomision,
 			@RequestParam(value="tipocomision")         Long          tipocomision,

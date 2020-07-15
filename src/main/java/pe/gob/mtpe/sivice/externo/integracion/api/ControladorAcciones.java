@@ -27,9 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acciones;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acciones; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.AccionesService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;

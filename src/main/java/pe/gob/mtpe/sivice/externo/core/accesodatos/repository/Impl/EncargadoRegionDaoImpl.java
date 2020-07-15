@@ -3,19 +3,11 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.EncargadoRegion;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InfAnuales;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.EncargadoRegionDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
-import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 
 @Component

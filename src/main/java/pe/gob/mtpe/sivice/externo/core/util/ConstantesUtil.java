@@ -168,6 +168,10 @@ public class ConstantesUtil {
 	public static final String CONSEJERO_MSG_DOCAPROBACION_VACIO = "Adjuntar Documento de aprobacion";
 	public static final String CONSEJERO_ERROR_DOCAPROBACION_VACIO = "El documento de aprobacion no puede estar vacio" ;
 	
+	
+	// ***** COMISION CONSEJERO ******
+	
+	public static final String C_DOCCOMISIONCONSEJERO="DOC_COMICON";
 	// FIJAS
 	// personas
 	// busquedas

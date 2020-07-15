@@ -99,6 +99,8 @@ public class Comisiones implements Serializable {
 	@Column(name = "V_NOMBREARCHIVO")
 	private String vNombreArchivo;
 	
+	private transient String nombrencargado;
+	
 	
 	public Comisiones() {
 
@@ -270,6 +272,15 @@ public class Comisiones implements Serializable {
 
 	public void setvNombreArchivo(String vNombreArchivo) {
 		this.vNombreArchivo = vNombreArchivo;
+	}
+	
+ 
+	public String getNombrencargado() {
+		return nombrencargado;
+	}
+
+	public void setNombrencargado(String nombrencargado) {
+		this.nombrencargado = nombrencargado;
 	}
 
 	public String obtenerRutaAbsoluta() {

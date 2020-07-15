@@ -95,7 +95,11 @@ public class Comisiones implements Serializable {
 	
 	@Column(name = "V_ARCHIVOEXTENSION")
 	private String vArchivoextension;
-
+	
+	@Column(name = "V_NOMBREARCHIVO")
+	private String vNombreArchivo;
+	
+	
 	public Comisiones() {
 
 	}
@@ -260,6 +264,16 @@ public class Comisiones implements Serializable {
 		this.vArchivoextension = vArchivoextension;
 	}
 
-	 
+	public String getvNombreArchivo() {
+		return vNombreArchivo;
+	}
+
+	public void setvNombreArchivo(String vNombreArchivo) {
+		this.vNombreArchivo = vNombreArchivo;
+	}
+
+	public String obtenerRutaAbsoluta() {
+		return this.getvUbidocap()+this.getvNombreArchivo()+"."+this.getvArchivoextension();
+	}
 	 
 }

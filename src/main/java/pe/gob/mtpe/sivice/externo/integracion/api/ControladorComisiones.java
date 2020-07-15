@@ -1,8 +1,12 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,7 +124,7 @@ public class ControladorComisiones {
 				Archivos archivo = new Archivos();
 				archivo = archivoUtilitarioService.cargarArchivo(archivocomision, ConstantesUtil.C_COMISIONES);
 				generico.setvUbidocap(archivo.getUbicacion());
-				generico.setvNumdocapr(archivo.getNombre());
+				generico.setvNombreArchivo(archivo.getNombre());
 				generico.setvArchivoextension(archivo.getExtension());
 			}
 			
@@ -183,7 +187,7 @@ public class ControladorComisiones {
 				Archivos archivo = new Archivos();
 				archivo = archivoUtilitarioService.cargarArchivo(archivocomision, ConstantesUtil.C_COMISIONES);
 				generico.setvUbidocap(archivo.getUbicacion());
-				generico.setvNumdocapr(archivo.getNombre());
+				generico.setvNombreArchivo(archivo.getNombre());
 				generico.setvArchivoextension(archivo.getExtension());
 			}
 			
@@ -252,5 +256,23 @@ public class ControladorComisiones {
 	public List<Comisiones> buscarComision(@RequestParam(value = "nombrecomision") String nombrecomision) {
 		return comisionService.buscarComision(nombrecomision);
 	}
+	
+	@GetMapping("/descargar/{id}")
+	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+		Comisiones generico = new Comisiones();
+		generico.setcOmisionidpk(id);
+		String ruta = "";
+		try {
+			generico = comisionService.buscarPorId(generico);
+			ruta = rutaRaiz + generico.obtenerRutaAbsoluta();
+			res.setHeader("Content-Disposition", "attachment; filename=" + generico.getvNombreArchivo()+"."+generico.getvArchivoextension());
+			res.getOutputStream().write(Files.readAllBytes(Paths.get(ruta)));
+		} catch (Exception e) {
+			
+		}
+
+	}
+	
+	
 
 }

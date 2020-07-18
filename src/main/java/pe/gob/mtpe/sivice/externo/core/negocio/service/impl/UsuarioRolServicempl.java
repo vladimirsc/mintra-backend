@@ -140,6 +140,11 @@ public class UsuarioRolServicempl implements UsuarioRolService {
 		return usuarioRol;
 	}
 
+	@Override
+	public UsuarioRol buscarRolPorIdusuario(UsuarioRol usuarioRol) { 
+		return usuarioRolDao.buscarRolPorIdusuario(usuarioRol);
+	}
+
 	 
 
 }

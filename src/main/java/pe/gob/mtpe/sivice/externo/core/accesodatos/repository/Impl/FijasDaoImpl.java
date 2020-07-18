@@ -3,6 +3,8 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Component;
+
+import oracle.jdbc.OracleTypes;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
@@ -14,7 +16,8 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoTemas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol; 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.FijasDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
@@ -170,10 +173,10 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
        
        String consejo=null;
        switch(rolusuario) {
-		case ConstantesUtil.C_ROLE_ADMCONSSAT: consejo="CONSSAT";     break;
-		case ConstantesUtil.C_ROLE_ADMCORSSAT: consejo="CONRSAT";     break; 
-		case ConstantesUtil.C_ROLE_OPECONSSAT: consejo="COMICONSSAT"; break; 
-		case ConstantesUtil.C_ROLE_OPECORSSAT: consejo="COMICORSAT";  break;
+		case ConstantesUtil.C_ROLE_ADMCONSSAT: consejo=ConstantesUtil.C_CONSSAT;     break;
+		case ConstantesUtil.C_ROLE_ADMCORSSAT: consejo=ConstantesUtil.C_CONRSAT;     break; 
+		case ConstantesUtil.C_ROLE_OPECONSSAT: consejo=ConstantesUtil.C_COMICONSSAT; break; 
+		case ConstantesUtil.C_ROLE_OPECORSSAT: consejo=ConstantesUtil.C_COMICORSAT;  break;
 		}
        
        
@@ -322,14 +325,17 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 	}
 	
 	
+	/*
 	@SuppressWarnings("unchecked")
 	@Override
 	public UsuarioRol informacionUsuario(Long idusuario) {
 		UsuarioRol usuario = new UsuarioRol();
 		EntityManager manager = createEntityManager();
 		List<UsuarioRol> lista = manager
-			.createQuery("SELECT ur FROM UsuarioRol ur INNER JOIN ur.usuario us  WHERE us.uSuarioidpk=:idusuario AND ur.cFlgactivo='1' AND ur.cFlgelimino='0'")
-			.setParameter("idusuario", idusuario).getResultList();
+			.createQuery("SELECT ur FROM UsuarioRol ur INNER JOIN ur.usuario us INNER JOIN ur.roles rl  WHERE us.uSuarioidpk=:idusuario AND ur.cFlgactivo=:activo AND ur.cFlgelimino=:eliminado")
+			.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
+			.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO)
+			.setParameter("idusuario",idusuario).getResultList();
 		manager.close();
 		if(lista.isEmpty()) {
 			usuario=null;
@@ -340,7 +346,32 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 	}
 
 	
-
+  */
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public UsuarioRol informacionUsuario(Long idusuario) {
+		UsuarioRol usuariorol = new UsuarioRol();
+		Usuarios usuario = new Usuarios();
+		Roles rol = new Roles();
+		
+		usuariorol.setUsuario(usuario);
+		usuariorol.setRoles(rol);
+		
+		EntityManager manager = createEntityManager();
+		List<UsuarioRol> lista = manager
+			.createQuery("SELECT ur FROM UsuarioRol ur INNER JOIN ur.usuario us INNER JOIN ur.roles rl  WHERE us.uSuarioidpk=:idusuario AND ur.cFlgactivo=:activo AND ur.cFlgelimino=:eliminado")
+			.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
+			.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO)
+			.setParameter("idusuario",idusuario).getResultList();
+		manager.close();
+		if(lista.isEmpty()) {
+			usuariorol=null;
+		}else {
+			usuariorol = lista.get(0);
+		}		
+		return usuariorol;
+	}
 	 
 
 }

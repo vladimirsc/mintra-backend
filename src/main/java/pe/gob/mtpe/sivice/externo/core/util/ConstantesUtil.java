@@ -28,7 +28,7 @@ public class ConstantesUtil {
 	public static final String C_ARCHIVO_VALIDACION_UBICACION_INCORRECTA ="El archivo no se encuentra en su ubicacion";
 	
 	//VALIDACIONES
-	public static final String C_DNI_DUPLICADO_MSG_CONSEJEROS ="ACTIVO Y DUPLICADO";
+	public static final String C_DNI_DUPLICADO_MSG_CONSEJEROS ="SE ENCUENTRA ASIGNADO A OTRO USUARIO";
 	public static final String C_DNI_DUPLICADO_ERROR_CONSEJEROS ="El DNI se encuentra activo,con otro consejero";
 	// ******* ACTAS ******
 
@@ -366,6 +366,13 @@ public class ConstantesUtil {
     
     public static final String C_MSG_MENSAJE_USUARIOROL ="Error al cambiar estado del rol";
     public static final String C_MSG_ERROR_USUARIOROL ="no realizo el cambio";
+    
+    
+    public static final String C_CONSSAT="CONSSAT";
+    public static final String C_CONRSAT="CONRSAT";
+    public static final String C_COMICONSSAT="COMICONSSAT";
+    public static final String C_COMICORSAT="COMICORSAT";
+    
     
     public static final String C_ROLE_ADMCONSSAT="ROLE_ADMCONSSAT";
     public static final String C_ROLE_ADMCORSSAT="ROLE_ADMCORSSAT";

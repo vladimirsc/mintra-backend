@@ -19,9 +19,9 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoTemas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.FijasDao;
-import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
-import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService; 
 
 @Service("profesionesService")
 @Transactional(readOnly = true)
@@ -142,8 +142,18 @@ public class FijasServiceImpl implements FijasService {
 	@Override
 	public InformacionUsuario informacionUsuario(Long idusuario) { 
 		InformacionUsuario informacionUsuario = new InformacionUsuario();
+		Long idconsejo = 0L; 
 		
 		UsuarioRol usuarioRol = new UsuarioRol();
+		
+		Usuarios usuario= new Usuarios();
+		usuario.setuSuarioidpk(idusuario);
+		
+		Roles rol = new Roles();
+		
+		usuarioRol.setUsuario(usuario);
+		usuarioRol.setRoles(rol);
+		
 		usuarioRol = fijasDao.informacionUsuario(idusuario);
 		
 		if(usuarioRol!=null) {
@@ -160,21 +170,8 @@ public class FijasServiceImpl implements FijasService {
 			informacionUsuario.setvNombreRegion(usuarioRol.getUsuario().getRegiones().getvDesnombre());
 			informacionUsuario.setvNombreRol(usuarioRol.getRoles().getvDesnombre());
 			
-			switch(usuarioRol.getRoles().getvDesnombre()) {
-			
-			  case ConstantesUtil.C_ROLE_ADMCONSSAT:
-			      break;
-			   
-			  case ConstantesUtil.C_ROLE_ADMCORSSAT:
-				 break;
-				 
-			  case ConstantesUtil.C_ROLE_OPECONSSAT:
-				 break;
-				 
-			  case ConstantesUtil.C_ROLE_OPECORSSAT:
-				 break;
-			
-			};
+			idconsejo = fijasDao.BuscarConsejoPorNombre(informacionUsuario.getvNombreRol());
+			informacionUsuario.setnIdConsejo(idconsejo);
 		}
 		
 		return informacionUsuario;

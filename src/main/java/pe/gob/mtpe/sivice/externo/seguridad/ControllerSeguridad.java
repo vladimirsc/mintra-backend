@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,12 +38,25 @@ public class ControllerSeguridad {
 
 	@PostMapping("/listar")
 	public List<Usuarios> listar(
-			@RequestParam(value="vrol") String vrol, 
-			@RequestParam(value="vregion") String vregion
+			
 			) {
+		
+		/*
+		 @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
+		 */
+		Long idUsuario = Long.valueOf("22");
+		Long idRegion =Long.valueOf("10");
+		String nombreRol = "ROLE_ADMCORSSAT";
+		
 	     Usuarios usuario = new Usuarios();
-	     usuario.setVrol(vrol);
-	     usuario.setVregion(vregion);
+	     usuario.setVrol(nombreRol);
+	     
+	     Regiones region  = new Regiones();
+	     region.setrEgionidpk(idRegion);
+	     
+	     usuario.setRegiones(region);
 		List<Usuarios> listar = usuarioService.listar(usuario);
 		return listar;
 

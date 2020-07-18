@@ -24,7 +24,8 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 	public List<Consejeros> listar(Consejeros consejero) {
 		EntityManager manager = createEntityManager();
 		List<Consejeros> lista = manager
-				.createQuery("FROM Consejeros c WHERE c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC") 
+				.createQuery("SELECT c FROM Consejeros c INNER JOIN c.region r WHERE r.rEgionidpk=:idregion AND c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC") 
+				.setParameter("idregion",consejero.getRegion().getrEgionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 
@@ -67,8 +68,8 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		Predicate valor5 = builder.equal(root.get("vDesappaterno"), consejero.getvDesappaterno()) ;
 		Predicate valor6 = builder.equal(root.get("vDesapmaterno"), consejero.getvDesapmaterno()) ;
 		Predicate valor7 = builder.equal(root.get("entidad"),consejero.getvEntidad()) ;   
-		Predicate valor8 = builder.equal(root.get("region"),consejero.getrEgionfk()) ;   
-		Predicate valor9 = builder.equal(root.get("consejo"),consejero.getcOnsejofk()) ;  
+		Predicate valor8 = builder.equal(root.get("region"),consejero.getRegion().getrEgionidpk()) ;   
+		Predicate valor9 = builder.equal(root.get("consejo"),consejero.getConsejo().getcOnsejoidpk()) ;  
 		Predicate valor10 = builder.or(valor1,valor2,valor3,valor4,valor5,valor6,valor7); 
 		Predicate valor11 = builder.and(valor8,valor9);  
 		Predicate finalbusqueda =builder.and(valor10,valor11);
@@ -132,9 +133,8 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 		EntityManager manager = createEntityManager();
 		 Consejeros  consejeroresultado = new Consejeros();
 		List<Consejeros> lista = manager
-				.createQuery("FROM Consejeros c WHERE c.vNumdocumento=:numerodoc AND c.cFlgeliminado=:eliminado")
-				.setParameter("numerodoc", consejero.getvNumdocumento()) 
-				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+				.createQuery("FROM Consejeros c WHERE c.vNumdocumento=:numerodoc")
+				.setParameter("numerodoc", consejero.getvNumdocumento()).getResultList();
 		manager.close();
 
 		if (lista.isEmpty()) {

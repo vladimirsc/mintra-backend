@@ -23,5 +23,7 @@ public interface UsuarioRolService {
 	public UsuarioRol Eliminar(UsuarioRol usuarioperfil);
 	
 	UsuarioRol deshabilitarrol(UsuarioRol usuarioRol);
+	
+	public UsuarioRol buscarRolPorIdusuario(UsuarioRol usuarioRol);
 
 }

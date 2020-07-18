@@ -91,6 +91,27 @@ public class UsuarioRolDaoImpl extends BaseDao<Long, UsuarioRol> implements Usua
 		return usuariorol;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public UsuarioRol buscarRolPorIdusuario(UsuarioRol usuarioRol) {
+		UsuarioRol usuariorol = new UsuarioRol();
+		EntityManager manager = createEntityManager();
+		List<UsuarioRol> lista = manager
+				.createQuery("SELECT ur FROM UsuarioRol ur INNER JOIN ur.roles r INNER JOIN ur.usuario u WHERE u.uSuarioidpk=:idusuario AND u.enabled=:habilitado AND ur.cFlgactivo=:activo AND u.cFlgeliminado=:eliminado")
+				.setParameter("idusuario", usuarioRol.getUsuario().getuSuarioidpk()) 
+				.setParameter("habilitado", "1") 
+				.setParameter("activo", "1") 
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		if(lista.isEmpty()) {
+			usuariorol=null;
+		}else {
+			usuariorol=lista.get(0); 
+		}
+		
+		return usuariorol;
+	}
+
 	 
 	 
 

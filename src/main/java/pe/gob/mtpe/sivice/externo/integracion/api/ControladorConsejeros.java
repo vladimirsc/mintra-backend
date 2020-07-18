@@ -64,21 +64,30 @@ public class ControladorConsejeros {
 
 	@GetMapping("/")
 	public List<Consejeros> listarConsejeros(
-			@RequestHeader(name = "id_usuario", required = true) Long idUsuario
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		
-		// ********  INFORMACION DEL USUARIO LOGEADO ************
-		InformacionUsuario informacionUsuario = new InformacionUsuario();
-		informacionUsuario =fijasService.informacionUsuario(idUsuario);
-		// ******************************************************
-		 
-		 
 		logger.info("==========  listarConsejeros  ===========");
 		
-		//OBTENEMOS LOS DATOS DE LA SESION
-		 Consejeros consejero= new Consejeros();
-		 consejero.setrEgionfk(Long.parseLong("14"));
-		 consejero.setcOnsejofk(Long.parseLong("1"));
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		   InformacionUsuario informacionUsuario = new InformacionUsuario();
+		   informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		   
+		   
+		// ******************************************************************
+		 
+		   Regiones region = new Regiones();
+		   region.setrEgionidpk(idRegion);
+			  
+		   Consejos consejo = new Consejos();
+		   consejo.setcOnsejoidpk(informacionUsuario.getnIdConsejo());
+ 
+		  Consejeros consejero= new Consejeros();
+		  consejero.setRegion(region);
+		  consejero.setConsejo(consejo);
+		 
 		return consejeroService.listar(consejero);
 	}
 
@@ -86,7 +95,23 @@ public class ControladorConsejeros {
 	public List<Consejeros> buscarConsejeros(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestBody Consejeros buscar) {
+		
 		logger.info("==========  buscarConsejeros  ===========");
+		
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		  InformacionUsuario informacionUsuario = new InformacionUsuario();
+		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		// ******************************************************************
+		  
+		  Regiones region = new Regiones();
+		  region.setrEgionidpk(informacionUsuario.getnIdRegion());
+		  
+		  Consejos consejo = new Consejos();
+		  consejo.setcOnsejoidpk(informacionUsuario.getnIdConsejo());
+		  
+		  buscar.setRegion(region);
+		  buscar.setConsejo(consejo);
+		
 		return consejeroService.buscar(buscar);
 	}
 	
@@ -94,12 +119,21 @@ public class ControladorConsejeros {
 	public ResponseEntity<?> buscarPorId(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@PathVariable Long id) {
+		
 		logger.info("==========  buscarConsejeros  ===========");
+		
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		  InformacionUsuario informacionUsuario = new InformacionUsuario();
+		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		// ******************************************************************
+		  
 		Consejeros generico = new Consejeros();
-		generico.setcOnsejeroidpk(id);
+		
 		Map<String, Object> response = new HashMap<>();
 		try {
 			
+			generico.setcOnsejeroidpk(id); 
+			generico.setrEgionfk(informacionUsuario.getnIdRegion());
 			generico = consejeroService.buscarPorId(generico);
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CONSEJERO_MSG_ERROR_BUSCAR);
@@ -134,19 +168,36 @@ public class ControladorConsejeros {
 			) {
 		
 		logger.info("==========  insertarConsejeros  ===========");
+		
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		  InformacionUsuario informacionUsuario = new InformacionUsuario();
+		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		// ******************************************************************
+		String flgeliminado = "0";  
 		Archivos archivo = new Archivos();
 		Consejeros generico = new Consejeros(); 
-		Consejeros consejeroBuscar = new Consejeros();  
+		Consejeros consejeroBuscar = new Consejeros(); 
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
 			 consejeroBuscar.setvNumdocumento(vNumdocumento);
 			 consejeroBuscar = consejeroService.buscarPorDni(consejeroBuscar);
 				if(consejeroBuscar!=null) {
-					response.put(ConstantesUtil.X_MENSAJE,ConstantesUtil.C_DNI_DUPLICADO_MSG_CONSEJEROS);
-					response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_DNI_DUPLICADO_ERROR_CONSEJEROS);
-					response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
-					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+					if("1".equals(consejeroBuscar.getcFlgeliminado())) {
+						flgeliminado = consejeroBuscar.getcFlgeliminado();
+						generico.setcFlgeliminado("0");
+						generico.setcOnsejeroidpk(consejeroBuscar.getcOnsejeroidpk());
+						generico.setdFecreg(consejeroBuscar.getdFecreg());
+						generico.setdFecelimina(consejeroBuscar.getdFecelimina());
+						generico.setnUsureg(consejeroBuscar.getnUsureg());
+						generico.setnUsueliminia(consejeroBuscar.getnUsueliminia());
+					}else {
+						response.put(ConstantesUtil.X_MENSAJE," EL DNI("+consejeroBuscar.getvNumdocumento()+") "+ConstantesUtil.C_DNI_DUPLICADO_MSG_CONSEJEROS);
+						response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_DNI_DUPLICADO_ERROR_CONSEJEROS);
+						response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
+						return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+					}
+					
 				}
 			
 		        if(docaprob!=null && docaprob.getSize()>0) {
@@ -161,20 +212,25 @@ public class ControladorConsejeros {
  
 					// REGISTRAMOS AL CONSEJERO
 					Regiones       region         = new Regiones();
+					region.setrEgionidpk(informacionUsuario.getnIdRegion());
+					
 					Consejos       consejo        = new Consejos();
+					consejo.setcOnsejoidpk(informacionUsuario.getnIdConsejo());
+					
 					Tipoconsejero  tipoconsejero = new Tipoconsejero(); 
 					TipoDocumentos tipodocumento  = new TipoDocumentos();
 					Profesiones    profesion      = new Profesiones();
 					Entidades      entidad        = new Entidades();
 					
-					Long vregion = Long.valueOf(14);
 					
-					if(rEgionfk!=null)      { region.setrEgionidpk(vregion); }
-					if(cOnsejofk!=null)     { consejo.setcOnsejoidpk(cOnsejofk);} 
+					
+					//if(rEgionfk!=null)      { region.setrEgionidpk(vregion); }
+					//if(cOnsejofk!=null)     { consejo.setcOnsejoidpk(cOnsejofk);} 
 					if(vTipdocumento!=null) { tipodocumento.settPdocumentoidpk(vTipdocumento); }
 					if(vProfesion!=null)    { profesion.setpRofesionidpk(vProfesion); }
 					if(vEntidad!=null)      { entidad.seteNtidadidpk(vEntidad); }
 					if(vTpconsejero!=null)  { tipoconsejero.settPconsejeroidpk(vTpconsejero); }
+					
 					
 					generico.setRegion(region);
 					generico.setConsejo(consejo);
@@ -193,7 +249,15 @@ public class ControladorConsejeros {
 					generico.setvNumdocasig(vNumdocasig);
 					
 					
-					generico = consejeroService.Registrar(generico);
+					if("1".equals(flgeliminado)) {
+						generico.setnUsumodifica(informacionUsuario.getnIdUsuario());
+						generico = consejeroService.Actualizar(generico);
+						
+					}else {
+						generico.setnUsureg(informacionUsuario.getnIdUsuario());
+						generico = consejeroService.Registrar(generico);
+					}
+					
 				 
 
 		} catch (DataAccessException e) {
@@ -221,7 +285,14 @@ public class ControladorConsejeros {
 			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestParam(value="cOnsejeroidpk")  Long  cOnsejeroidpk,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario) {
 		
-	 
+		logger.info("==========  ACTUALIZAR CONSEJERO  ===========");
+		
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		  InformacionUsuario informacionUsuario = new InformacionUsuario();
+		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		// ******************************************************************
+		
+		
 		
 		Archivos archivo = new Archivos();
 		Consejeros consejeroBuscar = new Consejeros();
@@ -234,7 +305,7 @@ public class ControladorConsejeros {
 			
 			consejeroBuscar = consejeroService.buscarPorId(consejeroBuscar);
 			if (consejeroBuscar == null) {
-				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CONSEJERO_MSG_ERROR_BUSCAR);
+				response.put(ConstantesUtil.X_MENSAJE,ConstantesUtil.C_DNI_DUPLICADO_MSG_CONSEJEROS);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.CONSEJERO_ERROR_BUSCAR);
 				response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
@@ -245,7 +316,7 @@ public class ControladorConsejeros {
 				consejeroBuscar.setvNumdocumento(vNumdocumento);
 				 consejeroBuscar = consejeroService.buscarPorDni(consejeroBuscar);
 				if(consejeroBuscar!=null) {
-					response.put(ConstantesUtil.X_MENSAJE,ConstantesUtil.C_DNI_DUPLICADO_MSG_CONSEJEROS);
+					response.put(ConstantesUtil.X_MENSAJE," EL DNI("+consejeroBuscar.getvNumdocumento()+") "+ConstantesUtil.C_DNI_DUPLICADO_MSG_CONSEJEROS);
 					response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_DNI_DUPLICADO_ERROR_CONSEJEROS);
 					response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
 					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
@@ -285,8 +356,8 @@ public class ControladorConsejeros {
 			consejeroBuscar.setTipoconsejero(tipoconsejero);
 			consejeroBuscar.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 			consejeroBuscar.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
-			consejeroBuscar.setvNumdocasig(vNumdocasig);
-			//consejeroBuscar.setcOmisionfk(cOmisionfk); ??????
+			consejeroBuscar.setvNumdocasig(vNumdocasig); 
+			consejeroBuscar.setnUsumodifica(informacionUsuario.getnIdUsuario()); 
 			
 			consejeroBuscar = consejeroService.Actualizar(consejeroBuscar);
 			
@@ -304,10 +375,16 @@ public class ControladorConsejeros {
 
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminarBoletin(
+	public ResponseEntity<?> eliminar(
 			@PathVariable Long id,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario) {
-		logger.info("==========  eliminarBoletin  ===========");
+		
+		logger.info("==========  ELIMINAR CONSEJERO ===========");
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		  InformacionUsuario informacionUsuario = new InformacionUsuario();
+		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		// ******************************************************************
+		
 		Consejeros generico = new Consejeros();
 		generico.setcOnsejeroidpk(id);
  
@@ -321,6 +398,7 @@ public class ControladorConsejeros {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 
+			generico.setnUsueliminia(informacionUsuario.getnIdUsuario());
 			generico = consejeroService.Eliminar(generico);
 			 
 		} catch (DataAccessException e) {
@@ -333,17 +411,28 @@ public class ControladorConsejeros {
 		return new ResponseEntity<Consejeros>(generico,HttpStatus.OK);
 	}
 	
+	/*
 	@GetMapping("/comision/{id}")
 	public List<Consejeros> listarPorComision(
 			@PathVariable Long id,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario){
+		
+		logger.info("==========  LISTAR CONSEJERO POR COMISION ===========");
+		
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		  InformacionUsuario informacionUsuario = new InformacionUsuario();
+		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		// ******************************************************************
+		
 		Consejeros consejero = new Consejeros();
-		//consejero.setcOmisionfk(id); ??????
+		 
 	  return consejeroService.listarConsejerosPorComision(consejero);
-	}
+	} */
 	
 	@GetMapping("/descargar/{id}")
 	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+		
+		logger.info("==========  DESCARGAR DOCUMENTO CONSEJERO ===========");
 		Consejeros generico = new Consejeros();
 		generico.setcOnsejeroidpk(id);
 		String ruta = "";

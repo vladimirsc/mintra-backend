@@ -21,5 +21,7 @@ public interface UsuarioRolDao {
 
 	public UsuarioRol Eliminar(UsuarioRol usuarioRol);
 	
+	public UsuarioRol buscarRolPorIdusuario(UsuarioRol usuarioRol);
+	
 	 
 }

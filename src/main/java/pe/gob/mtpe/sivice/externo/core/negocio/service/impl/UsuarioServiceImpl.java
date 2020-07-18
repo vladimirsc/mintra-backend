@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.FijasDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.UsuarioDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.UsuarioService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -19,10 +18,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Autowired
 	private UsuarioDao usuarioDao;
 
-	@Autowired
-	private FijasDao fijasDao;
-	
-	
+ 
  
 	@Override
 	public List<Usuarios> listar(Usuarios usuario) {
@@ -33,13 +29,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 			
 		}else if(ConstantesUtil.C_ROLE_ADMCORSSAT.equals(usuario.getVrol())) {
 			
-			Regiones region = new Regiones();
-			region = fijasDao.buscarPorNombreRegion(usuario.getVregion());
 			
-			if(region!=null) {
+			//region = fijasDao.buscarPorNombreRegion(usuario.getVregion());
+			
+			 
+				Regiones region = new Regiones();
+				region.setrEgionidpk(usuario.getRegiones().getrEgionidpk());
+				
 				usuario.setRegiones(region);
 				lista =usuarioDao.listarPorRegion(usuario);
-			}
+			 
  	
 		}
 		

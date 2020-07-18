@@ -24,10 +24,7 @@ public class ConsejeroDaoImpl extends BaseDao<Long, Consejeros> implements Conse
 	public List<Consejeros> listar(Consejeros consejero) {
 		EntityManager manager = createEntityManager();
 		List<Consejeros> lista = manager
-				.createQuery("FROM Consejeros c WHERE c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
-				//.createQuery("FROM Consejeros c WHERE c.rEgionfk=:region AND c.cOnsejofk=:consejo  AND c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC")
-				//.setParameter("region", consejero.getrEgionfk())
-				//.setParameter("consejo", consejero.getcOnsejofk())
+				.createQuery("FROM Consejeros c WHERE c.cFlgeliminado=:eliminado ORDER BY c.cOnsejeroidpk DESC") 
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 

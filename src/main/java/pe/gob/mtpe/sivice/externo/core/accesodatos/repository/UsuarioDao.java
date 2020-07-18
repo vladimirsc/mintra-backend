@@ -21,4 +21,6 @@ public interface UsuarioDao {
 	public Usuarios Actualizar(Usuarios usuario);
 
 	public Usuarios Eliminar(Usuarios usuario);
+	
+	Usuarios informacionUsuario(Long idusuario);
 }

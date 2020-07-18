@@ -103,7 +103,7 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 		EntityManager manager = createEntityManager();
 		List<Actas> lista = manager
 				.createQuery("SELECT a  FROM Actas  a INNER JOIN  a.sesionfk s "
-						+ " WHERE s.vCodsesion=:codigosesion OR s.tipoSesiones.tIposesionidpk=:codtiposesion OR s.dFecreacion BETWEEN :fechainicio  AND :fechafin AND a.cFlagelimina=:eliminado")
+						+ " WHERE s.vCodsesion=:codigosesion  OR s.dFecreacion BETWEEN :fechainicio  AND :fechafin OR s.tipoSesiones.tIposesionidpk=:codtiposesion  AND a.cFlagelimina=:eliminado")
 				.setParameter("codigosesion", actas.getvCodigoSesion())
 				.setParameter("codtiposesion", actas.getnTipoSesion())
 				.setParameter("fechainicio",  (actas.getVfechaInicio()!=null)? FechasUtil.convertStringToDate(actas.getVfechaInicio()) : FechasUtil.convertStringToDate("01-01-1880"))

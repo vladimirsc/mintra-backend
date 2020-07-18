@@ -1,6 +1,5 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
-
-import java.io.IOException;
+ 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,12 +32,14 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InformacionUsuario;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ConsejeroService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
@@ -51,16 +53,28 @@ public class ControladorConsejeros {
 	@Autowired
 	private ConsejeroService consejeroService;
 	
-	
 	@Autowired
 	private ArchivoUtilitarioService archivoUtilitarioService;
+	
+	@Autowired
+	private FijasService fijasService;
 
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
 
 	@GetMapping("/")
-	public List<Consejeros> listarConsejeros() {
+	public List<Consejeros> listarConsejeros(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario
+			) {
+		
+		// ********  INFORMACION DEL USUARIO LOGEADO ************
+		InformacionUsuario informacionUsuario = new InformacionUsuario();
+		informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		// ******************************************************
+		 
+		 
 		logger.info("==========  listarConsejeros  ===========");
+		
 		//OBTENEMOS LOS DATOS DE LA SESION
 		 Consejeros consejero= new Consejeros();
 		 consejero.setrEgionfk(Long.parseLong("14"));
@@ -69,13 +83,17 @@ public class ControladorConsejeros {
 	}
 
 	@PostMapping("/buscar")
-	public List<Consejeros> buscarConsejeros(@RequestBody Consejeros buscar) {
+	public List<Consejeros> buscarConsejeros(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestBody Consejeros buscar) {
 		logger.info("==========  buscarConsejeros  ===========");
 		return consejeroService.buscar(buscar);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorId(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@PathVariable Long id) {
 		logger.info("==========  buscarConsejeros  ===========");
 		Consejeros generico = new Consejeros();
 		generico.setcOnsejeroidpk(id);
@@ -111,8 +129,8 @@ public class ControladorConsejeros {
 			@RequestParam(value="vDesemail2")      String        vDesemail2,    @RequestParam(value="vEntidad")       Long  vEntidad,
 			@RequestParam(value="vTpconsejero")    Long          vTpconsejero,  @RequestParam(value="dFecinicio")     String  dFecinicio, 
 			@RequestParam(value="dFecfin")         String        dFecfin,       @RequestParam(value="vNumdocasig")    String vNumdocasig,
-			@RequestParam(value="rEgionfk")        Long          rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
-			@RequestParam(value="cOmisionfk")      Long          cOmisionfk
+			@RequestParam(value="rEgionfk")        String        rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
+			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestHeader(name = "id_usuario", required = true) Long idUsuario
 			) {
 		
 		logger.info("==========  insertarConsejeros  ===========");
@@ -149,7 +167,9 @@ public class ControladorConsejeros {
 					Profesiones    profesion      = new Profesiones();
 					Entidades      entidad        = new Entidades();
 					
-					if(rEgionfk!=null)      { region.setrEgionidpk(rEgionfk); }
+					Long vregion = Long.valueOf(14);
+					
+					if(rEgionfk!=null)      { region.setrEgionidpk(vregion); }
 					if(cOnsejofk!=null)     { consejo.setcOnsejoidpk(cOnsejofk);} 
 					if(vTipdocumento!=null) { tipodocumento.settPdocumentoidpk(vTipdocumento); }
 					if(vProfesion!=null)    { profesion.setpRofesionidpk(vProfesion); }
@@ -198,7 +218,10 @@ public class ControladorConsejeros {
 			@RequestParam(value="vTpconsejero")    Long          vTpconsejero,  @RequestParam(value="dFecinicio")     String  dFecinicio, 
 			@RequestParam(value="dFecfin")         String        dFecfin,       @RequestParam(value="vNumdocasig")    String vNumdocasig,
 			@RequestParam(value="rEgionfk")        Long          rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
-			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestParam(value="cOnsejeroidpk")  Long  cOnsejeroidpk) throws IOException{
+			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestParam(value="cOnsejeroidpk")  Long  cOnsejeroidpk,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario) {
+		
+	 
 		
 		Archivos archivo = new Archivos();
 		Consejeros consejeroBuscar = new Consejeros();
@@ -237,18 +260,29 @@ public class ControladorConsejeros {
 				consejeroBuscar.setvExtdocasig(archivo.getExtension());
 			}
 			
+			Tipoconsejero  tipoconsejero = new Tipoconsejero(); 
+			TipoDocumentos tipodocumento  = new TipoDocumentos();
+			Profesiones    profesion      = new Profesiones();
+			Entidades      entidad        = new Entidades();
 			
+			 
+			if(vTpconsejero!=null)  { tipoconsejero.settPconsejeroidpk(vTpconsejero); }
+			if(vTipdocumento!=null) { tipodocumento.settPdocumentoidpk(vTipdocumento); }
+			if(vProfesion!=null)    { profesion.setpRofesionidpk(vProfesion); }
+			if(vEntidad!=null)      { entidad.seteNtidadidpk(vEntidad); }
 			
-			//consejeroBuscar.setvTipdocumento(vTipdocumento); ??????
+ 
+			
+			consejeroBuscar.setTipodocumento(tipodocumento); 
 			consejeroBuscar.setvNumdocumento(vNumdocumento);
 			consejeroBuscar.setvDesnombre(vDesnombre);
 			consejeroBuscar.setvDesappaterno(vDesappaterno);
 			consejeroBuscar.setvDesapmaterno(vDesapmaterno);
-			//consejeroBuscar.setvProfesion(vProfesion); ??????
+			consejeroBuscar.setProfesion(profesion);  
 			consejeroBuscar.setvDesemail1(vDesemail1);
 			consejeroBuscar.setvDesemail2(vDesemail2);
-			//consejeroBuscar.setvEntidad(vEntidad); ??????
-			//consejeroBuscar.setvTpconsejero(vTpconsejero); ??????
+			consejeroBuscar.setEntidad(entidad);  
+			consejeroBuscar.setTipoconsejero(tipoconsejero);
 			consejeroBuscar.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 			consejeroBuscar.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
 			consejeroBuscar.setvNumdocasig(vNumdocasig);
@@ -270,7 +304,9 @@ public class ControladorConsejeros {
 
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminarBoletin(@PathVariable Long id) {
+	public ResponseEntity<?> eliminarBoletin(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario) {
 		logger.info("==========  eliminarBoletin  ===========");
 		Consejeros generico = new Consejeros();
 		generico.setcOnsejeroidpk(id);
@@ -298,7 +334,9 @@ public class ControladorConsejeros {
 	}
 	
 	@GetMapping("/comision/{id}")
-	public List<Consejeros> listarPorComision(@PathVariable Long id){
+	public List<Consejeros> listarPorComision(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario){
 		Consejeros consejero = new Consejeros();
 		//consejero.setcOmisionfk(id); ??????
 	  return consejeroService.listarConsejerosPorComision(consejero);

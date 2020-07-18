@@ -115,6 +115,24 @@ public class UsuarioDaoImpl extends BaseDao<Long, Usuarios> implements UsuarioDa
 		return usuario;
 	}
 
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Usuarios informacionUsuario(Long idusuario) {
+		Usuarios usuario = new Usuarios();
+		EntityManager manager = createEntityManager();
+		List<Usuarios> lista = manager
+				.createQuery("SELECT u FROM Usuarios u WHERE u.uSuarioidpk=:idusuario")
+				.setParameter("idusuario", idusuario).getResultList();
+		manager.close();
+		if(lista.isEmpty()) {
+			usuario=null;
+		}else {
+			usuario = lista.get(0);
+		}		
+		return usuario;
+	}
+
 	
 
 }

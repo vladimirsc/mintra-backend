@@ -92,6 +92,7 @@ public class ControladorEncargadoRegion {
 			          @RequestParam(value = "numerodocumento")    String        numerodocumento, 
 			          @RequestParam(value = "numerocelular")       String        numerocelular,  
 			          @RequestParam(value = "fechadocaprobacion")  String        fechadocaprobacion, 
+			          @RequestParam(value = "numdocaprobacion")  String        numdocaprobacion,
 			          @RequestParam(value="docaprob")              MultipartFile docaprob
 	 ) {
 		
@@ -126,9 +127,10 @@ public class ControladorEncargadoRegion {
 			generico.setvApellidopaterno(apellidopaterno);
 			generico.setvApellidomaterno(apellidomaterno);
 			generico.setTipoDocumentos(tipodocumentos);
-			generico.setvNumdocaprobacion(numerodocumento);
+			generico.setvNumdocumento(numerodocumento);
 			generico.setvNumerocelular(numerocelular);
 			generico.setdFechaprobacion((fechadocaprobacion!=null)? FechasUtil.convertStringToDate(fechadocaprobacion) : null  );
+			generico.setvNumdocaprobacion(numdocaprobacion);
 			generico = encargadoRegionService.registrar(generico);
 			
 			
@@ -155,6 +157,7 @@ public class ControladorEncargadoRegion {
 			          @RequestParam(value = "numerodocumento")    String        numerodocumento, 
 			          @RequestParam(value = "numerocelular")       String        numerocelular,  
 			          @RequestParam(value = "fechadocaprobacion")  String        fechadocaprobacion, 
+			          @RequestParam(value = "numdocaprobacion")  String        numdocaprobacion,
 			          @RequestParam(value="docaprob")              MultipartFile docaprob
 	 ) {
 		
@@ -194,9 +197,10 @@ public class ControladorEncargadoRegion {
 			generico.setvApellidopaterno(apellidopaterno);
 			generico.setvApellidomaterno(apellidomaterno);
 			generico.setTipoDocumentos(tipodocumentos);
-			generico.setvNumdocaprobacion(numerodocumento);
+			generico.setvNumdocumento(numerodocumento);
 			generico.setvNumerocelular(numerocelular);
 			generico.setdFechaprobacion((fechadocaprobacion!=null)? FechasUtil.convertStringToDate(fechadocaprobacion) : null  );
+			generico.setvNumdocaprobacion(numdocaprobacion);
 			generico = encargadoRegionService.actualizar(generico);
 			
 			
@@ -252,7 +256,7 @@ public class ControladorEncargadoRegion {
 	
 	
 	@GetMapping("/descargar/{id}")
-	public ResponseEntity<?>   descargarArchivo3Tema(@PathVariable Long id, HttpServletResponse res) {
+	public ResponseEntity<?>   descargar(@PathVariable Long id, HttpServletResponse res) {
 		EncargadoRegion generico = new EncargadoRegion(); 
 		String ruta = "";
 		Map<String, Object> response = new HashMap<>();

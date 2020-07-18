@@ -45,7 +45,7 @@ public class EncargadoRegion implements Serializable {
 	private TipoDocumentos tipoDocumentos;
 	
 	@Column(name = "V_NUMERODOCUMENTO")
-	private String vNumdocaprobacion;
+	private String vNumdocumento;
 	
 	@Column(name = "V_NOMBRE")
 	private String vNombre;
@@ -95,6 +95,9 @@ public class EncargadoRegion implements Serializable {
 
 	@Column(name = "N_USUELIMINA")  
 	private Long nUsuarioelimina;
+	
+	@Column(name = "V_NUMDOCAPROBACION")  
+	private String vNumdocaprobacion;
 	
 	private transient Long regionpk;
 	private transient Long consejeropk;
@@ -285,11 +288,16 @@ public class EncargadoRegion implements Serializable {
 		this.consejeropk = consejeropk;
 	}
 	
+	public String getvNumdocumento() {
+		return vNumdocumento;
+	}
+
+	public void setvNumdocumento(String vNumdocumento) {
+		this.vNumdocumento = vNumdocumento;
+	}
+	
 	public String obtenerRutaAbsolutaArchivo() {
 		return this.getvUbicacionarchivo()+this.getvNombreArchivo()+"."+this.getvExtension();
 	}
-	
-	
-
-	
+ 
 }

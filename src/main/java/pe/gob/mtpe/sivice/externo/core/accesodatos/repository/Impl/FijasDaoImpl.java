@@ -1,12 +1,11 @@
 package pe.gob.mtpe.sivice.externo.core.accesodatos.repository.Impl;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades; 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
@@ -15,6 +14,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoTemas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.FijasDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
@@ -319,6 +319,24 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 	public Roles buscaRoles(Roles rol) {
 		buscarId(rol.getrOlidpk());
 		return rol;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public UsuarioRol informacionUsuario(Long idusuario) {
+		UsuarioRol usuario = new UsuarioRol();
+		EntityManager manager = createEntityManager();
+		List<UsuarioRol> lista = manager
+			.createQuery("SELECT ur FROM UsuarioRol ur INNER JOIN ur.usuario us  WHERE us.uSuarioidpk=:idusuario AND ur.cFlgactivo='1' AND ur.cFlgelimino='0'")
+			.setParameter("idusuario", idusuario).getResultList();
+		manager.close();
+		if(lista.isEmpty()) {
+			usuario=null;
+		}else {
+			usuario = lista.get(0);
+		}		
+		return usuario;
 	}
 
 	

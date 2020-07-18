@@ -3,7 +3,7 @@ package pe.gob.mtpe.sivice.externo.core.accesodatos.repository;
 import java.util.List;
 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades; 
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
@@ -12,6 +12,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoTemas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol;
 
 public interface FijasDao {
 
@@ -67,6 +68,9 @@ public interface FijasDao {
 	public Roles buscaRoles(Roles rol);
  
 	public Long BuscarConsejoPorNombre(String rolusuario); 
+	
+	//USUARIO
+	public UsuarioRol informacionUsuario(Long idusuario);
 
 	 
 

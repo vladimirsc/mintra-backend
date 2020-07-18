@@ -13,14 +13,12 @@ import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 public class UsuarioRolDaoImpl extends BaseDao<Long, UsuarioRol> implements UsuarioRolDao {
 
 	@Override
-	public List<UsuarioRol> listar() {
-		// TODO Auto-generated method stub
+	public List<UsuarioRol> listar() { 
 		return null;
 	}
 
 	@Override
-	public UsuarioRol buscarPorId(UsuarioRol usuarioRol) {
-		// TODO Auto-generated method stub
+	public UsuarioRol buscarPorId(UsuarioRol usuarioRol) { 
 		return null;
 	}
 
@@ -49,8 +47,7 @@ public class UsuarioRolDaoImpl extends BaseDao<Long, UsuarioRol> implements Usua
 	} 
 
 	@Override
-	public UsuarioRol Eliminar(UsuarioRol usuarioRol) {
-		// TODO Auto-generated method stub
+	public UsuarioRol Eliminar(UsuarioRol usuarioRol) { 
 		return null;
 	}
 

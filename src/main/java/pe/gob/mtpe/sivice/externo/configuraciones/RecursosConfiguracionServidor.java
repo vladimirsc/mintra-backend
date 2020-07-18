@@ -25,7 +25,10 @@ public class RecursosConfiguracionServidor extends ResourceServerConfigurerAdapt
 		http.authorizeRequests() 
 		//.antMatchers(HttpMethod.POST, "/login").permitAll()
 		.antMatchers(HttpMethod.GET,"/api/login").permitAll()
-		//.antMatchers(HttpMethod.POST,"/api/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/consejeros/descargar/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/informes/descargar/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/boletines/descargar/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/encargadoregion/descargar/**").permitAll()
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfiguracion());
 		

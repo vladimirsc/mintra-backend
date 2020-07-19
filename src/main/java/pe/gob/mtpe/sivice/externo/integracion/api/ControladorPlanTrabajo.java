@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,7 +65,11 @@ public class ControladorPlanTrabajo {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarPorIdPlanTrabajo(@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorIdPlanTrabajo(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		PlanTrabajo generico  = new PlanTrabajo();
 		generico.setpLantrabidpk(id); 
 		Map<String, Object> response = new HashMap<>();
@@ -89,7 +94,11 @@ public class ControladorPlanTrabajo {
 	
 
 	@PostMapping("/buscar")
-	public List<PlanTrabajo> buscarPlanTrabajo(@RequestBody PlanTrabajo buscar) {
+	public List<PlanTrabajo> buscarPlanTrabajo(
+			@RequestBody PlanTrabajo buscar,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		return planTrabajoService.buscar(buscar);
 	}
 	
@@ -100,7 +109,9 @@ public class ControladorPlanTrabajo {
 			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion , @RequestParam(value="docplantrabajo" ,required = false) MultipartFile docplantrabajo,
 			@RequestParam(value="comisionfk"   ) Long          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
 			@RequestParam(value="dFecinicio"   ) String        dFecinicio,    @RequestParam(value="dFecfin")        String  dFecfin,
-			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr
+			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) throws IOException{
 		
 		PlanTrabajo generico = new PlanTrabajo();
@@ -171,7 +182,10 @@ public class ControladorPlanTrabajo {
 			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion, @RequestParam(value="docplantrabajo",required = false) MultipartFile docplantrabajo,
 			@RequestParam(value="comisionfk"   ) Long          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
 			@RequestParam(value="dFecinicio"   ) String        dFecinicio,    @RequestParam(value="dFecfin")        String  dFecfin,
-			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,    @RequestParam(value="pLantrabidpk"   ) Long  pLantrabidpk
+			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,    @RequestParam(value="pLantrabidpk"   ) Long  pLantrabidpk,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) throws IOException {
 		logger.info("============  BUSCAR PROFESION =================");
 		PlanTrabajo generico = new PlanTrabajo();
@@ -222,7 +236,11 @@ public class ControladorPlanTrabajo {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminarPlanTrabajo(@PathVariable Long id) {
+	public ResponseEntity<?> eliminarPlanTrabajo(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("============  BUSCAR PROFESION =================");
 		PlanTrabajo generico = new PlanTrabajo();
 		generico.setpLantrabidpk(id);
@@ -253,7 +271,9 @@ public class ControladorPlanTrabajo {
 	
 	
 	@GetMapping("/descargaraprobacion/{id}")
-	public void descargarArchivoAprobacion(@PathVariable Long id, HttpServletResponse res) {
+	public void descargarArchivoAprobacion(
+			@PathVariable Long id, 
+			HttpServletResponse res) {
 		PlanTrabajo generico = new PlanTrabajo();
 		generico.setpLantrabidpk(id);
 		String ruta = "";
@@ -269,7 +289,9 @@ public class ControladorPlanTrabajo {
 	}
 	
 	@GetMapping("/descargarplan/{id}")
-	public void descargarArchivoPlan(@PathVariable Long id, HttpServletResponse res) {
+	public void descargarArchivoPlan(
+			@PathVariable Long id,
+			HttpServletResponse res) {
 		PlanTrabajo generico = new PlanTrabajo();
 		generico.setpLantrabidpk(id);
 		String ruta = "";

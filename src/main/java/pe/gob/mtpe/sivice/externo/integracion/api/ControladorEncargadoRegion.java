@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +55,10 @@ public class ControladorEncargadoRegion {
 	public List<EncargadoRegion> informacion(
 			@RequestParam(value = "regionpk")           Long    regionpk,
 			@RequestParam(value = "nombre") 			String  nombre, 
-			@RequestParam(value = "numerodocumento")    String  numerodocumento
+			@RequestParam(value = "numerodocumento")    String  numerodocumento,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			){
 		EncargadoRegion generico = new EncargadoRegion();
 		List<EncargadoRegion> lsregiones= new ArrayList<EncargadoRegion>();
@@ -74,7 +78,11 @@ public class ControladorEncargadoRegion {
 	}
 	
 	@GetMapping("/")
-	public List<EncargadoRegion> informacion(){
+	public List<EncargadoRegion> informacion(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
+		
 		List<EncargadoRegion> generico= new ArrayList<EncargadoRegion>();
 		generico = encargadoRegionService.listar();
 		return generico;
@@ -93,7 +101,10 @@ public class ControladorEncargadoRegion {
 			          @RequestParam(value = "numerocelular")       String        numerocelular,  
 			          @RequestParam(value = "fechadocaprobacion")  String        fechadocaprobacion, 
 			          @RequestParam(value = "numdocaprobacion")  String        numdocaprobacion,
-			          @RequestParam(value="docaprob")              MultipartFile docaprob
+			          @RequestParam(value="docaprob")              MultipartFile docaprob,
+			          @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+					  @RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+					  @RequestHeader(name = "info_rol", required = true) String nombreRol
 	 ) {
 		
 		EncargadoRegion  generico = new EncargadoRegion();
@@ -158,7 +169,10 @@ public class ControladorEncargadoRegion {
 			          @RequestParam(value = "numerocelular")       String        numerocelular,  
 			          @RequestParam(value = "fechadocaprobacion")  String        fechadocaprobacion, 
 			          @RequestParam(value = "numdocaprobacion")  String        numdocaprobacion,
-			          @RequestParam(value="docaprob")              MultipartFile docaprob
+			          @RequestParam(value="docaprob")              MultipartFile docaprob,
+			          @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+					  @RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+					  @RequestHeader(name = "info_rol", required = true) String nombreRol
 	 ) {
 		
 		EncargadoRegion  generico = new EncargadoRegion();
@@ -215,7 +229,11 @@ public class ControladorEncargadoRegion {
 	}
 	
 	@GetMapping("/{idencargadoregion}")
-	public ResponseEntity<?> informacion(@PathVariable Long idencargadoregion){
+	public ResponseEntity<?> informacion(
+			@PathVariable Long idencargadoregion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		
 		EncargadoRegion  generico = new EncargadoRegion();
 		generico.seteNcargadoregionidpk(idencargadoregion);
@@ -234,7 +252,11 @@ public class ControladorEncargadoRegion {
 	
 	
 	@DeleteMapping("/{idencargadoregion}")
-	public ResponseEntity<?> eliminar(@PathVariable Long idencargadoregion){
+	public ResponseEntity<?> eliminar(
+			@PathVariable Long idencargadoregion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		
 		EncargadoRegion  generico = new EncargadoRegion();
 		generico.seteNcargadoregionidpk(idencargadoregion);
@@ -256,7 +278,9 @@ public class ControladorEncargadoRegion {
 	
 	
 	@GetMapping("/descargar/{id}")
-	public ResponseEntity<?>   descargar(@PathVariable Long id, HttpServletResponse res) {
+	public ResponseEntity<?>   descargar(
+			@PathVariable Long id, 
+			HttpServletResponse res) {
 		EncargadoRegion generico = new EncargadoRegion(); 
 		String ruta = "";
 		Map<String, Object> response = new HashMap<>();

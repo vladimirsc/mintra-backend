@@ -2,14 +2,11 @@ package pe.gob.mtpe.sivice.externo.core.negocio.service.impl;
 
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InformacionUsuario;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
@@ -18,8 +15,6 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoTemas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.FijasDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService; 
 
@@ -139,43 +134,7 @@ public class FijasServiceImpl implements FijasService {
 		return fijasDao.BuscarConsejoPorNombre(rolusuario);
 	}
 
-	@Override
-	public InformacionUsuario informacionUsuario(Long idusuario) { 
-		InformacionUsuario informacionUsuario = new InformacionUsuario();
-		Long idconsejo = 0L; 
-		
-		UsuarioRol usuarioRol = new UsuarioRol();
-		
-		Usuarios usuario= new Usuarios();
-		usuario.setuSuarioidpk(idusuario);
-		
-		Roles rol = new Roles();
-		
-		usuarioRol.setUsuario(usuario);
-		usuarioRol.setRoles(rol);
-		
-		usuarioRol = fijasDao.informacionUsuario(idusuario);
-		
-		if(usuarioRol!=null) {
-			
-			informacionUsuario.setnIdUsuario(usuarioRol.getUsuario().getuSuarioidpk());
-			informacionUsuario.setnIdRegion(usuarioRol.getUsuario().getRegiones().getrEgionidpk());
-			informacionUsuario.setnIdRol(usuarioRol.getRoles().getrOlidpk());
  
-			informacionUsuario.setvNombreUsuario(usuarioRol.getUsuario().getvNombre());
-			informacionUsuario.setvApellidoPaterno(usuarioRol.getUsuario().getvAppaterno());
-			informacionUsuario.setvApellidoMaterno(usuarioRol.getUsuario().getvApmaterno());
-			informacionUsuario.setvCorreo(usuarioRol.getUsuario().getUsername());
-			
-			informacionUsuario.setvNombreRegion(usuarioRol.getUsuario().getRegiones().getvDesnombre());
-			informacionUsuario.setvNombreRol(usuarioRol.getRoles().getvDesnombre());
-			
-			idconsejo = fijasDao.BuscarConsejoPorNombre(informacionUsuario.getvNombreRol());
-			informacionUsuario.setnIdConsejo(idconsejo);
-		}
-		
-		return informacionUsuario;
-	}
 
 	
 }

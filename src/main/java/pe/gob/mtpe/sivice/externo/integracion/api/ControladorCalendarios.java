@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,7 +48,11 @@ public class ControladorCalendarios {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscar(@PathVariable Long id) {
+	public ResponseEntity<?> buscar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Calendarios generico = new Calendarios();
 		generico.setcAlendarioidpk(id);
 		Map<String, Object> response = new HashMap<>();
@@ -73,12 +78,20 @@ public class ControladorCalendarios {
 	}
 
 	@PostMapping("/buscar")
-	public List<Calendarios> buscar(@RequestBody Calendarios buscar) {
+	public List<Calendarios> buscar(
+			@RequestBody Calendarios buscar,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		return calendarioService.buscar(buscar);
 	}
 
 	@PostMapping("/registrar")
-	public ResponseEntity<?> registrar(@RequestBody Calendarios calendarios) {
+	public ResponseEntity<?> registrar(
+			@RequestBody Calendarios calendarios,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -109,7 +122,11 @@ public class ControladorCalendarios {
 	}
 
 	@PutMapping("/actualizar")
-	public ResponseEntity<?> actualizar(@RequestBody Calendarios calendarios) {
+	public ResponseEntity<?> actualizar(
+			@RequestBody Calendarios calendarios,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Calendarios generico = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -138,7 +155,11 @@ public class ControladorCalendarios {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminar(@PathVariable Long id) {
+	public ResponseEntity<?> eliminar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("==========  insertarConsejeros  ===========");
 		Calendarios generico = new Calendarios();
 		generico.setcAlendarioidpk(id);

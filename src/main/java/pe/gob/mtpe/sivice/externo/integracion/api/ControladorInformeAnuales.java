@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping; 
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,7 +60,11 @@ public class ControladorInformeAnuales {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscar(@PathVariable Long id) {
+	public ResponseEntity<?> buscar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		InfAnuales generico = new InfAnuales();
 		generico.setiNformeidpk(id);
 		Map<String, Object> response = new HashMap<>();
@@ -89,7 +94,10 @@ public class ControladorInformeAnuales {
 		@RequestParam(value="vSesion")      String  vSesion,
 		@RequestParam(value="vNumdocap")    String  vNumdocap,
 		@RequestParam(value="dFecdesde")    String  dFecdesde,
-		@RequestParam(value="dFhasta")      String  dFhasta
+		@RequestParam(value="dFhasta")      String  dFhasta,
+		@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+		@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+		@RequestHeader(name = "info_rol", required = true) String nombreRol
 
 			) {
 		
@@ -115,7 +123,10 @@ public class ControladorInformeAnuales {
 			@RequestParam(value="vNumdocap")                     String        vNumdocap, 
 			@RequestParam(value="comision",required = false)     String         comision, 
 			@RequestParam(value="dFecdesde")                     String         dFecdesde,  
-			@RequestParam(value="docboletin",required = false)   MultipartFile  docboletin ) {
+			@RequestParam(value="docboletin",required = false)   MultipartFile  docboletin,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		
@@ -170,7 +181,10 @@ public class ControladorInformeAnuales {
 			@RequestParam(value="vNumdocap")                     String      vNumdocap, 
 			@RequestParam(value="comision",required = false)     String          comision, 
 			@RequestParam(value="dFecdesde")                     String        dFecdesde,  
-			@RequestParam(value="docboletin",required = false)   MultipartFile docboletin 
+			@RequestParam(value="docboletin",required = false)   MultipartFile docboletin ,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			
 			) throws IOException {
 		
@@ -210,7 +224,11 @@ public class ControladorInformeAnuales {
 	
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminar(@PathVariable Long id) {
+	public ResponseEntity<?> eliminar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("==========  insertarConsejeros  ==========="+id);
 		InfAnuales generico = new InfAnuales();
 		generico.setiNformeidpk(id);
@@ -241,7 +259,9 @@ public class ControladorInformeAnuales {
 	
 	 
 	@GetMapping("/descargar/{id}")
-	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+	public void descargarArchivo(
+			@PathVariable Long id,
+			HttpServletResponse res) {
 		InfAnuales generico = new InfAnuales();
 		generico.setiNformeidpk(id);
 		String ruta = "";

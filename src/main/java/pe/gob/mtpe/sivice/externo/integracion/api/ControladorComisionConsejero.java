@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,7 +84,11 @@ public class ControladorComisionConsejero {
 	*/
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscar(@PathVariable Long id) {
+	public ResponseEntity<?> buscar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		ComiConsej generico = new ComiConsej();
 		generico.setcOmiconsidpk(id);
 		Map<String, Object> response = new HashMap<>();
@@ -108,7 +113,11 @@ public class ControladorComisionConsejero {
 	
 	
 	@GetMapping("/consejeroscomision/{idcomision}")
-	public List<ComiConsej> listarConsejerosComision(@PathVariable Long idcomision ){
+	public List<ComiConsej> listarConsejerosComision(
+			@PathVariable Long idcomision,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		
  
 		List<ComiConsej> listaconsejero = new ArrayList<ComiConsej>();
@@ -124,7 +133,10 @@ public class ControladorComisionConsejero {
 			@RequestParam(value="vfechainicio" )     String vfechainicio,
 			@RequestParam(value="vfechafin" )        String vfechafin,
 			@RequestParam(value="vnumerodocumento" ) String vnumerodocumento,
-			@RequestParam(value="vdocumento" )       MultipartFile  vdocumento
+			@RequestParam(value="vdocumento" )       MultipartFile  vdocumento,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		ComiConsej generico = new ComiConsej(); 
 		Archivos archivoDocumento = new Archivos();
@@ -180,7 +192,11 @@ public class ControladorComisionConsejero {
 	
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminar( @PathVariable Long id) {
+	public ResponseEntity<?> eliminar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("==========  ELIMINAR CONSEJERO  ===========");
 		ComiConsej generico = new ComiConsej();
 		generico.setcOmiconsidpk(id);
@@ -209,7 +225,9 @@ public class ControladorComisionConsejero {
 	
 	
 	@GetMapping("/descargar/{id}")
-	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+	public void descargarArchivo(
+			@PathVariable Long id,
+			HttpServletResponse res) {
 		ComiConsej generico = new ComiConsej();
 		generico.setcOmiconsidpk(id);
 		String ruta = "";

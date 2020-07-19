@@ -68,9 +68,7 @@ public interface FijasDao {
 	public Roles buscaRoles(Roles rol);
  
 	public Long BuscarConsejoPorNombre(String rolusuario); 
-	
-	//USUARIO
-	public UsuarioRol informacionUsuario(Long idusuario);
+	 
 
 	 
 

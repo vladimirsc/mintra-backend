@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +44,10 @@ public class ControladorSesion {
 	private  FijasService fijasService;
 
 	@GetMapping("/")
-	public List<Sesiones> listarSesion() {
+	public List<Sesiones> listarSesion(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("============  BUSCAR listarSesion =================");
 		//falta adicionar el consejo como parametro eso de la session se obtiene
 		return sesionService.listar();
@@ -54,7 +58,10 @@ public class ControladorSesion {
 			@RequestParam("codigosesion")  String codigosesion,
 			@RequestParam("tiposesion")    Long tiposesion,
 			@RequestParam("fechainicio")   String fechainicio,
-			@RequestParam("fechafin")      String fechafin
+			@RequestParam("fechafin")      String fechafin,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		List<Sesiones> generico = new  ArrayList<Sesiones>();
 		Sesiones sesionbuscar = new Sesiones();
@@ -77,7 +84,11 @@ public class ControladorSesion {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarPorIdPlanTrabajo(@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorIdPlanTrabajo(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Sesiones generico  = new Sesiones();
 		generico.setsEsionidpk(id); 
 		Map<String, Object> response = new HashMap<>();
@@ -107,7 +118,10 @@ public class ControladorSesion {
 			 @RequestParam(value="tiposesion")  Long tiposesion,
 			 @RequestParam(value="dFecreacion") String dFecreacion,
 			 @RequestParam(value="dHorinicio")  String dHorinicio,
-			 @RequestParam(value="dHorfin")     String dHorfin
+			 @RequestParam(value="dHorfin")     String dHorfin,
+			 @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+				@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+				@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		logger.info("============  BUSCAR PROFESION =================");
 		// OBTENER 
@@ -151,7 +165,10 @@ public class ControladorSesion {
 			 @RequestParam(value="dFecreacion") String dFecreacion,
 			 @RequestParam(value="dHorinicio")  String dHorinicio,
 			 @RequestParam(value="dHorfin")     String dHorfin,
-			 @RequestParam(value="codusuario")  Long codusuario
+			 @RequestParam(value="codusuario")  Long codusuario,
+			 @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			 @RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			 @RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		logger.info("============  BUSCAR PROFESION =================");
 		Sesiones generico = new Sesiones();
@@ -181,7 +198,11 @@ public class ControladorSesion {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminarSesion(@PathVariable Long id) {
+	public ResponseEntity<?> eliminarSesion(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("============  BUSCAR PROFESION =================");
 		Sesiones generico =  new Sesiones();
 		generico.setsEsionidpk(id); 
@@ -213,7 +234,10 @@ public class ControladorSesion {
 	
 	@PostMapping("/buscarpornombre")
 	public List<Sesiones> buscarSesion(
-			@RequestParam(value="nombresesion")  String  nombresesion 
+			@RequestParam(value="nombresesion")  String  nombresesion ,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 	      ){
 		return sesionService.buscarSesion(nombresesion);
 	}

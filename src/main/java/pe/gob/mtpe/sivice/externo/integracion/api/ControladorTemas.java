@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +52,11 @@ public class ControladorTemas {
 	private String rutaRaiz;
 
 	@GetMapping("/{idsesion}")
-	public ResponseEntity<?> cabeceraSesion(@PathVariable Long idsesion) {
+	public ResponseEntity<?> cabeceraSesion(
+			@PathVariable Long idsesion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Sesiones cabeceraSesionTema = new Sesiones();
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -77,19 +82,31 @@ public class ControladorTemas {
 	}
 
 	@GetMapping("/temasporsesion/{idsesion}")
-	public List<Temas> temasPorSesion(@PathVariable Long idsesion) {
+	public List<Temas> temasPorSesion(
+			@PathVariable Long idsesion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		List<Temas> listaTemasPorSesion = new ArrayList<Temas>();
 		listaTemasPorSesion = temaService.temasPorSesion(idsesion);
 		return listaTemasPorSesion;
 	}
 
 	@PostMapping("/buscar")
-	public List<Temas> buscarTemas(@RequestBody Temas buscar) {
+	public List<Temas> buscarTemas(
+			@RequestBody Temas buscar,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		return temaService.buscar(buscar);
 	}
 
 	@GetMapping("/info/{id}")
-	public ResponseEntity<?> buscarPorIdPlanTrabajo(@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorIdPlanTrabajo(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Temas generico = new Temas();
 		generico.settEmaidpk(id);
 
@@ -121,8 +138,10 @@ public class ControladorTemas {
 			@RequestParam("docAdjunto3") MultipartFile docAdjunto3, 
 			@RequestParam("sEsionfk") Long sEsionfk,
 			@RequestParam("tIpotemafk") Long tIpotemafk, 
-			@RequestParam("vDescripcion") String vDescripcion
-
+			@RequestParam("vDescripcion") String vDescripcion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 	) {
 
 		Archivos archivo1 = new Archivos();
@@ -183,7 +202,11 @@ public class ControladorTemas {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> actualizarTemas(@RequestBody Temas temas) {
+	public ResponseEntity<?> actualizarTemas(
+			@RequestBody Temas temas,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("============  BUSCAR actualizarTemas =================");
 		Temas generico = new Temas();
 		Map<String, Object> response = new HashMap<>();
@@ -211,7 +234,11 @@ public class ControladorTemas {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminarTemas(@PathVariable Long id) {
+	public ResponseEntity<?> eliminarTemas(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("==========  eliminarTemas  ===========");
 		Temas generico = new Temas();
 		generico.settEmaidpk(id);
@@ -241,7 +268,9 @@ public class ControladorTemas {
 	
 	
 	@GetMapping("/archivo1_tema/{id}")
-	public ResponseEntity<?>  descargarArchivo1Tema(@PathVariable Long id, HttpServletResponse res) {
+	public ResponseEntity<?>  descargarArchivo1Tema(
+			@PathVariable Long id, 
+			HttpServletResponse res) {
 		Temas generico = new Temas(); 
 		String ruta = "";
 		Map<String, Object> response = new HashMap<>();
@@ -275,7 +304,9 @@ public class ControladorTemas {
 	
 	
 	@GetMapping("/archivo2_tema/{id}")
-	public ResponseEntity<?>   descargarArchivo2Tema(@PathVariable Long id, HttpServletResponse res) {
+	public ResponseEntity<?>   descargarArchivo2Tema(
+			@PathVariable Long id, 
+			HttpServletResponse res) {
 		Temas generico = new Temas(); 
 		String ruta = "";
 		Map<String, Object> response = new HashMap<>();
@@ -310,7 +341,8 @@ public class ControladorTemas {
 	
 	
 	@GetMapping("/archivo3_tema/{id}")
-	public ResponseEntity<?>   descargarArchivo3Tema(@PathVariable Long id, HttpServletResponse res) {
+	public ResponseEntity<?>   descargarArchivo3Tema(
+			@PathVariable Long id, HttpServletResponse res) {
 		Temas generico = new Temas(); 
 		String ruta = "";
 		Map<String, Object> response = new HashMap<>();

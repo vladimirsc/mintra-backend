@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,7 +58,11 @@ public class ControladorAcciones {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarSeguimientos(@PathVariable Long id) {
+	public ResponseEntity<?> buscarSeguimientos(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Acciones generico = new Acciones();
 		generico.setaCcionesidpk(id);
 		Map<String, Object> response = new HashMap<>();
@@ -81,7 +86,10 @@ public class ControladorAcciones {
 	}
 
 	@PostMapping("/buscar")
-	public List<Acciones> buscar(@RequestBody Acciones buscar) {
+	public List<Acciones> buscar(@RequestBody Acciones buscar,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		return accionesService.buscar(buscar);
 	}
 
@@ -96,7 +104,9 @@ public class ControladorAcciones {
 	     @RequestParam(value = "fecha_ejecutara")    String fecha_ejecutara,
 	     @RequestParam(value = "flgejecuto")         String flgejecuto,
 	     @RequestParam(value = "fecha_ejecuto")      String fecha_ejecuto,
-	     @RequestParam(value = "docaccion")          MultipartFile docaccion
+	     @RequestParam(value = "docaccion")          MultipartFile docaccion,@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+		 @RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+		 @RequestHeader(name = "info_rol", required = true) String nombreRol
 	) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Acciones generico = new Acciones();
@@ -117,7 +127,10 @@ public class ControladorAcciones {
 			@RequestParam(value = "idaccion")      Long idaccion, 
 			@RequestParam(value = "flgejecuto")         String flgejecuto,
 			@RequestParam(value = "fecha_ejecuto") String fecha_ejecuto,
-			@RequestParam(value = "docaccion")      MultipartFile docaccion
+			@RequestParam(value = "docaccion")      MultipartFile docaccion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		Acciones generico = new Acciones();
 		Map<String, Object> response = new HashMap<>();
@@ -154,7 +167,11 @@ public class ControladorAcciones {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminar(@PathVariable Long id) {
+	public ResponseEntity<?> eliminar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("==========  insertarConsejeros  ===========");
 		Acciones generico = new Acciones();
 		generico.setaCcionesidpk(id);
@@ -184,7 +201,11 @@ public class ControladorAcciones {
 	}
 	
 	@GetMapping("/accionesporacuerdo/{idacuerdo}")
-	public List<Acciones> listarAccionesPorAcuerdo(@PathVariable Long idacuerdo){
+	public List<Acciones> listarAccionesPorAcuerdo(
+			@PathVariable Long idacuerdo,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		List<Acciones> listaAcciones = new ArrayList<Acciones>();
 		listaAcciones = accionesService.listarAccionesPorAcuerdo(idacuerdo);
 		return listaAcciones;
@@ -192,7 +213,8 @@ public class ControladorAcciones {
 	
 	
 	@GetMapping("/descargar/{id}")
-	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+	public void descargarArchivo(
+			@PathVariable Long id, HttpServletResponse res) {
 		Acciones generico = new Acciones();
 		generico.setaCcionesidpk(id);
 		String ruta = "";

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -91,7 +92,11 @@ public class ControladorActas {
 	*/
  
 	@GetMapping("/actaporsesion/{idsesion}")   //CUERPO DEL ACTA POR SESION
-	ResponseEntity<?> actasPorSesion(@PathVariable Long idsesion){
+	ResponseEntity<?> actasPorSesion(
+			@PathVariable Long idsesion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		Actas acta = new Actas();
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -119,7 +124,10 @@ public class ControladorActas {
 	
 	@GetMapping("/listaracuerdosporacta/{idsesion}")  //CUERPO LISTA DE ACUERDOS POR ACTA
 	List<Acuerdos> listaAcuerdosPorActa(
-			@PathVariable Long idsesion
+			@PathVariable Long idsesion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 	 ){
 		
 		Sesiones sesion = new Sesiones();
@@ -133,7 +141,11 @@ public class ControladorActas {
 	}
 	
 	@GetMapping("/{idacta}")  //CABECERA DEL ACTA (INFORMACION DE LA SESION)
-	public ResponseEntity<?> cabeceraActa(@PathVariable Long idacta) {
+	public ResponseEntity<?> cabeceraActa(
+			@PathVariable Long idacta,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Actas actas = new Actas();
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -157,7 +169,10 @@ public class ControladorActas {
 			@RequestParam("vResponsable")  String vResponsable,
 			@RequestParam("vDesacuerdo")   String vDesacuerdo,
 			@RequestParam("entidadfk")       Long entidadfk,
-			@RequestParam("dFecatencion")  String dFecatencion
+			@RequestParam("dFecatencion")  String dFecatencion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			){
 		
 		
@@ -198,7 +213,11 @@ public class ControladorActas {
 	
 	
 	@GetMapping("/listarfirmantesporacta/{idsesion}")           //LISTAMOS LOS FIRMANTES O REGISTRAMOS
-	List<Firmantes> listarFirmantesPorActa(@PathVariable Long idsesion){
+	List<Firmantes> listarFirmantesPorActa(
+			@PathVariable Long idsesion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		List<Firmantes>listarFirmantes = new ArrayList<Firmantes>();
 		listarFirmantes = actaService.listarFirmentes(idsesion);
 		return listarFirmantes;
@@ -214,7 +233,10 @@ public class ControladorActas {
 			@RequestParam("vNumerodocumento") String vNumerodocumento,
 			@RequestParam("vNombre")          String vNombre,
 			@RequestParam("vTipo")            String vTipo,
-			@RequestParam("cFlgasistio")      String cFlgasistio
+			@RequestParam("cFlgasistio")      String cFlgasistio,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 	 ) {
 		Firmantes generico = new Firmantes();
 		Map<String, Object> response = new HashMap<>();
@@ -241,7 +263,11 @@ public class ControladorActas {
 	
 
 	@GetMapping("/infoacta/{id}")
-	public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorId(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== BUSCAR ACTA ID=============== ");
 		Actas actas = new Actas();
 		actas.setaCtaidpk(id);
@@ -268,13 +294,21 @@ public class ControladorActas {
 	}
 
 	@PostMapping("/buscar")
-	public List<Actas> buscarActas(@RequestBody Actas buscar) {
+	public List<Actas> buscarActas(
+			@RequestBody Actas buscar,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== BUSCAR ACTAS=============== ");
 		return actaService.buscar(buscar);
 	}
 
 	@PutMapping("/actualizar")
-	public ResponseEntity<?> actualizarActas(@RequestBody Actas acta) {
+	public ResponseEntity<?> actualizarActas(
+			@RequestBody Actas acta,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== ACTUALIZAR BOLETIN=============== ");
 		Map<String, Object> response = new HashMap<>();
 		Actas generico = new Actas();
@@ -305,7 +339,11 @@ public class ControladorActas {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminarActas(@PathVariable Long id) {
+	public ResponseEntity<?> eliminarActas(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== ELIMINAR BOLETIN=============== ");
 		Actas generico = new Actas();
 		generico.setaCtaidpk(id);
@@ -338,7 +376,10 @@ public class ControladorActas {
 	public ResponseEntity<?> registrar(
 			@RequestParam("docacta") MultipartFile docacta,
 			@RequestParam("sesionfk") Long sesionfk,
-			@RequestParam("fecha_acta") String fecha_acta
+			@RequestParam("fecha_acta") String fecha_acta,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 	) {
 		Actas generico = new Actas();
 		Archivos archivo = new Archivos();
@@ -377,7 +418,9 @@ public class ControladorActas {
 	}
 
 	@GetMapping("/descargar/{id}")
-	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+	public void descargarArchivo(
+			@PathVariable Long id, 
+			HttpServletResponse res ) {
 		Actas generico = new Actas();
 		generico.setaCtaidpk(id);
 		String ruta = "";
@@ -393,12 +436,20 @@ public class ControladorActas {
 	}
 	
 	@PostMapping("/buscartemasporsesion")
-	public List<Actas> buscarTemasPorSesion(@RequestBody Actas actas){
+	public List<Actas> buscarTemasPorSesion(
+			@RequestBody Actas actas,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		return actaService.buscarActasPorSesion(actas);
 	}
 	
 	@PostMapping("/listarActasPorSesion")
-	public List<Actas> listarActasPorSesion(@RequestBody Actas actas){
+	public List<Actas> listarActasPorSesion(
+			@RequestBody Actas actas,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		return actaService.listarActasPorSesion(actas);
 	}
 	

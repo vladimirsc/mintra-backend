@@ -5,9 +5,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +25,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InformacionUsuario;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
@@ -71,43 +67,44 @@ public class ControladorConsejeros {
 		
 		logger.info("==========  listarConsejeros  ===========");
 		
-		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
-		   InformacionUsuario informacionUsuario = new InformacionUsuario();
-		   informacionUsuario =fijasService.informacionUsuario(idUsuario);
-		   
-		   
-		// ******************************************************************
+ 
 		 
 		   Regiones region = new Regiones();
 		   region.setrEgionidpk(idRegion);
-			  
-		   Consejos consejo = new Consejos();
-		   consejo.setcOnsejoidpk(informacionUsuario.getnIdConsejo());
  
 		  Consejeros consejero= new Consejeros();
-		  consejero.setRegion(region);
-		  consejero.setConsejo(consejo);
+		  consejero.setRegion(region); 
 		 
 		return consejeroService.listar(consejero);
 	}
 
 	@PostMapping("/buscar")
-	public List<Consejeros> buscarConsejeros(
-			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
-			@RequestBody Consejeros buscar) {
+	public List<Consejeros> buscarConsejeros( 
+			@RequestBody Consejeros buscar,
+			@RequestHeader(name = "id_usuario", required = true)        Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true)          String nombreRol) {
 		
 		logger.info("==========  buscarConsejeros  ===========");
 		
 		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
-		  InformacionUsuario informacionUsuario = new InformacionUsuario();
-		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		   Long idconsejo = 0L;  
+		   idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
 		// ******************************************************************
+		
 		  
 		  Regiones region = new Regiones();
-		  region.setrEgionidpk(informacionUsuario.getnIdRegion());
+		  region.setrEgionidpk(idRegion);
+		  
 		  
 		  Consejos consejo = new Consejos();
-		  consejo.setcOnsejoidpk(informacionUsuario.getnIdConsejo());
+		  
+		  
+		  if(idconsejo>0) {
+			  consejo.setcOnsejoidpk(idconsejo);
+			  
+		  }
+		  
 		  
 		  buscar.setRegion(region);
 		  buscar.setConsejo(consejo);
@@ -116,15 +113,17 @@ public class ControladorConsejeros {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarPorId(
-			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
-			@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorId( 
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true)        Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true)          String nombreRol) {
 		
 		logger.info("==========  buscarConsejeros  ===========");
 		
 		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
-		  InformacionUsuario informacionUsuario = new InformacionUsuario();
-		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		 // InformacionUsuario informacionUsuario = new InformacionUsuario();
+		 // informacionUsuario =fijasService.informacionUsuario(idUsuario);
 		// ******************************************************************
 		  
 		Consejeros generico = new Consejeros();
@@ -133,7 +132,7 @@ public class ControladorConsejeros {
 		try {
 			
 			generico.setcOnsejeroidpk(id); 
-			generico.setrEgionfk(informacionUsuario.getnIdRegion());
+			generico.setrEgionfk(idRegion);
 			generico = consejeroService.buscarPorId(generico);
 			if (generico == null) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CONSEJERO_MSG_ERROR_BUSCAR);
@@ -164,14 +163,17 @@ public class ControladorConsejeros {
 			@RequestParam(value="vTpconsejero")    Long          vTpconsejero,  @RequestParam(value="dFecinicio")     String  dFecinicio, 
 			@RequestParam(value="dFecfin")         String        dFecfin,       @RequestParam(value="vNumdocasig")    String vNumdocasig,
 			@RequestParam(value="rEgionfk")        String        rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
-			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestHeader(name = "id_usuario", required = true) Long idUsuario
+			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name="info_regioncodigo",required=true) Long idRegion,@RequestHeader(name="info_rol",required =true) String nombreRol
 			) {
 		
 		logger.info("==========  insertarConsejeros  ===========");
 		
 		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
-		  InformacionUsuario informacionUsuario = new InformacionUsuario();
-		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		  //InformacionUsuario informacionUsuario = new InformacionUsuario();
+		  //informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		   Long idconsejo = 0L;  
+		   idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
 		// ******************************************************************
 		String flgeliminado = "0";  
 		Archivos archivo = new Archivos();
@@ -212,10 +214,10 @@ public class ControladorConsejeros {
  
 					// REGISTRAMOS AL CONSEJERO
 					Regiones       region         = new Regiones();
-					region.setrEgionidpk(informacionUsuario.getnIdRegion());
+					region.setrEgionidpk(idRegion);
 					
 					Consejos       consejo        = new Consejos();
-					consejo.setcOnsejoidpk(informacionUsuario.getnIdConsejo());
+					consejo.setcOnsejoidpk(idconsejo);
 					
 					Tipoconsejero  tipoconsejero = new Tipoconsejero(); 
 					TipoDocumentos tipodocumento  = new TipoDocumentos();
@@ -250,11 +252,11 @@ public class ControladorConsejeros {
 					
 					
 					if("1".equals(flgeliminado)) {
-						generico.setnUsumodifica(informacionUsuario.getnIdUsuario());
+						generico.setnUsumodifica(idUsuario);
 						generico = consejeroService.Actualizar(generico);
 						
 					}else {
-						generico.setnUsureg(informacionUsuario.getnIdUsuario());
+						generico.setnUsureg(idUsuario);
 						generico = consejeroService.Registrar(generico);
 					}
 					
@@ -283,13 +285,17 @@ public class ControladorConsejeros {
 			@RequestParam(value="dFecfin")         String        dFecfin,       @RequestParam(value="vNumdocasig")    String vNumdocasig,
 			@RequestParam(value="rEgionfk")        Long          rEgionfk,      @RequestParam(value="cOnsejofk")      Long   cOnsejofk,
 			@RequestParam(value="cOmisionfk")      Long          cOmisionfk,    @RequestParam(value="cOnsejeroidpk")  Long  cOnsejeroidpk,
-			@RequestHeader(name = "id_usuario", required = true) Long idUsuario) {
+			@RequestHeader(name="id_usuario",required = true)  Long idUsuario,  @RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name="info_rol",required = true) String nombreRol
+		) {
 		
 		logger.info("==========  ACTUALIZAR CONSEJERO  ===========");
 		
 		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
-		  InformacionUsuario informacionUsuario = new InformacionUsuario();
-		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		 // InformacionUsuario informacionUsuario = new InformacionUsuario();
+		  //informacionUsuario =fijasService.informacionUsuario(idUsuario);
+		  // Long idconsejo = 0L;  
+		   //idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
 		// ******************************************************************
 		
 		
@@ -357,7 +363,7 @@ public class ControladorConsejeros {
 			consejeroBuscar.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 			consejeroBuscar.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
 			consejeroBuscar.setvNumdocasig(vNumdocasig); 
-			consejeroBuscar.setnUsumodifica(informacionUsuario.getnIdUsuario()); 
+			consejeroBuscar.setnUsumodifica(idUsuario); 
 			
 			consejeroBuscar = consejeroService.Actualizar(consejeroBuscar);
 			
@@ -376,15 +382,13 @@ public class ControladorConsejeros {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
-			@PathVariable Long id,
-			@RequestHeader(name = "id_usuario", required = true) Long idUsuario) {
+			@PathVariable Long id ,
+			@RequestHeader(name = "id_usuario", required = true)        Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true)          String nombreRol) {
 		
 		logger.info("==========  ELIMINAR CONSEJERO ===========");
-		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
-		  InformacionUsuario informacionUsuario = new InformacionUsuario();
-		  informacionUsuario =fijasService.informacionUsuario(idUsuario);
-		// ******************************************************************
-		
+ 
 		Consejeros generico = new Consejeros();
 		generico.setcOnsejeroidpk(id);
  
@@ -398,7 +402,7 @@ public class ControladorConsejeros {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 
-			generico.setnUsueliminia(informacionUsuario.getnIdUsuario());
+			generico.setnUsueliminia(idUsuario);
 			generico = consejeroService.Eliminar(generico);
 			 
 		} catch (DataAccessException e) {

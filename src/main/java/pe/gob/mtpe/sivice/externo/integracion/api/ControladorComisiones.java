@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,13 +61,20 @@ public class ControladorComisiones {
 
 	// @Secured({"ROLE_ADMCONSSAT","ROLE_ADMCORSSAT","ROLE_OPECONSSAT","ROLE_OPECORSSAT"})
 	@GetMapping("/")
-	public List<Comisiones> listarComisiones() {
+	public List<Comisiones> listarComisiones(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== listarComisiones =============== ");
 		return comisionService.listar();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarPorIdComision(@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorIdComision(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Comisiones generico = new Comisiones();
 		generico.setcOmisionidpk(id);
 		Map<String, Object> response = new HashMap<>();
@@ -102,7 +110,10 @@ public class ControladorComisiones {
 			@RequestParam(value="archivocomision")      MultipartFile archivocomision,
 			@RequestParam(value ="fechainicio")         String        fechainicio,
 			@RequestParam(value ="fechafin")            String        fechafin,
-			@RequestParam(value ="consejeroasignado")   Long          consejeroasignado
+			@RequestParam(value ="consejeroasignado")   Long          consejeroasignado,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		
 		Comisiones generico = new Comisiones();
@@ -165,7 +176,10 @@ public class ControladorComisiones {
 			@RequestParam(value="archivocomision")      MultipartFile archivocomision,
 			@RequestParam(value ="fechainicio")         String        fechainicio,
 			@RequestParam(value ="fechafin")            String        fechafin ,
-			@RequestParam(value ="consejeroasignado")   Long          consejeroasignado
+			@RequestParam(value ="consejeroasignado")   Long          consejeroasignado,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		
 		Comisiones generico = new Comisiones();
@@ -253,12 +267,18 @@ public class ControladorComisiones {
 	}
 
 	@PostMapping("/buscarpornombre")
-	public List<Comisiones> buscarComision(@RequestParam(value = "nombrecomision") String nombrecomision) {
+	public List<Comisiones> buscarComision(
+			@RequestParam(value = "nombrecomision") String nombrecomision,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		return comisionService.buscarComision(nombrecomision);
 	}
 	
 	@GetMapping("/descargar/{id}")
-	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+	public void descargarArchivo(
+			@PathVariable Long id, 
+			HttpServletResponse res) {
 		Comisiones generico = new Comisiones();
 		generico.setcOmisionidpk(id);
 		String ruta = "";

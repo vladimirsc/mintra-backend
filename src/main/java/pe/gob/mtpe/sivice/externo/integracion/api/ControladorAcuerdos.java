@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +51,11 @@ public class ControladorAcuerdos {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarPorIdAcuerdo(@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorIdAcuerdo(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Acuerdos generico = new Acuerdos();
 		generico.setaCuerdoidpk(id);
 		Map<String, Object> response = new HashMap<>();
@@ -77,9 +82,14 @@ public class ControladorAcuerdos {
 	}
 
 	@PostMapping("/buscaracuerdosporsesion")
-	public List<BandejaActas> buscar(@RequestParam("codigosesion") String codigosesion,
-			@RequestParam("tiposesion") Long tiposesion, @RequestParam("fechainicio") String fechainicio,
-			@RequestParam("fechafin") String fechafin) {
+	public List<BandejaActas> buscar(
+			@RequestParam("codigosesion") String codigosesion,
+			@RequestParam("tiposesion") Long tiposesion, 
+			@RequestParam("fechainicio") String fechainicio,
+			@RequestParam("fechafin") String fechafin,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 
 		Sesiones sesionbuscar = new Sesiones();
 		List<BandejaActas> listarBandejaActas = new ArrayList<BandejaActas>();
@@ -102,7 +112,11 @@ public class ControladorAcuerdos {
 	}
 
 	@PostMapping("/registrar")
-	public ResponseEntity<?> registrar(@RequestBody Acuerdos acuerdos) {
+	public ResponseEntity<?> registrar(
+			@RequestBody Acuerdos acuerdos,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -118,7 +132,11 @@ public class ControladorAcuerdos {
 	}
 
 	@PutMapping("/acuerdos")
-	public ResponseEntity<?> actualizar(@RequestBody Acuerdos acuerdos) {
+	public ResponseEntity<?> actualizar(
+			@RequestBody Acuerdos acuerdos,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Acuerdos generico = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -146,7 +164,11 @@ public class ControladorAcuerdos {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminar(@PathVariable Long id) {
+	public ResponseEntity<?> eliminar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== INGRESO A   eliminar=============== ");
 		Acuerdos generico = new Acuerdos();
 		generico.setaCuerdoidpk(id);
@@ -178,7 +200,11 @@ public class ControladorAcuerdos {
 	
  
 	@GetMapping("/acuerdosporacta/{idacta}")
-	public List<Acuerdos> listarAcuerdosPorActas(@PathVariable Long idacta) {
+	public List<Acuerdos> listarAcuerdosPorActas(
+			@PathVariable Long idacta,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Actas acta = new Actas();
 		acta.setaCtaidpk(idacta);
 		return acuerdoService.listarAcuerdosPorActa(acta);

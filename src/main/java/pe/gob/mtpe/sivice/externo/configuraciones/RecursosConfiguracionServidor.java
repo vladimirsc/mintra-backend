@@ -29,6 +29,8 @@ public class RecursosConfiguracionServidor extends ResourceServerConfigurerAdapt
 		.antMatchers(HttpMethod.GET,"/api/informes/descargar/**").permitAll()
 		.antMatchers(HttpMethod.GET,"/api/boletines/descargar/**").permitAll()
 		.antMatchers(HttpMethod.GET,"/api/encargadoregion/descargar/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/plantrabajo/descargaraprobacion/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/plantrabajo/descargarplan/**").permitAll()
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfiguracion());
 		

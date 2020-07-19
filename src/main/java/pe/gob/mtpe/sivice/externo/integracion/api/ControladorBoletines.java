@@ -57,7 +57,9 @@ public class ControladorBoletines {
 
 	@GetMapping("/")
 	public List<Boletines> listarBoletines(
-			@RequestHeader(name = "id_usuario", required = true) Long idUsuario) {
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario, 
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== listarBoletines =============== "+idUsuario.toString()); 
 		return boletinService.listar();
 	}
@@ -66,7 +68,10 @@ public class ControladorBoletines {
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarBoletin(
 			@RequestParam("archivoboletin") MultipartFile archivoboletin, 
-			@RequestParam("fecha") String fecha_boletin) {
+			@RequestParam("fecha") String fecha_boletin,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Boletines generico = new Boletines();
 		Archivos archivo = new Archivos();
@@ -121,7 +126,10 @@ public class ControladorBoletines {
 	public ResponseEntity<?> actualizarBoletin(
 			@RequestParam(value="codigoboletin")                                 Long codigoboletin,
 			@RequestParam(value="archivoboletin",required = false) MultipartFile archivoboletin, 
-			@RequestParam(value="fecha")                                         String fecha_boletin
+			@RequestParam(value="fecha")                                         String fecha_boletin,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		logger.info("========== ACTUALIZAR A GRABAR BOLETINES=============== ");
 		Archivos archivo = new Archivos();
@@ -164,7 +172,11 @@ public class ControladorBoletines {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminarBoletin(@PathVariable Long id) {
+	public ResponseEntity<?> eliminarBoletin(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Boletines generico = new Boletines();
 		generico.setbOletinidpk(id);
@@ -194,7 +206,11 @@ public class ControladorBoletines {
 	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+	public ResponseEntity<?> buscarPorId(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Boletines generico = new Boletines();
 		generico.setbOletinidpk(id);
@@ -222,13 +238,18 @@ public class ControladorBoletines {
 
 	
 	@PostMapping("/buscar")
-	public List<Boletines> buscar(@RequestBody Boletines buscar) {
+	public List<Boletines> buscar(
+			@RequestBody Boletines buscar,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		 
 		return boletinService.buscarBoletines(buscar);
 	}
 	
 	@GetMapping("/descargar/{id}")
-	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
+	public void descargarArchivo(
+			@PathVariable Long id, HttpServletResponse res) {
 		Boletines generico = new Boletines();
 		generico.setbOletinidpk(id);
 		String ruta = "";

@@ -40,20 +40,7 @@ public class ConsejeroServiceImpl implements ConsejeroService {
 		List<Consejeros> lista = new ArrayList<Consejeros>();
 		
 		lista = consejeroDao.buscar(consejero);
-		/*
-		if(!lista.isEmpty()) {
-			Comisiones comision = new Comisiones();
-			for (Consejeros i : lista) {
-				
-				if(i.getcOmisionfk()!=null) { 
-					comision.setcOmisionidpk(i.getcOmisionfk());
-					comision = comisionDao.buscarPorId(comision);
-					i.setVnombreComision(comision.getvCodcomision());	
-				}
-				
-			}
-			
-		}*/
+ 
 		return lista;
 	}
 

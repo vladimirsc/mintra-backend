@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping; 
 import org.springframework.web.bind.annotation.RestController;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Particalen;
@@ -35,7 +36,11 @@ public class ControladorParticiCalendario {
 
 	 
 	@PostMapping("/registrar")
-	public ResponseEntity<?> registrar(@RequestBody Particalen generico) {
+	public ResponseEntity<?> registrar(
+			@RequestBody Particalen generico,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -60,13 +65,21 @@ public class ControladorParticiCalendario {
 	
 	
 	@GetMapping("/listaparticipantes/{calendariofk}")
-	public List<Particalen> listarParticpantesPorCalendario(@PathVariable("calendariofk") Long  codigocalendario){
+	public List<Particalen> listarParticpantesPorCalendario(
+			@PathVariable("calendariofk") Long  codigocalendario,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		return participanteCalendarioService.listarParticipantesPorCalendario(codigocalendario);
 	}
 	
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminar(@PathVariable Long id) {
+	public ResponseEntity<?> eliminar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("==========  insertarConsejeros  ===========");
 		Particalen generico =new Particalen();
 		generico.setpArtcalendidpk(id);

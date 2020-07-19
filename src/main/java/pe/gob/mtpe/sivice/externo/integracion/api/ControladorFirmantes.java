@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Firmantes;
@@ -33,12 +34,19 @@ public class ControladorFirmantes {
 	private FirmanteService firmanteService;
 
 	@GetMapping("/")
-	public List<Firmantes> listar() {
+	public List<Firmantes> listar(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		return firmanteService.listar();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscar(@PathVariable Long id) {
+	public ResponseEntity<?> buscar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Firmantes generico = new Firmantes();
 		generico.setfIrmanteidpk(id);
 		Map<String, Object> response = new HashMap<>();
@@ -61,12 +69,20 @@ public class ControladorFirmantes {
 	}
 
 	@PostMapping("/buscar")
-	public List<Firmantes> buscar(@RequestBody Firmantes buscar) {
+	public List<Firmantes> buscar(
+			@RequestBody Firmantes buscar,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		return null;
 	}
 
 	@PostMapping("/firmantes")
-	public ResponseEntity<?> registrar(@RequestBody Firmantes generico) {
+	public ResponseEntity<?> registrar(
+			@RequestBody Firmantes generico,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -82,7 +98,11 @@ public class ControladorFirmantes {
 	}
 
 	@PutMapping("/firmantes")
-	public ResponseEntity<?> actualizar(@RequestBody Firmantes firmantes) {
+	public ResponseEntity<?> actualizar(
+			@RequestBody Firmantes firmantes,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Firmantes generico = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -109,7 +129,11 @@ public class ControladorFirmantes {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminar(@PathVariable Long id) {
+	public ResponseEntity<?> eliminar(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("==========  insertarConsejeros  ===========");
 		Firmantes generico = new Firmantes();
 		generico.setfIrmanteidpk(id);

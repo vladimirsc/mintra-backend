@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,7 +67,11 @@ public class ControladorAsistencia {
 	
 	
 	@GetMapping("/{idsesion}")
-	public ResponseEntity<?> buscarPorIdAsistencias(@PathVariable Long idsesion) {
+	public ResponseEntity<?> buscarPorIdAsistencias(
+			@PathVariable Long idsesion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		// ONTENEMOS LOS DATOS DE LA SESSION
 		Sesiones sesion = new Sesiones();
 		Map<String, Object> response = new HashMap<>();
@@ -87,7 +92,11 @@ public class ControladorAsistencia {
 	}
 
 	@GetMapping("/listarasistentes/{idsesion}")
-	public List<AsistenciaConsejeros> buscarAsistencias(@PathVariable Long idsesion) {
+	public List<AsistenciaConsejeros> buscarAsistencias(
+			@PathVariable Long idsesion, 
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		List<AsistenciaConsejeros> lista = new ArrayList<AsistenciaConsejeros>();
 
 		 
@@ -101,7 +110,10 @@ public class ControladorAsistencia {
 			@RequestParam(value = "idAsistencia") Long idAsistencia,
 			@RequestParam(value = "asistio")      String cFlgasistio,
 			@RequestParam(value = "horaEntrada")  String vHoentrada,
-			@RequestParam(value = "horaSalida")   String vHosalida) {
+			@RequestParam(value = "horaSalida")   String vHosalida,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 
 		Map<String, Object> response = new HashMap<>();
 		Asistencias generico = new Asistencias();
@@ -129,7 +141,11 @@ public class ControladorAsistencia {
 	}
 
 	@GetMapping("/info/{idasistencia}")
-	public ResponseEntity<?> infoAsistente(@PathVariable Long idasistencia) {
+	public ResponseEntity<?> infoAsistente(
+			@PathVariable Long idasistencia,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 
 		Map<String, Object> response = new HashMap<>();
 		AsistenciaConsejeros infoAsistencia = new AsistenciaConsejeros();
@@ -184,14 +200,18 @@ public class ControladorAsistencia {
 	}
 
 	@PostMapping("/registrarinvitado")
-	public ResponseEntity<?> grabarInvitado(@RequestParam(value = "entidad") Long entidad,
+	public ResponseEntity<?> grabarInvitado(
+			@RequestParam(value = "entidad") Long entidad,
 			@RequestParam(value = "sEsionfk")          Long sEsionfk, 
 			@RequestParam(value = "tipodocumento")     Long tipodocumento,
 			@RequestParam(value = "vNumerodocumento")  String vNumerodocumento,
 			@RequestParam(value = "vNombre")           String vNombre,
 			@RequestParam(value = "vApellido_paterno") String vApellido_paterno,
 			@RequestParam(value = "vApellido_materno") String vApellido_materno,
-			@RequestParam(value = "vNumerocelular")    String vNumerocelular) {
+			@RequestParam(value = "vNumerocelular")    String vNumerocelular,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		Invitados generico = new Invitados();
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -235,7 +255,10 @@ public class ControladorAsistencia {
 	@PostMapping("/cargardocasistencia")
 	public ResponseEntity<?> cargarArchivoAsistencias(
 			@RequestParam(value = "docasistencia") MultipartFile docasistencia,
-			@RequestParam(value = "sesioncodigo") Long sesioncodigo) {
+			@RequestParam(value = "sesioncodigo") Long sesioncodigo,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 
 		AsistenciasArchivos asistenciasArchivos = new AsistenciasArchivos();
 		Map<String, Object> response = new HashMap<>();
@@ -284,7 +307,9 @@ public class ControladorAsistencia {
 	
 	
 	@GetMapping("/descargar/{idsesion}")
-	public void descargarArchivo(@PathVariable Long idsesion, HttpServletResponse res) {
+	public void descargarArchivo(
+			@PathVariable Long idsesion,
+			HttpServletResponse res ) {
 		AsistenciasArchivos asistenciasArchivos = new AsistenciasArchivos(); 
 		String ruta = "";
 		try {

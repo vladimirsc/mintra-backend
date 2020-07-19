@@ -33,11 +33,32 @@ public class ControllerSeguridad {
 	
 	@Autowired
 	private BCryptPasswordEncoder encriptarclave;
+	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+		
+		 Usuarios usuario = new Usuarios();
+		 Map<String, Object> response = new HashMap<>();
+		 try {
+			 usuario.setuSuarioidpk(id);
+			 
+			 usuario = usuarioService.buscarPorId(usuario);
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,
+					e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, usuario);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		 
+		return new ResponseEntity<Usuarios>(usuario, HttpStatus.OK);
+	}
+	
+	
 
 	@GetMapping("/")
-	public List<Usuarios> listar(
-			
-			) {
+	public List<Usuarios> listar( ) {
 		
 		/*
 		 @RequestHeader(name = "id_usuario", required = true) Long idUsuario,

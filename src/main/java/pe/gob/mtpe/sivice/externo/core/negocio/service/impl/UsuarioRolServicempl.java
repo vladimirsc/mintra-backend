@@ -27,14 +27,12 @@ public class UsuarioRolServicempl implements UsuarioRolService {
 	}
 
 	@Override
-	public UsuarioRol buscarPorId(UsuarioRol usuarioperfil) {
-		// TODO Auto-generated method stub
-		return null;
+	public UsuarioRol buscarPorId(UsuarioRol usuarioperfil) { 
+		return usuarioRolDao.buscarPorId(usuarioperfil);
 	}
 
 	@Override
-	public List<UsuarioRol> buscar(UsuarioRol usuarioperfil) {
-		// TODO Auto-generated method stub
+	public List<UsuarioRol> buscar(UsuarioRol usuarioperfil) { 
 		return usuarioRolDao.buscar(usuarioperfil);
 	}
 
@@ -79,15 +77,13 @@ public class UsuarioRolServicempl implements UsuarioRolService {
 	}
 
 	@Override
-	public UsuarioRol Actualizar(UsuarioRol usuarioperfil) {
-		// TODO Auto-generated method stub
-		return null;
+	public UsuarioRol Actualizar(UsuarioRol usuarioperfil) { 
+		return usuarioRolDao.Actualizar(usuarioperfil);
 	}
 
 	@Override
-	public UsuarioRol Eliminar(UsuarioRol usuarioperfil) {
-		// TODO Auto-generated method stub
-		return null;
+	public UsuarioRol Eliminar(UsuarioRol usuarioperfil) { 
+		return usuarioRolDao.Eliminar(usuarioperfil);
 	}
 
 	@Override

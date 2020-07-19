@@ -1,6 +1,8 @@
 package pe.gob.mtpe.sivice.externo.seguridad;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -47,9 +49,9 @@ public class ControllerRoles {
 
 			usuarioRolbuscar = usuarioRolService.buscarPorRol(usuarioRol);
 			if (usuarioRolbuscar != null) {
-				usuarioRolService.deshabilitarrol(usuarioRolbuscar);
+				usuarioRol=usuarioRolService.deshabilitarrol(usuarioRolbuscar);
 			} else {
-				usuarioRolService.Registrar(usuarioRol);
+				usuarioRol=usuarioRolService.Registrar(usuarioRol);
 			}
 
 		} catch (DataAccessException e) {
@@ -123,6 +125,21 @@ public class ControllerRoles {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<UsuarioRol>(usuarioRol, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/{idusuario}")
+	public List<UsuarioRol> listaRolesPorUsuario(@PathVariable Long idusuario){
+		
+		List<UsuarioRol> listar = new ArrayList<UsuarioRol>();
+		
+		Usuarios usuarios = new Usuarios();
+		usuarios.setuSuarioidpk(idusuario);
+		
+		UsuarioRol usuarioRol = new UsuarioRol();
+		usuarioRol.setUsuario(usuarios);
+		listar = usuarioRolService.buscar(usuarioRol);
+		
+		return listar;
 	}
 
 }

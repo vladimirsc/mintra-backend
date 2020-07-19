@@ -67,7 +67,7 @@ public class ControllerSeguridad {
 		 */
 		Long idUsuario = Long.valueOf("22");
 		Long idRegion =Long.valueOf("10");
-		String nombreRol = "ROLE_ADMCORSSAT";
+		String nombreRol = "ROLE_ADMCONSSAT";
 		
 	     Usuarios usuario = new Usuarios();
 	     usuario.setVrol(nombreRol);

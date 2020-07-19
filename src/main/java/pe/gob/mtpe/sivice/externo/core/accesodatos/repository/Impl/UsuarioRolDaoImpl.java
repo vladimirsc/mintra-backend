@@ -19,7 +19,7 @@ public class UsuarioRolDaoImpl extends BaseDao<Long, UsuarioRol> implements Usua
 
 	@Override
 	public UsuarioRol buscarPorId(UsuarioRol usuarioRol) { 
-		return null;
+		return buscarId(usuarioRol.getuSuariorolidpk());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -48,7 +48,11 @@ public class UsuarioRolDaoImpl extends BaseDao<Long, UsuarioRol> implements Usua
 
 	@Override
 	public UsuarioRol Eliminar(UsuarioRol usuarioRol) { 
-		return null;
+		usuarioRol.setdFecelimina(new Date());
+		usuarioRol.setcFlgelimino(ConstantesUtil.C_INDC_ACTIVO);
+		usuarioRol.setcFlgactivo(ConstantesUtil.C_INDC_INACTIVO);
+		actualizar(usuarioRol);
+		return usuarioRol;
 	}
 
 	@SuppressWarnings("unchecked")

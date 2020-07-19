@@ -22,7 +22,8 @@ public class UsuarioDaoImpl extends BaseDao<Long, Usuarios> implements UsuarioDa
 	public List<Usuarios> listar(Usuarios usuario) {
 		EntityManager manager = createEntityManager();
 		List<Usuarios> lista = manager
-				.createQuery("SELECT u FROM Usuarios u order by uSuarioidpk desc").getResultList();
+				.createQuery("SELECT u FROM Usuarios u WHERE u.cFlgeliminado=:eliminado order by uSuarioidpk desc")
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
 	}

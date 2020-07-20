@@ -36,6 +36,7 @@ public class TemaDaoImpl extends BaseDao<Long, Temas> implements TemaDao {
 
 	@Override
 	public Temas Registrar(Temas temas) {
+		temas.setdFecreg(new Date());
 		guardar(temas);
 		return temas;
 	}

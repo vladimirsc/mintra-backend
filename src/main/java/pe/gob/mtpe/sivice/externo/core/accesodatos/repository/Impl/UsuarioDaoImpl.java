@@ -81,18 +81,20 @@ public class UsuarioDaoImpl extends BaseDao<Long, Usuarios> implements UsuarioDa
 
 	@Override
 	public Usuarios Registrar(Usuarios usuario) { 
+		usuario.setdFecreg(new Date());
 		guardar(usuario);
 		return usuario;
 	}
 
 	@Override
 	public Usuarios Actualizar(Usuarios usuario) { 
+		usuario.setdFecmodifica(new Date());
 		actualizar(usuario);
 		return usuario;
 	}
 
 	@Override
-	public Usuarios Eliminar(Usuarios usuario) {
+	public Usuarios Eliminar(Usuarios usuario) { 
 		usuario.setdFecelimina(new Date());
 		usuario.setcFlgeliminado(ConstantesUtil.C_INDC_ACTIVO);
 		actualizar(usuario);

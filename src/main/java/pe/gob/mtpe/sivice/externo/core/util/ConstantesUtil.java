@@ -376,6 +376,8 @@ public class ConstantesUtil {
     
     public static final String C_ROLE_ADMCONSSAT="ROLE_ADMCONSSAT";
     public static final String C_ROLE_ADMCORSSAT="ROLE_ADMCORSSAT";
+    public static final String C_ROLE_CONSSAT="ROLE_CONSSAT";
+    public static final String C_ROLE_CORSSAT="ROLE_CORSSAT";
     public static final String C_ROLE_OPECONSSAT="ROLE_OPECONSSAT";
     public static final String C_ROLE_OPECORSSAT="ROLE_OPECORSSAT";
     

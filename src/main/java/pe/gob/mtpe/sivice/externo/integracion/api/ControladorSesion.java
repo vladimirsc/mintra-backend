@@ -160,12 +160,17 @@ public class ControladorSesion {
 			tipoSesiones.settIposesionidpk(tiposesion);
 			
 			// BUSCAR COMISION POR NOMBRE Y LUEGO ASIGNARLE CODIGO
-			Comisiones comision = new Comisiones();
-			comision.setcOmisionidpk(cOmisionfk);
+			
+			if(ConstantesUtil.C_ROLE_OPECONSSAT.equals(nombreRol) || ConstantesUtil.C_ROLE_OPECORSSAT.equals(nombreRol)) {
+				Comisiones comision = new Comisiones();
+				comision.setcOmisionidpk(cOmisionfk);
+				generico.setComisionfk(comision);
+			}
+			
 			
 			generico.setRegion(region);
 			generico.setConsejofk(consejo);
-			generico.setComisionfk(comision);
+			
 			generico.setnUsureg(idUsuario);
 			generico.setTipoSesiones(tipoSesiones);
 			generico.setdFecreacion(FechasUtil.convertStringToDate(dFecreacion));

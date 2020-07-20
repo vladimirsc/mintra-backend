@@ -121,11 +121,10 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			} else if (tipoConsejo == 3 || tipoConsejo == 4) {
 
 				if (cantdadAsistentes == 0) {
-// BUSCAMOS EN LA TABLA CONSEJERO COMISION
-					List<ComiConsej> listaComicionConsejero = new ArrayList<ComiConsej>();
-					Long idcomision = sesiones.getComisionfk().getcOmisionidpk();
+                    // BUSCAMOS EN LA TABLA CONSEJERO COMISION
+					List<ComiConsej> listaComicionConsejero = new ArrayList<ComiConsej>(); 
 
-					listaComicionConsejero = comisionConsejeroDao.listaConsejerosPorComision(idcomision);
+					listaComicionConsejero = comisionConsejeroDao.listaConsejerosPorComision(sesiones.getComisionfk().getcOmisionidpk());
 					logger.info("=============== COMISONES ====================" + listaComicionConsejero.size());
 					for (ComiConsej i : listaComicionConsejero) {
 						logger.info("============" + i.getConsejero().getcOnsejeroidpk());

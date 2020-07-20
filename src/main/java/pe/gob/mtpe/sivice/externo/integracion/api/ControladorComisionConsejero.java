@@ -119,6 +119,7 @@ public class ControladorComisionConsejero {
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		
+		// ******* REGISTRAR O LISTAR CONSEJEROS ASIGNADOS POR COMISION
  
 		List<ComiConsej> listaconsejero = new ArrayList<ComiConsej>();
 		listaconsejero = ComisionConsejeroService.buscar(idcomision);
@@ -152,10 +153,9 @@ public class ControladorComisionConsejero {
 				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-			
-			
+ 
 			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
-			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+			 Long codigoconsejo=fijasService.BuscarConsejoPorNombre(nombreRol); // CONSSAT
 			//*******************************************************
 			
 			if(vdocumento!=null && vdocumento.getSize()>0) {

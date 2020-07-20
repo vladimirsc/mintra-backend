@@ -6,7 +6,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Calendarios;
 
 public interface CalendarioService {
 
-	List<Calendarios> listar();
+	List<Calendarios> listar(Calendarios calendario);
 
 	Calendarios buscarPorId(Calendarios calendarios);
 

@@ -62,7 +62,7 @@ public class Invitados implements Serializable {
 	private Date dFecregistro;
 	
 	@Column(name = "N_USUREG")
-	private String nUsureg;
+	private Long nUsureg;
 	
 	@Column(name = "C_FLGELIMINADO",length=1)
 	private String cFlgeliminado;
@@ -161,11 +161,11 @@ public class Invitados implements Serializable {
 		this.dFecregistro = dFecregistro;
 	}
 
-	public String getnUsureg() {
+	public Long getnUsureg() {
 		return nUsureg;
 	}
 
-	public void setnUsureg(String nUsureg) {
+	public void setnUsureg(Long nUsureg) {
 		this.nUsureg = nUsureg;
 	}
 

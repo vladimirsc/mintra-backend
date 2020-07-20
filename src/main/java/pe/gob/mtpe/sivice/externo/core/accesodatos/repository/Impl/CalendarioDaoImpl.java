@@ -23,10 +23,11 @@ public class CalendarioDaoImpl extends BaseDao<Long, Calendarios> implements Cal
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Calendarios> listar() {
+	public List<Calendarios> listar(Calendarios calendario) {
 		EntityManager manager = createEntityManager();
 		List<Calendarios> lista = manager
-				.createQuery("FROM Calendarios b WHERE b.cFlgeliminado=:eliminado ORDER BY b.cAlendarioidpk DESC")
+				.createQuery("SELECT b FROM Calendarios b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.cFlgeliminado=:eliminado ORDER BY b.cAlendarioidpk DESC")
+				.setParameter("idregion",calendario.getRegion().getrEgionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -58,6 +59,8 @@ public class CalendarioDaoImpl extends BaseDao<Long, Calendarios> implements Cal
 		Predicate valor2 = builder.like(root.get("vDesactividad"),calendarios.getvDesactividad());
 		Predicate valor3 = builder.between(root.get("dFecactividad"),calendarios.getdFechaInicioActividad(),calendarios.getdFechaFinActividad());
 		Predicate valor4=null;
+		Predicate valor5 = builder.equal(root.get("region"),calendarios.getRegion().getrEgionidpk());
+		Predicate valor6 = builder.and(valor5);
 		
 		if(!"".equals(calendarios.getcFlgejecuto()) && "1".equals(calendarios.getcFlgejecuto()) || ("1".equals(calendarios.getcFlgejecuto()))){
 			valor4 = builder.equal(root.get("dFecejecuto"), calendarios.getdFecejecuto()) ;  
@@ -66,7 +69,8 @@ public class CalendarioDaoImpl extends BaseDao<Long, Calendarios> implements Cal
 			valor4 =  builder.equal(root.get("dFecejecuto"), calendarios.getdFecejecuto()) ; 
 		}
 			
-		Predicate finalbusqueda =builder.or(valor1,valor2,valor3,valor4);
+		Predicate valor7 = builder.or(valor1,valor2,valor3,valor4);
+		Predicate finalbusqueda = builder.and(valor7,valor6);
 		criteriaQuery.where(finalbusqueda);
 		Query<Calendarios> query = (Query<Calendarios>) manager.createQuery(criteriaQuery);
 		List<Calendarios> resultado = query.getResultList();

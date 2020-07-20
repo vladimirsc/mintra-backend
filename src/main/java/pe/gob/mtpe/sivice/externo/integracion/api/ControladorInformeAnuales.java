@@ -55,8 +55,19 @@ public class ControladorInformeAnuales {
 	private  FijasService fijasService;
 
 	@GetMapping("/")
-	public List<InfAnuales> listar() {
-		return informAnualService.listar();
+	public List<InfAnuales> listar( 
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
+			) {
+		
+		 Regiones region = new Regiones();
+		  region.setrEgionidpk(idRegion);
+		
+		InfAnuales infAnuales  = new InfAnuales();
+		infAnuales.setRegion(region);
+		
+		return informAnualService.listar(infAnuales);
 	}
 
 	@GetMapping("/{id}")
@@ -128,7 +139,12 @@ public class ControladorInformeAnuales {
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		
-		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
+		logger.info("========== INGRESO A GRABAR INFORMES ANUALES=============== ");
+		
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		   Long idconsejo = 0L;  
+		   idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
+		// ******************************************************************
 		
 		InfAnuales generico = new InfAnuales();
 		Archivos archivo = new Archivos();
@@ -141,22 +157,17 @@ public class ControladorInformeAnuales {
 				generico.setvNombreArchivo(archivo.getNombre());
 				generico.setvExtension(archivo.getExtension());
 			}
-			
-			
-			
-			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
-			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
-
+ 
 			Consejos consejo = new Consejos();
-			consejo.setcOnsejoidpk(codigoconsejo);
+			consejo.setcOnsejoidpk(idconsejo);
 			
 			Regiones region = new Regiones();
-			region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+			region.setrEgionidpk(idRegion);
 			//*******************************************************
 			
 			generico.setRegion(region);
 			generico.setConsejo(consejo);
-			generico.setnUsureg(ConstantesUtil.c_usuariologin);
+			generico.setnUsureg(idUsuario);
 			
 			generico.setvCodinforme(vCodinforme);
 			generico.setvSesion(vSesion);
@@ -208,7 +219,7 @@ public class ControladorInformeAnuales {
 			generico.setComision(comision);
 			generico.setvNumdocap(vNumdocap);
 			generico.setdFecdesde(FechasUtil.convertStringToDate(dFecdesde)); 
-			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
+			generico.setnUsumodifica(idUsuario);
 			generico = informAnualService.Actualizar(generico);  
 			
 			
@@ -244,7 +255,7 @@ public class ControladorInformeAnuales {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			 
-			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
+			generico.setnUsuelimina(idUsuario);
 			generico = informAnualService.Eliminar(generico);
 
 		} catch (DataAccessException e) {
@@ -260,8 +271,8 @@ public class ControladorInformeAnuales {
 	 
 	@GetMapping("/descargar/{id}")
 	public void descargarArchivo(
-			@PathVariable Long id,
-			HttpServletResponse res) {
+			@PathVariable Long id, HttpServletResponse res) {
+		
 		InfAnuales generico = new InfAnuales();
 		generico.setiNformeidpk(id);
 		String ruta = "";

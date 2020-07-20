@@ -21,8 +21,8 @@ public class PlanTrabajoServiceImpl implements PlanTrabajoService {
 	private PlanTrabajoDao planTrabajoDao;
 	
 	@Override
-	public List<PlanTrabajo> listar() {
-		return planTrabajoDao.listar();
+	public List<PlanTrabajo> listar(PlanTrabajo planTrabajo) {
+		return planTrabajoDao.listar(planTrabajo);
 	}
 
 	@Override
@@ -33,8 +33,6 @@ public class PlanTrabajoServiceImpl implements PlanTrabajoService {
 	@Override
 	public List<PlanTrabajo> buscar(PlanTrabajo planTrabajo) {
 		if(planTrabajo.getdFecaprobacion()!=null && planTrabajo.getdFecaprobacionfin()!=null) {
-			logger.info("xxxx"+FechasUtil.convertDateToString(planTrabajo.getdFecaprobacion()).substring(0,10));
-			logger.info("yyyy"+FechasUtil.convertStringToDate(FechasUtil.convertDateToString(planTrabajo.getdFecaprobacion()).substring(0,10)));
 			planTrabajo.setdFecaprobacion(FechasUtil.convertStringToDate(FechasUtil.convertDateToString(planTrabajo.getdFecaprobacion()).substring(0,10)));
 			planTrabajo.setdFecaprobacionfin(FechasUtil.convertStringToDate(FechasUtil.convertDateToString(planTrabajo.getdFecaprobacionfin()).substring(0,10)));
 		}

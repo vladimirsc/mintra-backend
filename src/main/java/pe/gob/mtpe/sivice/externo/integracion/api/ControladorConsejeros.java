@@ -290,15 +290,7 @@ public class ControladorConsejeros {
 		) {
 		
 		logger.info("==========  ACTUALIZAR CONSEJERO  ===========");
-		
-		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
-		 // InformacionUsuario informacionUsuario = new InformacionUsuario();
-		  //informacionUsuario =fijasService.informacionUsuario(idUsuario);
-		  // Long idconsejo = 0L;  
-		   //idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
-		// ******************************************************************
-		
-		
+ 
 		
 		Archivos archivo = new Archivos();
 		Consejeros consejeroBuscar = new Consejeros();
@@ -348,8 +340,7 @@ public class ControladorConsejeros {
 			if(vProfesion!=null)    { profesion.setpRofesionidpk(vProfesion); }
 			if(vEntidad!=null)      { entidad.seteNtidadidpk(vEntidad); }
 			
- 
-			
+
 			consejeroBuscar.setTipodocumento(tipodocumento); 
 			consejeroBuscar.setvNumdocumento(vNumdocumento);
 			consejeroBuscar.setvDesnombre(vDesnombre);

@@ -22,10 +22,11 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Comisiones> listar() {
+	public List<Comisiones> listar(Comisiones comisiones) {
 		EntityManager manager = createEntityManager();
 		List<Comisiones> lista = manager
-				.createQuery("FROM Comisiones c WHERE c.cFlgeliminado=:eliminado ORDER BY c.cOmisionidpk DESC")
+				.createQuery("SELECT c FROM Comisiones c INNER JOIN  c.region r WHERE  r.rEgionidpk=:idregion AND c.cFlgeliminado=:eliminado ORDER BY c.cOmisionidpk DESC")
+				.setParameter("idregion",comisiones.getRegion().getrEgionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -104,7 +105,7 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 		Comisiones consultacomision = new Comisiones();
 		EntityManager manager = createEntityManager();
 		List<Comisiones> lista = manager
-				.createQuery("FROM Comisiones c WHERE c.cOmisionidpk=:idcomision  AND c.cFlgeliminado=:eliminado")
+				.createQuery("SELECT c FROM Comisiones c WHERE c.cOmisionidpk=:idcomision  AND c.cFlgeliminado=:eliminado")
 				.setParameter("idcomision", comisiones.getcOmisionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();

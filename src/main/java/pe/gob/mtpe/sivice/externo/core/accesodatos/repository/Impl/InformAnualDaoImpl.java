@@ -21,10 +21,11 @@ public class InformAnualDaoImpl extends BaseDao<Long, InfAnuales> implements Inf
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<InfAnuales> listar() {
+	public List<InfAnuales> listar(InfAnuales infAnuales) {
 		EntityManager manager = createEntityManager();
 		List<InfAnuales> lista = manager
-				.createQuery("FROM InfAnuales b WHERE b.cFlgeliminado=:eliminado ORDER BY b.iNformeidpk DESC")
+				.createQuery("SELECT b FROM InfAnuales b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.cFlgeliminado=:eliminado ORDER BY b.iNformeidpk DESC")
+				.setParameter("idregion", infAnuales.getRegion().getrEgionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;

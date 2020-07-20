@@ -65,8 +65,16 @@ public class ControladorComisiones {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
 		logger.info("========== listarComisiones =============== ");
-		return comisionService.listar();
+ 
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
+		Comisiones comisiones = new Comisiones();
+		comisiones.setRegion(region);
+		
+		return comisionService.listar(comisiones);
 	}
 
 	@GetMapping("/{id}")
@@ -121,13 +129,13 @@ public class ControladorComisiones {
 		try {
 
 			// ***** DATOS DE USUARIO DE INICIO DE SESION **********
-			Long codigoconsejo = fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+			Long codigoconsejo = fijasService.BuscarConsejoPorNombre(nombreRol); // CONSSAT
 
 			Consejos consejo = new Consejos();
 			consejo.setcOnsejoidpk(codigoconsejo);
 
 			Regiones region = new Regiones();
-			region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+			region.setrEgionidpk(idRegion);
 			// *******************************************************
 			
 			
@@ -153,7 +161,7 @@ public class ControladorComisiones {
 			generico.setdFecdocapr( (fechaaprobacion !=null)?FechasUtil.convertStringToDate(fechaaprobacion) : null );
 			generico.setdFecinicio( (fechainicio!=null)?FechasUtil.convertStringToDate(fechainicio) : null );
 			generico.setdFecfin((fechafin!=null)?FechasUtil.convertStringToDate(fechafin) : null );
-			generico.setnUsureg(ConstantesUtil.c_usuariologin);
+			generico.setnUsureg(idUsuario);
 			
 			generico = comisionService.Registrar(generico);
 		} catch (DataAccessException e) {
@@ -187,13 +195,13 @@ public class ControladorComisiones {
 		try {
 
 			// ***** DATOS DE USUARIO DE INICIO DE SESION **********
-			Long codigoconsejo = fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+			Long codigoconsejo = fijasService.BuscarConsejoPorNombre(nombreRol); // CONSSAT
 
 			Consejos consejo = new Consejos();
 			consejo.setcOnsejoidpk(codigoconsejo);
 
 			Regiones region = new Regiones();
-			region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+			region.setrEgionidpk(idRegion);
 			// *******************************************************
 			
 			
@@ -222,7 +230,7 @@ public class ControladorComisiones {
 			generico.setdFecdocapr( (fechaaprobacion !=null)?FechasUtil.convertStringToDate(fechaaprobacion) : null );
 			generico.setdFecinicio( (fechainicio!=null)?FechasUtil.convertStringToDate(fechainicio) : null );
 			generico.setdFecfin((fechafin!=null)?FechasUtil.convertStringToDate(fechafin) : null );
-			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
+			generico.setnUsumodifica(idUsuario);
 			
 			generico = comisionService.Actualizar(generico);
 		} catch (DataAccessException e) {
@@ -237,7 +245,11 @@ public class ControladorComisiones {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> eliminarComisiones(@PathVariable Long id) {
+	public ResponseEntity<?> eliminarComisiones(
+			@PathVariable Long id,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("==========  insertarConsejeros  ===========");
 		Comisiones generico = new Comisiones();
 		generico.setcOmisionidpk(id);
@@ -252,7 +264,7 @@ public class ControladorComisiones {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 
-			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
+			generico.setnUsuelimina(idUsuario);
 			generico = comisionService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

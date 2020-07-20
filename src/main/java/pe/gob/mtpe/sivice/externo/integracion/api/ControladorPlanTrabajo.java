@@ -6,9 +6,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
@@ -59,9 +56,19 @@ public class ControladorPlanTrabajo {
 	private String rutaRaiz;
 
 	@GetMapping("/")
-	public List<PlanTrabajo> listarPlanTrabajo() {
-		logger.info("============  BUSCAR listarPlanTrabajo =================");
-		return planTrabajoService.listar();
+	public List<PlanTrabajo> listarPlanTrabajo(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
+		logger.info("============  LISTAR PLAN DE TRABAJO =================");
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
+		PlanTrabajo planTrabajo = new PlanTrabajo();
+		planTrabajo.setRegion(region);
+		
+		return planTrabajoService.listar(planTrabajo);
 	}
 	
 	@GetMapping("/{id}")
@@ -70,8 +77,14 @@ public class ControladorPlanTrabajo {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
 		PlanTrabajo generico  = new PlanTrabajo();
 		generico.setpLantrabidpk(id); 
+		generico.setRegion(region);
+		
 		Map<String, Object> response = new HashMap<>();
 		try {
 			generico = planTrabajoService.buscarPorId(generico);
@@ -99,6 +112,12 @@ public class ControladorPlanTrabajo {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+ 
+		buscar.setRegion(region);
+		
 		return planTrabajoService.buscar(buscar);
 	}
 	
@@ -107,11 +126,10 @@ public class ControladorPlanTrabajo {
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarPlanTrabajo(
 			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion , @RequestParam(value="docplantrabajo" ,required = false) MultipartFile docplantrabajo,
-			@RequestParam(value="comisionfk"   ) Long          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
-			@RequestParam(value="dFecinicio"   ) String        dFecinicio,    @RequestParam(value="dFecfin")        String  dFecfin,
-			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
-			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
-			@RequestHeader(name = "info_rol", required = true) String nombreRol
+			@RequestParam(value="comisionfk"   ) Long          comisionfk,             @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
+			@RequestParam(value="dFecinicio"   ) String        dFecinicio,             @RequestParam(value="dFecfin")        String  dFecfin,
+			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,             @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion, @RequestHeader(name = "info_rol", required = true) String nombreRol
 			) throws IOException{
 		
 		PlanTrabajo generico = new PlanTrabajo();
@@ -134,13 +152,14 @@ public class ControladorPlanTrabajo {
 				 
 				 
 				//*****  DATOS DE USUARIO DE INICIO DE SESION **********
-				 Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+				 Long idconsejo = 0L;  
+				 idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
 				  
 				 Consejos consejo = new Consejos();
-				 consejo.setcOnsejoidpk(codigoconsejo);
+				 consejo.setcOnsejoidpk(idconsejo);
 				 				
 				 Regiones region = new Regiones();
-				 region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+				 region.setrEgionidpk(idRegion);
 				 //*******************************************************
 				 
 				 if ((archivoDocAprobacion.isVerificarCarga() == true && archivoDocAprobacion.isVerificarCarga() == true)
@@ -162,7 +181,7 @@ public class ControladorPlanTrabajo {
 					 
 					 generico.setRegion(region);
 					 generico.setConsejo(consejo);
-					 generico.setnUsureg(ConstantesUtil.c_usuariologin);
+					 generico.setnUsureg(idUsuario);
 
 					 generico =planTrabajoService.Registrar(generico);
 				 }
@@ -221,7 +240,7 @@ public class ControladorPlanTrabajo {
 			generico.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 			generico.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
 			generico.setvNumdocapr(vNumdocapr);
-			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
+			generico.setnUsumodifica(idUsuario);
 			generico =planTrabajoService.Actualizar(generico);
 			 
     		
@@ -255,7 +274,7 @@ public class ControladorPlanTrabajo {
 				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-            generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
+            generico.setnUsuelimina(idUsuario);
 			generico =planTrabajoService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

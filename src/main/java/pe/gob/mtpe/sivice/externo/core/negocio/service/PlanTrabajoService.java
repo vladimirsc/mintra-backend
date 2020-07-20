@@ -5,7 +5,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
 
 public interface PlanTrabajoService {
 	
-	List<PlanTrabajo> listar();
+	List<PlanTrabajo> listar(PlanTrabajo planTrabajo);
 
 	PlanTrabajo buscarPorId(PlanTrabajo planTrabajo);
 

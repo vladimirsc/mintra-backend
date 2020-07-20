@@ -18,8 +18,8 @@ public class ComisionServiceimpl implements ComisionService {
 	private ComisionDao ComisionDao;
 	
 	@Override
-	public List<Comisiones> listar() {
-		return ComisionDao.listar();
+	public List<Comisiones> listar(Comisiones comisiones) {
+		return ComisionDao.listar(comisiones);
 	}
 
 	@Override

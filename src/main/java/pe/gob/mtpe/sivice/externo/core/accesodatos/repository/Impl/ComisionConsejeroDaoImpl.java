@@ -69,8 +69,8 @@ public class ComisionConsejeroDaoImpl extends BaseDao<Long, ComiConsej> implemen
 	public List<ComiConsej> listaConsejerosPorComision(Long idcomision) {
 		EntityManager manager = createEntityManager();
 		List<ComiConsej> lista = manager
-				.createQuery("FROM ComiConsej c   WHERE c.comisionfk=:comision AND c.cFlgeliminado=:eliminado")
-				.setParameter("comision", idcomision)
+				.createQuery("SELECT cs FROM ComiConsej cs INNER JOIN cs.comision co  WHERE co.cOmisionidpk=:idcomision AND cs.cFlgeliminado=:eliminado")
+				.setParameter("idcomision", idcomision)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;

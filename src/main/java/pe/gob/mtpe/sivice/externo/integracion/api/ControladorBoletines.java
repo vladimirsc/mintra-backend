@@ -60,8 +60,17 @@ public class ControladorBoletines {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario, 
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
+		
 		logger.info("========== listarBoletines =============== "+idUsuario.toString()); 
-		return boletinService.listar();
+		Boletines boletines = new Boletines();
+		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
+		boletines.setRegion(region);
+ 
+		return boletinService.listar(boletines);
 	}
 
   
@@ -72,7 +81,14 @@ public class ControladorBoletines {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
 		logger.info("========== INGRESO A GRABAR BOLETINES=============== ");
+		
+		// *****************  INFORMACION DEL USUARIO LOGEADO ***************
+		   Long idconsejo = 0L;  
+		   idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
+		// ******************************************************************
+		   
 		Boletines generico = new Boletines();
 		Archivos archivo = new Archivos();
 		
@@ -84,13 +100,11 @@ public class ControladorBoletines {
 			if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) { 
 				
 				//*****  DATOS DE USUARIO DE INICIO DE SESION **********
-				Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
- 
 				Consejos consejo = new Consejos();
-				consejo.setcOnsejoidpk(codigoconsejo);
+				consejo.setcOnsejoidpk(idconsejo);
 				
 				Regiones region = new Regiones();
-				region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+				region.setrEgionidpk(idRegion);
 				//*******************************************************
 				
 				generico.setdFecboletin(FechasUtil.convertStringToDate(fecha_boletin));
@@ -99,7 +113,7 @@ public class ControladorBoletines {
 				generico.setvUbiarch(archivo.getUbicacion());
 				generico.setConsejo(consejo);
 				generico.setRegion(region);
-				generico.setnUsureg(ConstantesUtil.c_usuariologin);
+				generico.setnUsureg(idUsuario);
 				
 				generico = boletinService.Registrar(generico);
 			} else {
@@ -157,7 +171,7 @@ public class ControladorBoletines {
 				generico.setdFecboletin(FechasUtil.convertStringToDate(fecha_boletin));
 			}
  
-			generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
+			generico.setnUsumodifica(idUsuario);
 			
 			generico = boletinService.Actualizar(generico);
 
@@ -191,7 +205,7 @@ public class ControladorBoletines {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
-			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
+			generico.setnUsuelimina(idUsuario);
 			generico = boletinService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -243,7 +257,12 @@ public class ControladorBoletines {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
-		 
+		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
+		buscar.setRegion(region);
+		buscar.setnUsureg(idUsuario);
 		return boletinService.buscarBoletines(buscar);
 	}
 	

@@ -43,8 +43,17 @@ public class ControladorCalendarios {
 	private  FijasService fijasService;
 
 	@GetMapping("/")
-	public List<Calendarios> listar() {
-		return calendarioService.listar();
+	public List<Calendarios> listar(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
+		Calendarios calendario = new Calendarios();
+		calendario.setRegion(region);
+		return calendarioService.listar(calendario);
 	}
 
 	@GetMapping("/{id}")
@@ -83,6 +92,10 @@ public class ControladorCalendarios {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		buscar.setRegion(region);
 		return calendarioService.buscar(buscar);
 	}
 
@@ -97,18 +110,18 @@ public class ControladorCalendarios {
 		try {
 			
 			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
-			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
+			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(nombreRol); 
 
 			Consejos consejo = new Consejos();
 			consejo.setcOnsejoidpk(codigoconsejo);
 			
 			Regiones region = new Regiones();
-			region.setrEgionidpk(ConstantesUtil.c_codigoregion);
+			region.setrEgionidpk(idRegion);
 			//*******************************************************
 			
 			calendarios.setRegion(region);
 			calendarios.setConsejo(consejo);
-			calendarios.setnUsureg(ConstantesUtil.c_usuariologin);
+			calendarios.setnUsureg(idUsuario);
 			
 			calendarios = calendarioService.Registrar(calendarios);
 		} catch (DataAccessException e) {
@@ -142,7 +155,7 @@ public class ControladorCalendarios {
 			calendarios.setdFecreg(generico.getdFecreg());
 			calendarios.setRegion(generico.getRegion());
 			calendarios.setConsejo(generico.getConsejo());
-			calendarios.setnUsumodifica(ConstantesUtil.c_usuariologin);
+			calendarios.setnUsumodifica(idUsuario);
 			generico = calendarioService.Actualizar(calendarios);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -174,7 +187,7 @@ public class ControladorCalendarios {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
  
-			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
+			generico.setnUsuelimina(idUsuario);
 			generico = calendarioService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

@@ -6,7 +6,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InfAnuales;
 
 public interface InformAnualDao {
 
-	List<InfAnuales> listar();
+	List<InfAnuales> listar(InfAnuales infAnuales );
 
 	InfAnuales buscarPorId(InfAnuales infAnuales);
 

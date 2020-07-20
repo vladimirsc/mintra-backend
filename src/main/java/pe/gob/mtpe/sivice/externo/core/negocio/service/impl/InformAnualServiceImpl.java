@@ -18,8 +18,8 @@ public class InformAnualServiceImpl implements InformAnualService {
 	private InformAnualDao informAnualDao;
 
 	@Override
-	public List<InfAnuales> listar() {
-		return informAnualDao.listar();
+	public List<InfAnuales> listar(InfAnuales infAnuales) {
+		return informAnualDao.listar(infAnuales);
 	}
 
 	@Override

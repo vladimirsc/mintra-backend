@@ -20,8 +20,8 @@ public class BoletinServiceImpl implements BoletinService {
 	private BoletinDao boletinDao;
 	
 	@Override
-	public List<Boletines> listar() {
-		return boletinDao.listar();
+	public List<Boletines> listar(Boletines boletines) {
+		return boletinDao.listar(boletines);
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import java.util.List;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InfAnuales;
 
 public interface InformAnualService {
-	List<InfAnuales> listar();
+	List<InfAnuales> listar(InfAnuales infAnuales );
 
 	InfAnuales buscarPorId(InfAnuales infAnuales);
 

@@ -22,10 +22,11 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Sesiones> listar() {
+	public List<Sesiones> listar(Sesiones sesion) {
 		EntityManager manager = createEntityManager();
 		List<Sesiones> lista = manager
-				.createQuery("FROM Sesiones c WHERE c.cFlgeliminado=:eliminado ORDER BY c.sEsionidpk DESC")
+				.createQuery("SELECT c FROM Sesiones c INNER JOIN c.region r WHERE r.rEgionidpk=:idregion AND c.cFlgeliminado=:eliminado ORDER BY c.sEsionidpk DESC")
+				.setParameter("idregion",sesion.getRegion().getrEgionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -62,19 +63,18 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 		
 		CriteriaQuery<Sesiones> criteriaQuery = builder.createQuery(Sesiones.class);
 		Root<Sesiones> root = criteriaQuery.from(Sesiones.class);
-		//ListJoin<Sesiones, TipoSesiones> join = root.join(Sesiones_);
-		//ListJoin<Sesiones,TipoSesiones> tiposesion = root.joinList("tIposesionidpk");
  
-		
 		sesion.setvCodsesion( (sesion.getvCodsesion()!=null)?sesion.getvCodsesion() : "" );
 		sesion.setdFechaInicio( (sesion.getdFechaInicio()!=null)? sesion.getdFechaInicio() : FechasUtil.convertStringToDate("01-01-1880")) ;
-		sesion.setdFechaFin((sesion.getdFechaFin()!=null)? sesion.getdFechaFin() : FechasUtil.convertStringToDate("01-01-1880")) ;
-		//sesion.getTipoSesiones().settIposesionidpk( (sesion.getTipoSesiones().gettIposesionidpk()!=null)?sesion.getTipoSesiones().gettIposesionidpk() : 0 );
+		sesion.setdFechaFin((sesion.getdFechaFin()!=null)? sesion.getdFechaFin() : FechasUtil.convertStringToDate("01-01-1880")) ; 
 		
 		Predicate valor1 = builder.equal(root.get("vCodsesion"), sesion.getvCodsesion()) ;
 		Predicate valor2 = builder.between(root.get("dFecreacion"), sesion.getdFechaInicio(), sesion.getdFechaFin());
 		Predicate valor3 = builder.equal(root.get("tipoSesiones") ,sesion.getTipoSesiones().gettIposesionidpk());
-		Predicate finalbusqueda =builder.or(valor1,valor2,valor3);
+		Predicate valor4 = builder.equal(root.get("region") ,sesion.getRegion().getrEgionidpk());
+		Predicate valor5 =builder.and(valor4);
+		Predicate valor6 =builder.or(valor1,valor2,valor3);
+		Predicate finalbusqueda =builder.and(valor6,valor5);
 		
 		criteriaQuery.where(finalbusqueda);
 		Query<Sesiones> query = (Query<Sesiones>) manager.createQuery(criteriaQuery);

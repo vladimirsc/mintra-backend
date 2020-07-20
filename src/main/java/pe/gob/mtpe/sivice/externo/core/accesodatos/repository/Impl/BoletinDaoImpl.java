@@ -20,10 +20,11 @@ public class BoletinDaoImpl extends BaseDao<Long, Boletines> implements BoletinD
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Boletines> listar() {
+	public List<Boletines> listar(Boletines boletines) {
 		EntityManager manager = createEntityManager();
 		List<Boletines> lista = manager
-				.createQuery("FROM Boletines b WHERE b.cFlgeliminado=:eliminado ORDER BY b.bOletinidpk DESC")
+				.createQuery("SELECT b FROM Boletines b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.cFlgeliminado=:eliminado ORDER BY b.bOletinidpk DESC")
+				.setParameter("idregion",boletines.getRegion().getrEgionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;

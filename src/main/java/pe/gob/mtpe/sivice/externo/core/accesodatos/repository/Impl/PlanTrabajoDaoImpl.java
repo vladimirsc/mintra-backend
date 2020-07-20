@@ -25,10 +25,11 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<PlanTrabajo> listar() {
+	public List<PlanTrabajo> listar(PlanTrabajo planTrabajo) {
 		EntityManager manager = createEntityManager();
 		List<PlanTrabajo> lista = manager
-				.createQuery("FROM PlanTrabajo c WHERE c.cFlgeliminado=:eliminado ORDER BY c.pLantrabidpk DESC")
+				.createQuery("SELECT c FROM PlanTrabajo c INNER JOIN c.region r WHERE r.rEgionidpk=:idregion  AND c.cFlgeliminado=:eliminado ORDER BY c.pLantrabidpk DESC")
+				.setParameter("idregion", planTrabajo.getRegion().getrEgionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -58,9 +59,9 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 		Predicate valor1 = builder.equal(root.get("vCodigoplantrab"), planTrabajo.getvCodigoplantrab());
 		Predicate valor2 = builder.between(root.get("dFecaprobacion"), planTrabajo.getdFecaprobacion(), planTrabajo.getdFecaprobacionfin());
 		Predicate valor3 = builder.between(root.get("dFecinicio"), planTrabajo.getdFecinicio(),planTrabajo.getdFecfin());
-		//Predicate valor4 = builder.equal(root.get("dFecfin"),planTrabajo.getdFecfin());
-		Predicate finalbusqueda=builder.or(valor1,valor2,valor3);
-		
+		Predicate valor4 = builder.equal(root.get("region"),planTrabajo.getRegion().getrEgionidpk());
+		Predicate valor5 = builder.or(valor1,valor2,valor3); 
+		Predicate finalbusqueda = builder.and(valor5,valor4);
 		criteriaQuery.where(finalbusqueda);
 		Query<PlanTrabajo> query = (Query<PlanTrabajo>) manager.createQuery(criteriaQuery);
 		List<PlanTrabajo> resultado = query.getResultList();

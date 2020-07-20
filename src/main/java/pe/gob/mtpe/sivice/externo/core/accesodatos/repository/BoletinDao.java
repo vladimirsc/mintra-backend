@@ -6,7 +6,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Boletines;
 
 public interface BoletinDao {
 
-	public List<Boletines> listar();
+	public List<Boletines> listar(Boletines boletines);
 
 	public Boletines buscarPorId(Boletines boletines);
 

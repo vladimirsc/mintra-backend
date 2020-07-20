@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
@@ -48,9 +51,16 @@ public class ControladorSesion {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+		
 		logger.info("============  BUSCAR listarSesion =================");
-		//falta adicionar el consejo como parametro eso de la session se obtiene
-		return sesionService.listar();
+	 
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
+		Sesiones sesion = new Sesiones();
+		sesion.setRegion(region);
+		
+		return sesionService.listar(sesion);
 	}
 
 	@PostMapping("/buscar")
@@ -63,8 +73,13 @@ public class ControladorSesion {
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
+		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
 		List<Sesiones> generico = new  ArrayList<Sesiones>();
 		Sesiones sesionbuscar = new Sesiones();
+		sesionbuscar.setRegion(region);
 		
 		 try {
 			 TipoSesiones tiposesiones = new TipoSesiones();
@@ -120,33 +135,43 @@ public class ControladorSesion {
 			 @RequestParam(value="dHorinicio")  String dHorinicio,
 			 @RequestParam(value="dHorfin")     String dHorfin,
 			 @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
-				@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
-				@RequestHeader(name = "info_rol", required = true) String nombreRol
+			 @RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			 @RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
-		logger.info("============  BUSCAR PROFESION =================");
-		// OBTENER 
+		
+		logger.info("============  REGISTRAR SESION =================");
+		//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+		  Long idconsejo = 0L;  
+		  idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
+		//*******************************************************
+		  
 		Sesiones generico = new Sesiones();
 		Map<String, Object> response = new HashMap<>();
+		
 		try {
 			
-			 
-			//*****  DATOS DE USUARIO DE INICIO DE SESION **********
-			Long codigoconsejo=fijasService.BuscarConsejoPorNombre(ConstantesUtil.c_rolusuario); // CONSSAT
-			 
 			Consejos consejo = new Consejos();
-			consejo.setcOnsejoidpk(codigoconsejo);
+			consejo.setcOnsejoidpk(idconsejo);
 							
 			Regiones region = new Regiones();
-			region.setrEgionidpk(ConstantesUtil.c_codigoregion);
-			//*******************************************************
+			region.setrEgionidpk(idRegion);
+			
+			TipoSesiones tipoSesiones = new TipoSesiones();
+			tipoSesiones.settIposesionidpk(tiposesion);
+			
+			// BUSCAR COMISION POR NOMBRE Y LUEGO ASIGNARLE CODIGO
+			Comisiones comision = new Comisiones();
+			comision.setcOmisionidpk(cOmisionfk);
 			
 			generico.setRegion(region);
 			generico.setConsejofk(consejo);
-			generico.setnUsureg(ConstantesUtil.c_usuariologin);
-			 generico.setdFecreacion(FechasUtil.convertStringToDate(dFecreacion));
-			 generico.setdHorinicio(dHorinicio);
-			 generico.setdHorfin(dHorfin);
-			 generico = sesionService.Registrar(consejofk,cOmisionfk,tiposesion,generico);
+			generico.setComisionfk(comision);
+			generico.setnUsureg(idUsuario);
+			generico.setTipoSesiones(tipoSesiones);
+			generico.setdFecreacion(FechasUtil.convertStringToDate(dFecreacion));
+			generico.setdHorinicio(dHorinicio);
+			generico.setdHorfin(dHorfin);
+			generico = sesionService.Registrar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
@@ -185,7 +210,7 @@ public class ControladorSesion {
 			generico.setdFecreacion(FechasUtil.convertStringToDate(dFecreacion));
 			 generico.setdHorinicio(dHorinicio);
 			 generico.setdHorfin(dHorfin); 
-			 generico.setnUsumodifica(ConstantesUtil.c_usuariologin);
+			 generico.setnUsumodifica(idUsuario);
 			generico = sesionService.Actualizar(cOmisionfk,tiposesion,generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -217,7 +242,7 @@ public class ControladorSesion {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
-			generico.setnUsuelimina(ConstantesUtil.c_usuariologin);
+			generico.setnUsuelimina(idUsuario);
 			generico = sesionService.Eliminar(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

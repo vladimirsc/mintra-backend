@@ -17,8 +17,8 @@ public class CalendarioServiceImpl implements CalendarioService {
 	private CalendarioDao calendarioDao;
 
 	@Override
-	public List<Calendarios> listar() {
-		return calendarioDao.listar();
+	public List<Calendarios> listar(Calendarios calendario) {
+		return calendarioDao.listar(calendario);
 	}
 
 	@Override

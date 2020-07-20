@@ -5,7 +5,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
 
 public interface ComisionService {
 	
-	List<Comisiones> listar();
+	List<Comisiones> listar(Comisiones comisiones);
 
 	Comisiones buscarPorId(Comisiones comisiones);
 

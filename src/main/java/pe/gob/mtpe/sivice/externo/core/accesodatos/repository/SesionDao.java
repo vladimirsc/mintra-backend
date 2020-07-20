@@ -6,7 +6,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 
 public interface SesionDao {
 	
-	List<Sesiones> listar();
+	List<Sesiones> listar(Sesiones sesion);
 
 	Sesiones buscarPorId(Sesiones sesion);
 

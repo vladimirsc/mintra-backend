@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ComisionDao;
@@ -29,8 +27,8 @@ public class SesionServiceImpl implements SesionService {
 	private ComisionDao comisionDao;
 
 	@Override
-	public List<Sesiones> listar() {
-		return sesionDao.listar();
+	public List<Sesiones> listar(Sesiones sesion) {
+		return sesionDao.listar(sesion);
 	}
 
 	@Override
@@ -45,29 +43,18 @@ public class SesionServiceImpl implements SesionService {
 
 	 
 	@Override
-	public Sesiones Registrar(Long consejo, Long comision, Long tipoSesion, Sesiones sesion) {
+	public Sesiones Registrar(Sesiones sesion) {
 
-		// obligatorio consejo CONSSAT/CORSAT/COMISIONES
-		Consejos consejos = new Consejos();
-		consejos.setcOnsejoidpk(consejo);
-		consejos = fijasDao.buscarPorCodigoConsejo(consejos);
-
-		// opcional la comision solo CONSATCOMISIONES/CORSATCOMISIONES
- 
-		if (comision != null) {
+		/*
+		if (sesion.getComisionfk().getcOmisionidpk() != null) {
 			Comisiones comisionbuscar = new Comisiones();
-			comisionbuscar.setcOmisionidpk(comision);
+			comisionbuscar.setcOmisionidpk(sesion.getComisionfk().getcOmisionidpk());
 			comisionbuscar = comisionDao.buscarPorId(comisionbuscar);
 			sesion.setComisionfk(comisionbuscar);
-		}
+		}*/
 
-		TipoSesiones tipoSesiones = new TipoSesiones();
-		tipoSesiones.settIposesionidpk(tipoSesion);
-		tipoSesiones = fijasDao.buscarPorCodigoTipoSesion(tipoSesiones);
-
-		sesion.setConsejofk(consejos);
-		
-		sesion.setTipoSesiones(tipoSesiones);
+		sesion.setConsejofk(sesion.getConsejofk());
+		sesion.setTipoSesiones(sesion.getTipoSesiones());
 
 		return sesionDao.Registrar(sesion);
 

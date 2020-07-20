@@ -6,13 +6,13 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 
 public interface SesionService {
 
-	List<Sesiones> listar();
+	List<Sesiones> listar(Sesiones sesion);
 
 	Sesiones buscarPorId(Sesiones sesion);
 
 	List<Sesiones> buscar(Sesiones sesion);
 
-	public Sesiones Registrar(Long consejo,Long comision,Long tipoSesion, Sesiones sesion);
+	public Sesiones Registrar(Sesiones sesion);
 
 	public Sesiones Actualizar(Long comision,Long tipoSesion,Sesiones sesion);
 

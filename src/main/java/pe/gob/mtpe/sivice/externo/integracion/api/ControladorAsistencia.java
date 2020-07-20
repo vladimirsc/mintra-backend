@@ -97,7 +97,7 @@ public class ControladorAsistencia {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
-		List<AsistenciaConsejeros> lista = new ArrayList<AsistenciaConsejeros>();
+		   List<AsistenciaConsejeros> lista = new ArrayList<AsistenciaConsejeros>();
 
 		 
 			lista = asistenciaService.listarConsejerosAsistencia(idsesion);
@@ -232,6 +232,7 @@ public class ControladorAsistencia {
 			generico.setvApellido_paterno(vApellido_paterno);
 			generico.setvApellido_materno(vApellido_materno);
 			generico.setvNumerocelular(vNumerocelular);
+			generico.setnUsureg(idUsuario);
 			generico = asistenciaService.RegistrarInvitados(generico);
 
 			if (generico == null) {

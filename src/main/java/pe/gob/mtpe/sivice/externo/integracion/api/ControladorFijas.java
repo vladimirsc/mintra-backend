@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoComisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
@@ -337,5 +339,11 @@ public class ControladorFijas {
 		return new ResponseEntity<Entidades>(entidad,HttpStatus.OK);
 	}
 	  
-
+	// ==================    ENTIDADES       ===========================
+	@GetMapping({"/listaroles"})
+	public List<Roles> listarRoles() {
+		logger.info("============  LISTAR listarTipoTemas =================");
+		return fijasService.listaRoles();
+	} 
+	
 }

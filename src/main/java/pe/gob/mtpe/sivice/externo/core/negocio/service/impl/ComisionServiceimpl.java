@@ -53,4 +53,9 @@ public class ComisionServiceimpl implements ComisionService {
 		return ComisionDao.buscarComision(nombre_comision);
 	}
 
+	@Override
+	public Comisiones buscarComisionPorNombre(String nombre_comision) { 
+		return ComisionDao.buscarComisionPorNombre(nombre_comision);
+	}
+
 }

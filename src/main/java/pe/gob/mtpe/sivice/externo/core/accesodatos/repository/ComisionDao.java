@@ -20,4 +20,6 @@ public interface ComisionDao {
 	List<Comisiones> buscarComision(String nombre_comision);
 	
 	Comisiones consultaPorId(Comisiones comisiones);
+	
+	Comisiones buscarComisionPorNombre(String nombre_comision);
 }

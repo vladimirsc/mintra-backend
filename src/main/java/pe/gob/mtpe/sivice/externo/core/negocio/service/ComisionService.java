@@ -18,4 +18,6 @@ public interface ComisionService {
 	public Comisiones Eliminar(Comisiones comisiones);
 	
 	List<Comisiones> buscarComision(String nombre_comision);
+	
+	Comisiones buscarComisionPorNombre(String nombre_comision);
 }

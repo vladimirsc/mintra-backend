@@ -27,6 +27,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.ComisionService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.SesionService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -45,6 +46,9 @@ public class ControladorSesion {
 	
 	@Autowired
 	private  FijasService fijasService;
+	
+	@Autowired
+	private ComisionService comisionService;
 
 	@GetMapping("/")
 	public List<Sesiones> listarSesion(
@@ -129,7 +133,7 @@ public class ControladorSesion {
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarSesion(
 			 @RequestParam(value="consejofk")   Long consejofk,
-			 @RequestParam(value="cOmisionfk")  Long cOmisionfk,
+			 @RequestParam(value="cOmisionfk")  String cOmisionfk,
 			 @RequestParam(value="tiposesion")  Long tiposesion,
 			 @RequestParam(value="dFecreacion") String dFecreacion,
 			 @RequestParam(value="dHorinicio")  String dHorinicio,
@@ -163,7 +167,7 @@ public class ControladorSesion {
 			
 			if(ConstantesUtil.C_ROLE_OPECONSSAT.equals(nombreRol) || ConstantesUtil.C_ROLE_OPECORSSAT.equals(nombreRol)) {
 				Comisiones comision = new Comisiones();
-				comision.setcOmisionidpk(cOmisionfk);
+				comision = comisionService.buscarComisionPorNombre(cOmisionfk);
 				generico.setComisionfk(comision);
 			}
 			

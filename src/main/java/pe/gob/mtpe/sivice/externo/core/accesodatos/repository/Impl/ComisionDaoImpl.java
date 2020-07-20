@@ -116,6 +116,24 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 		
 		return consultacomision;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Comisiones buscarComisionPorNombre(String nombre_comision) {
+		Comisiones consultacomision = new Comisiones();
+		EntityManager manager = createEntityManager();
+		List<Comisiones> lista = manager
+				.createQuery("SELECT c FROM Comisiones c WHERE c.vCodcomision=:codigocomision  AND c.cFlgeliminado=:eliminado")
+				.setParameter("codigocomision", nombre_comision)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		
+		if(!lista.isEmpty()) {
+			consultacomision = lista.get(0);
+		}
+		
+		return consultacomision;
+	}
 	
 	
 

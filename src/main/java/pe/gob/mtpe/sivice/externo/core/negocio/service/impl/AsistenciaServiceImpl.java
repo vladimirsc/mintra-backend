@@ -96,15 +96,16 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 			Long cantdadAsistentes = asistenciaDao.cantidadAsistentesPorSesion(idsesion); // CANTIDAD DE ASISTENTES DE
 			// LA SESION
-			Long tipoConsejo = sesiones.getConsejofk().getcOnsejoidpk();
+			String tipoConsejo = sesiones.getConsejofk().getvDesnombre();
+			Long idtipoconsejo = sesiones.getConsejofk().getcOnsejoidpk();
 
-			if (tipoConsejo == 1 || tipoConsejo == 2) {
+			if (ConstantesUtil.C_CONSSAT.equals(tipoConsejo) || ConstantesUtil.C_CONRSAT.equals(tipoConsejo)) {
 
 				if (cantdadAsistentes == 0) { // registramos
 					List<Consejeros> listaConsejeros = new ArrayList<Consejeros>();
-					listaConsejeros = consejeroDao.listarConsejerosPorConsejo(tipoConsejo);
+					listaConsejeros = consejeroDao.listarConsejerosPorConsejo(idtipoconsejo);
 
-// INSERTAMOS LOS CONSEJEROS
+                         // INSERTAMOS LOS CONSEJEROS
 					for (Consejeros i : listaConsejeros) {
 						Consejeros filaconsejero = new Consejeros();
 						filaconsejero.setcOnsejeroidpk(i.getcOnsejeroidpk());
@@ -118,7 +119,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 					}
 				}
 
-			} else if (tipoConsejo == 3 || tipoConsejo == 4) {
+			} else if (ConstantesUtil.C_COMICONSSAT.equals(tipoConsejo) || ConstantesUtil.C_COMICORSAT.equals(tipoConsejo)) {
 
 				if (cantdadAsistentes == 0) {
                     // BUSCAMOS EN LA TABLA CONSEJERO COMISION

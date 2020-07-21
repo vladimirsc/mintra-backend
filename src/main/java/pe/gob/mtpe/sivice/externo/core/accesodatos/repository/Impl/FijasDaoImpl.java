@@ -171,6 +171,8 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
        switch(rolusuario) {
 		case ConstantesUtil.C_ROLE_ADMCONSSAT: consejo=ConstantesUtil.C_CONSSAT;     break;
 		case ConstantesUtil.C_ROLE_ADMCORSSAT: consejo=ConstantesUtil.C_CONRSAT;     break; 
+		case ConstantesUtil.C_ROLE_CONSSAT:    consejo=ConstantesUtil.C_CONSSAT;     break;
+		case ConstantesUtil.C_ROLE_CORSSAT:    consejo=ConstantesUtil.C_CONRSAT;     break; 
 		case ConstantesUtil.C_ROLE_OPECONSSAT: consejo=ConstantesUtil.C_COMICONSSAT; break; 
 		case ConstantesUtil.C_ROLE_OPECORSSAT: consejo=ConstantesUtil.C_COMICORSAT;  break;
 		}

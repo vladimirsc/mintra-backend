@@ -140,7 +140,7 @@ public class ControllerSeguridad {
 			usuario.setvApmaterno(vApmaterno);
 			usuario.setvNumdocumento(vNumdocumento);
 			usuario.setUsername(vCorreo);
-			usuario.setPassword(vClave);
+			usuario.setPassword(encriptarclave.encode(vClave));
 			usuario.setTipodocumento(tipoDocumentos);
 			usuario.setRegiones(region);
 
@@ -196,21 +196,28 @@ public class ControllerSeguridad {
 			usuario.setvApmaterno(vApmaterno);
 			usuario.setvNumdocumento(vNumdocumento);
 			usuario.setUsername(vCorreo);
-			usuario.setPassword(vClave.trim());
+			usuario.setPassword(vClave);
 			usuario.setTipodocumento(tipoDocumentos);
 			usuario.setRegiones(region);
 
 			usuariobuscar = usuarioService.buscarPorId(usuario);
-
-			if (usuariobuscar != null) {
+             
+ 
                  
-				if(usuario.getPassword()==null || !"".equals(usuario.getPassword())) {
-					usuario.setPassword(encriptarclave.encode(usuario.getPassword()));
-				}else {
-					usuario.setPassword(usuariobuscar.getPassword());
-				}
+				if(usuario.getPassword()!=null) {
+					//preguntamis si es el mismo password
+					 if(!usuariobuscar.getPassword().equals(usuario.getPassword())) {
+						 usuario.setPassword(encriptarclave.encode(usuario.getPassword()));
+					 }else {
+						 usuario.setPassword(usuariobuscar.getPassword()); 
+					 }
+					
+ 
 				
+				usuario.setcFlgeliminado(usuariobuscar.getcFlgeliminado());
+				usuario.setEnabled(usuariobuscar.getEnabled());
 				usuario.setUsername(usuariobuscar.getUsername());
+				usuario.setdFecreg(usuariobuscar.getdFecreg());
 				usuariobuscar = usuarioService.Actualizar(usuario);
 
 			}else {

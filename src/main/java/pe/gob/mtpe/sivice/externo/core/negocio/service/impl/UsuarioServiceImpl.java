@@ -56,8 +56,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public Usuarios Registrar(Usuarios usuario) {
-		 usuario.setPassword(usuario.getPassword());
+	public Usuarios Registrar(Usuarios usuario) { 
 		 usuarioDao.Registrar(usuario);
 		return usuario;
 

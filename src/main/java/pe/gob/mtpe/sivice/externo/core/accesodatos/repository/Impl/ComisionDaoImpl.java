@@ -102,6 +102,8 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 	@SuppressWarnings("unchecked")
 	@Override
 	public Comisiones consultaPorId(Comisiones comisiones) {
+		
+		/*
 		Comisiones consultacomision = new Comisiones();
 		EntityManager manager = createEntityManager();
 		List<Comisiones> lista = manager
@@ -114,7 +116,27 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 			consultacomision = lista.get(0);
 		}
 		
-		return consultacomision;
+		return consultacomision;*/
+		
+		
+		EntityManager manager = createEntityManager();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		
+		CriteriaQuery<Comisiones> criteriaQuery = builder.createQuery(Comisiones.class);
+		Root<Comisiones> root = criteriaQuery.from(Comisiones.class);
+		
+		Predicate valor1 = builder.equal(root.get("cOmisionidpk"),comisiones.getcOmisionidpk());
+		criteriaQuery.where(valor1);
+		Query<Comisiones> query = (Query<Comisiones>) manager.createQuery(criteriaQuery);
+		List<Comisiones> resultado = query.getResultList();
+		manager.close();
+		
+		if(!resultado.isEmpty()) {
+			comisiones = resultado.get(0);
+		}
+		
+		return comisiones;
+		
 	}
 
 	@SuppressWarnings("unchecked")

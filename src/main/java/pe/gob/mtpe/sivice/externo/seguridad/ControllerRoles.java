@@ -83,9 +83,12 @@ public class ControllerRoles {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
+			if(!usuarioRol.getcFlgactivo().equals("1")) {
+ 
 			usuarioRol.setcFlgactivo("1");
 			usuarioRol.setcFlgelimino("0");
 			usuarioRol = usuarioRolService.Actualizar(usuarioRol);
+			}
 			
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

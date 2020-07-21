@@ -33,7 +33,7 @@ public class PlanTrabajo implements Serializable {
 	private Long pLantrabidpk;
 
 	@Column(name = "COMISION_FK")
-	private Long cOmisionfk;
+	private String cOmisionfk;
 
 	@Column(name = "V_CODIGOPLANTRAB")
 	private String vCodigoplantrab;
@@ -138,11 +138,13 @@ public class PlanTrabajo implements Serializable {
 		this.pLantrabidpk = pLantrabidpk;
 	}
 
-	public Long getcOmisionfk() {
+	 
+
+	public String getcOmisionfk() {
 		return cOmisionfk;
 	}
 
-	public void setcOmisionfk(Long cOmisionfk) {
+	public void setcOmisionfk(String cOmisionfk) {
 		this.cOmisionfk = cOmisionfk;
 	}
 

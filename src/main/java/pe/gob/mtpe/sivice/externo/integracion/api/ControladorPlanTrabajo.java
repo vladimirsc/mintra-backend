@@ -27,10 +27,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.ComisionService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.PlanTrabajoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -51,6 +53,9 @@ public class ControladorPlanTrabajo {
 	
 	@Autowired
 	private  FijasService fijasService;
+	
+	@Autowired
+	private ComisionService comisionService;
 
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
@@ -126,7 +131,7 @@ public class ControladorPlanTrabajo {
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarPlanTrabajo(
 			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion , @RequestParam(value="docplantrabajo" ,required = false) MultipartFile docplantrabajo,
-			@RequestParam(value="comisionfk"   ) Long          comisionfk,             @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
+			@RequestParam(value="comisionfk"   ) String          comisionfk,             @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
 			@RequestParam(value="dFecinicio"   ) String        dFecinicio,             @RequestParam(value="dFecfin")        String  dFecfin,
 			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,             @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion, @RequestHeader(name = "info_rol", required = true) String nombreRol
@@ -165,7 +170,12 @@ public class ControladorPlanTrabajo {
 				 if ((archivoDocAprobacion.isVerificarCarga() == true && archivoDocAprobacion.isVerificarCarga() == true)
 						  && (archivoPlanTrabajo.isVerificarCarga() == true && archivoPlanTrabajo.isVerificarCarga() == true) ) {
 					 logger.info("=================== cargaron plandes de trabajo =================");
-					 generico.setcOmisionfk(comisionfk);
+					 
+					// BUSCAR COMISION POR NOMBRE Y LUEGO ASIGNARLE CODIGO
+						if(ConstantesUtil.C_ROLE_OPECONSSAT.equals(nombreRol) || ConstantesUtil.C_ROLE_OPECORSSAT.equals(nombreRol)) {
+							generico.setcOmisionfk(comisionfk);
+						}
+						 
 					 generico.setdFecaprobacion(FechasUtil.convertStringToDate(dFecaprobacion));
 					 generico.setdFecinicio(FechasUtil.convertStringToDate(dFecinicio));
 					 generico.setdFecfin(FechasUtil.convertStringToDate(dFecfin));
@@ -199,7 +209,7 @@ public class ControladorPlanTrabajo {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> actualizarPlanTrabajo(
 			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion, @RequestParam(value="docplantrabajo",required = false) MultipartFile docplantrabajo,
-			@RequestParam(value="comisionfk"   ) Long          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
+			@RequestParam(value="comisionfk"   ) String          comisionfk,    @RequestParam(value="dFecaprobacion") String  dFecaprobacion,
 			@RequestParam(value="dFecinicio"   ) String        dFecinicio,    @RequestParam(value="dFecfin")        String  dFecfin,
 			@RequestParam(value="vNumdocapr"   ) String        vNumdocapr,    @RequestParam(value="pLantrabidpk"   ) Long  pLantrabidpk,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -212,6 +222,11 @@ public class ControladorPlanTrabajo {
 		Archivos archivoPlanTrabajo = new Archivos();
     	Map<String,Object> response = new HashMap<>();
     	try {
+    		// BUSCAR COMISION POR NOMBRE Y LUEGO ASIGNARLE CODIGO
+			if(ConstantesUtil.C_ROLE_OPECONSSAT.equals(nombreRol) || ConstantesUtil.C_ROLE_OPECORSSAT.equals(nombreRol)) {
+				generico.setcOmisionfk(comisionfk);
+			}
+    		
     		generico.setpLantrabidpk(pLantrabidpk);
     		generico = planTrabajoService.buscarPorId(generico);
 			if (generico == null) {

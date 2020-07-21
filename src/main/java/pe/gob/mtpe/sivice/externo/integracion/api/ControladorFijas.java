@@ -341,7 +341,11 @@ public class ControladorFijas {
 	  
 	// ==================    ENTIDADES       ===========================
 	@GetMapping({"/listaroles"})
-	public List<Roles> listarRoles() {
+	public List<Roles> listarRoles(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
+			) {
 		logger.info("============  LISTAR listarTipoTemas =================");
 		return fijasService.listaRoles();
 	} 

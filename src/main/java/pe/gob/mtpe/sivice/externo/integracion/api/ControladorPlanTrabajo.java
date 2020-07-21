@@ -172,7 +172,8 @@ public class ControladorPlanTrabajo {
 					 logger.info("=================== cargaron plandes de trabajo =================");
 					 
 					// BUSCAR COMISION POR NOMBRE Y LUEGO ASIGNARLE CODIGO
-						if(ConstantesUtil.C_ROLE_OPECONSSAT.equals(nombreRol) || ConstantesUtil.C_ROLE_OPECORSSAT.equals(nombreRol)) {
+						if(ConstantesUtil.C_ROLE_OPECONSSAT.equals(nombreRol) || ConstantesUtil.C_ROLE_OPECORSSAT.equals(nombreRol) ||
+								ConstantesUtil.C_ROLE_ADMCONSSAT.equals(nombreRol) || ConstantesUtil.C_ROLE_ADMCORSSAT.equals(nombreRol)) {
 							generico.setcOmisionfk(comisionfk);
 						}
 						 

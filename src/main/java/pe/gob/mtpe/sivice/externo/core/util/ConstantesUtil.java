@@ -381,11 +381,7 @@ public class ConstantesUtil {
     public static final String C_ROLE_OPECONSSAT="ROLE_OPECONSSAT";
     public static final String C_ROLE_OPECORSSAT="ROLE_OPECORSSAT";
     
-   /*
-    public static final String c_rolusuario   ="ROLE_ADMCONSSAT";
-    public static final Long   c_codigoregion =Long.parseLong("14");
-    public static final Long   c_usuariologin =Long.parseLong("21");
-    public static final Long   c_consejero =Long.parseLong("133"); */
+ 
     
   
  

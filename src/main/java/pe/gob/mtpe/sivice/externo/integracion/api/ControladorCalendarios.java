@@ -155,6 +155,7 @@ public class ControladorCalendarios {
 			calendarios.setdFecreg(generico.getdFecreg());
 			calendarios.setRegion(generico.getRegion());
 			calendarios.setConsejo(generico.getConsejo());
+			calendarios.setcFlgeliminado(generico.getcFlgeliminado());
 			calendarios.setnUsumodifica(idUsuario);
 			generico = calendarioService.Actualizar(calendarios);
 		} catch (DataAccessException e) {

@@ -89,6 +89,9 @@ public class Boletines implements Serializable {
 	@Column(name = "N_USUELIMINIA")
 	private Long nUsuelimina;
 	
+	@Column(name = "V_COMISION")
+	private String vComision;
+	
 	private transient String vFecdesde;
 	private transient String vFechasta;
 
@@ -255,6 +258,17 @@ public class Boletines implements Serializable {
 
 	public void setnUsuelimina(Long nUsuelimina) {
 		this.nUsuelimina = nUsuelimina;
+	}
+	
+	
+ 
+
+	public String getvComision() {
+		return vComision;
+	}
+
+	public void setvComision(String vComision) {
+		this.vComision = vComision;
 	}
 
 	public String obtenerRutaAbsoluta() {

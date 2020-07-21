@@ -78,6 +78,7 @@ public class ControladorBoletines {
 	public ResponseEntity<?> registrarBoletin(
 			@RequestParam("archivoboletin") MultipartFile archivoboletin, 
 			@RequestParam("fecha") String fecha_boletin,
+			@RequestParam("comision") String comision,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
@@ -114,7 +115,7 @@ public class ControladorBoletines {
 				generico.setConsejo(consejo);
 				generico.setRegion(region);
 				generico.setnUsureg(idUsuario);
-				
+				generico.setvComision(comision);
 				generico = boletinService.Registrar(generico);
 			} else {
 				response.put(ConstantesUtil.X_MENSAJE, "ARCHIVO NO ADJUNTO");
@@ -141,6 +142,7 @@ public class ControladorBoletines {
 			@RequestParam(value="codigoboletin")                                 Long codigoboletin,
 			@RequestParam(value="archivoboletin",required = false) MultipartFile archivoboletin, 
 			@RequestParam(value="fecha")                                         String fecha_boletin,
+			@RequestParam("comision") String comision,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol
@@ -172,7 +174,7 @@ public class ControladorBoletines {
 			}
  
 			generico.setnUsumodifica(idUsuario);
-			
+			generico.setvComision(comision);
 			generico = boletinService.Actualizar(generico);
 
 		} catch (DataAccessException e) {

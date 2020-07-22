@@ -28,18 +28,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 			lista =usuarioDao.listar(usuario);
 			
 		}else if(ConstantesUtil.C_ROLE_ADMCORSSAT.equals(usuario.getVrol())) {
-			
-			
-			//region = fijasDao.buscarPorNombreRegion(usuario.getVregion());
-			
-			 
+ 
 				Regiones region = new Regiones();
 				region.setrEgionidpk(usuario.getRegiones().getrEgionidpk());
 				
 				usuario.setRegiones(region);
 				lista =usuarioDao.listarPorRegion(usuario);
-			 
- 	
+ 
 		}
 		
 		return lista;

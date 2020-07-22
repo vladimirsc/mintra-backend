@@ -3,6 +3,7 @@ package pe.gob.mtpe.sivice.externo.seguridad;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
@@ -58,17 +61,11 @@ public class ControllerSeguridad {
 	
 
 	@GetMapping("/")
-	public List<Usuarios> listar( ) {
-		
-		/*
-		 @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+	public List<Usuarios> listar( 
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
-			@RequestHeader(name = "info_rol", required = true) String nombreRol
-		 */
-		Long idUsuario = Long.valueOf("22");
-		Long idRegion =Long.valueOf("10");
-		String nombreRol = "ROLE_ADMCONSSAT";
-		
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
+ 
 	     Usuarios usuario = new Usuarios();
 	     usuario.setVrol(nombreRol);
 	     

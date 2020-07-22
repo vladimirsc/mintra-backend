@@ -26,13 +26,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
-import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
-import pe.gob.mtpe.sivice.externo.core.negocio.service.ComisionService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService; 
 import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.PlanTrabajoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -54,8 +52,7 @@ public class ControladorPlanTrabajo {
 	@Autowired
 	private  FijasService fijasService;
 	
-	@Autowired
-	private ComisionService comisionService;
+	 
 
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;

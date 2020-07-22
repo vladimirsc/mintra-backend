@@ -99,7 +99,7 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 		return resultado;
 	}
 
-	@SuppressWarnings("unchecked")
+	 
 	@Override
 	public Comisiones consultaPorId(Comisiones comisiones) {
 		

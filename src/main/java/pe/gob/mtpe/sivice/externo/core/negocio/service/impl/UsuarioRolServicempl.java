@@ -78,6 +78,32 @@ public class UsuarioRolServicempl implements UsuarioRolService {
 
 	@Override
 	public UsuarioRol Actualizar(UsuarioRol usuarioperfil) { 
+		
+		 List<UsuarioRol> listaRoles = new ArrayList<UsuarioRol>();
+		 listaRoles = usuarioRolDao.buscar(usuarioperfil);
+		 
+		 if(!listaRoles.isEmpty()) {
+			 for(UsuarioRol usurol : listaRoles) {
+				 UsuarioRol usuarioRolActualizar = new UsuarioRol();
+				 Usuarios usuario = new Usuarios();
+				 Roles rol = new Roles();
+				 
+				 usuario.setuSuarioidpk(usurol.getUsuario().getuSuarioidpk());
+				 rol.setrOlidpk(usurol.getRoles().getrOlidpk());
+				 
+				 
+				 usuarioRolActualizar.setuSuariorolidpk(usurol.getuSuariorolidpk());
+				 usuarioRolActualizar.setUsuario(usuario);
+				 usuarioRolActualizar.setRoles(rol);
+				 usuarioRolActualizar.setcFlgactivo("0");
+				 usuarioRolActualizar.setcFlgelimino("1");
+				 usuarioRolActualizar= usuarioRolDao.Actualizar(usuarioRolActualizar);	 
+			 }
+ 
+		 }
+		
+		usuarioperfil.setcFlgactivo("1");
+		usuarioperfil.setcFlgelimino("0");
 		return usuarioRolDao.Actualizar(usuarioperfil);
 	}
 

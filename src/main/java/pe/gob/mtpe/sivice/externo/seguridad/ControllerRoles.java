@@ -75,21 +75,8 @@ public class ControllerRoles {
 		try {
 			usuarioRol.setuSuariorolidpk(idusuariorol);
 			usuarioRol = usuarioRolService.buscarPorId(usuarioRol);
-			
-			if(usuarioRol==null) {
-				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.C_MSG_MENSAJE_USUARIOROL);
-				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_MSG_ERROR_USUARIOROL);
-				response.put(ConstantesUtil.X_ENTIDAD, usuarioRol);
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-			}
-			
-			if(!usuarioRol.getcFlgactivo().equals("1")) {
- 
-			usuarioRol.setcFlgactivo("1");
-			usuarioRol.setcFlgelimino("0");
 			usuarioRol = usuarioRolService.Actualizar(usuarioRol);
-			}
-			
+ 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
 			response.put(ConstantesUtil.X_ERROR,
@@ -108,17 +95,7 @@ public class ControllerRoles {
 		try {
 			usuarioRol.setuSuariorolidpk(idusuariorol);
 			usuarioRol = usuarioRolService.buscarPorId(usuarioRol);
-			
-			if(usuarioRol==null) {
-				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.C_MSG_MENSAJE_USUARIOROL);
-				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_MSG_ERROR_USUARIOROL);
-				response.put(ConstantesUtil.X_ENTIDAD, usuarioRol);
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-			}
-			
-			usuarioRol.setcFlgactivo("0");
-			usuarioRol.setcFlgelimino("1");
-			usuarioRol = usuarioRolService.Actualizar(usuarioRol);
+			usuarioRol = usuarioRolService.Eliminar(usuarioRol);
 			
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

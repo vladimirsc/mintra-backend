@@ -11,8 +11,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoComisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoSesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoTemas;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero; 
 
 public interface FijasDao {
 

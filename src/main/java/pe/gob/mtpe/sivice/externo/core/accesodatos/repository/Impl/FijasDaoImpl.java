@@ -321,32 +321,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		buscarId(rol.getrOlidpk());
 		return rol;
 	}
-	
-	
-	/*
-	@SuppressWarnings("unchecked")
-	@Override
-	public UsuarioRol informacionUsuario(Long idusuario) {
-		UsuarioRol usuario = new UsuarioRol();
-		EntityManager manager = createEntityManager();
-		List<UsuarioRol> lista = manager
-			.createQuery("SELECT ur FROM UsuarioRol ur INNER JOIN ur.usuario us INNER JOIN ur.roles rl  WHERE us.uSuarioidpk=:idusuario AND ur.cFlgactivo=:activo AND ur.cFlgelimino=:eliminado")
-			.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
-			.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO)
-			.setParameter("idusuario",idusuario).getResultList();
-		manager.close();
-		if(lista.isEmpty()) {
-			usuario=null;
-		}else {
-			usuario = lista.get(0);
-		}		
-		return usuario;
-	}
 
-	
-  */
-	
  
-	 
 
 }

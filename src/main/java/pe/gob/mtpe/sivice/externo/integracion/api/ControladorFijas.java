@@ -361,7 +361,14 @@ public class ControladorFijas {
 			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		logger.info("============  LISTAR listarTipoTemas =================");
-		return fijasService.listaRoles();
+		List<Roles> listaRoles = new ArrayList<Roles>();
+		
+		if(ConstantesUtil.C_ROLE_ADMCONSSAT.equals(nombreRol)) {
+			listaRoles = fijasService.listaRoles();
+		}else {
+			listaRoles =  fijasService.listaRolesCorssat();
+		}
+		return listaRoles;
 	} 
 	
 }

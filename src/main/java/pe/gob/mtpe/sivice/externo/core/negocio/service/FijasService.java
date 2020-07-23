@@ -56,6 +56,7 @@ public interface FijasService {
 	//ROLES
 	public List<Roles> listaRoles();
 	public Roles buscaRoles(Roles rol);
+	public List<Roles> listaRolesCorssat();
 	
 	 
 	

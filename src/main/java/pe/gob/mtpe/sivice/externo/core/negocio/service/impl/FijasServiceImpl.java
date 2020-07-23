@@ -139,6 +139,11 @@ public class FijasServiceImpl implements FijasService {
 		return fijasDao.listarTipoRegiones(regiones);
 	}
 
+	@Override
+	public List<Roles> listaRolesCorssat() { 
+		return fijasDao.listaRolesCorssat();
+	}
+
  
 
 	

@@ -338,6 +338,21 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		return lista;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Roles> listaRolesCorssat() {
+		EntityManager manager = createEntityManager();
+		List<Roles> lista = manager
+				.createQuery("SELECT r FROM Roles r WHERE r.vDesnombre IN('"+ConstantesUtil.C_ROLE_ADMCORSSAT+"','"+ConstantesUtil.C_ROLE_CORSSAT+"','"+ConstantesUtil.C_ROLE_OPECORSSAT+"') AND r.cFlgactivo=:activo AND r.cFlgeliminado=:eliminado")
+				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		if (lista.isEmpty()) {
+			return null;
+		}
+		return lista;
+	}
+
  
 
 }

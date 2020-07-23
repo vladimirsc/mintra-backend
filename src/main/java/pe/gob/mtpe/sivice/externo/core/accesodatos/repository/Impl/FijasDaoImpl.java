@@ -322,6 +322,22 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 		return rol;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Regiones> listarTipoRegiones(Regiones regiones) {
+		EntityManager manager = createEntityManager();
+		List<Regiones> lista = manager
+				.createQuery("SELECT p FROM Regiones p WHERE p.rEgionidpk=:idregion AND p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
+				.setParameter("idregion", regiones.getrEgionidpk())
+				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		if (lista.isEmpty()) {
+			return null;
+		}
+		return lista;
+	}
+
  
 
 }

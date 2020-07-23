@@ -10,7 +10,7 @@ public interface ComisionConsejeroService {
 
 	ComiConsej buscarPorId(ComiConsej comiConsej);
 
-	List<ComiConsej> buscar(Long comision);
+	List<ComiConsej> buscar(Long comision,Long idRegion,Long idUsuario);
 
 	public ComiConsej Registrar(ComiConsej comiConsej);
 

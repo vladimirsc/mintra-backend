@@ -1,5 +1,6 @@
 package pe.gob.mtpe.sivice.externo.integracion.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,9 +146,22 @@ public class ControladorFijas {
 
 	// ==================    TIPOS DE REGIONES    ===========================
 	@GetMapping({"/listaregiones"})
-	public List<Regiones> listarRegiones() {
+	public List<Regiones> listarRegiones(
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		logger.info("============  LISTAR listarRegiones =================");
-		return fijasService.listarTipoRegiones();
+		
+		 List<Regiones>  lstregiones=  new ArrayList<Regiones>();
+		
+		if(ConstantesUtil.C_ROLE_ADMCONSSAT.equals(nombreRol)) {
+			lstregiones = fijasService.listarTipoRegiones();
+		}else {
+			Regiones regiones= new Regiones();
+			regiones.setrEgionidpk(idRegion);
+			lstregiones = fijasService.listarTipoRegiones(regiones);
+		}
+		return lstregiones;
 	} 
 	
 	@GetMapping("/buscaregion/{id}")

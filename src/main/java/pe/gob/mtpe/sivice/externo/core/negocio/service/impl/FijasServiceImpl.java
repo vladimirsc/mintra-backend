@@ -134,6 +134,11 @@ public class FijasServiceImpl implements FijasService {
 		return fijasDao.BuscarConsejoPorNombre(rolusuario);
 	}
 
+	@Override
+	public List<Regiones> listarTipoRegiones(Regiones regiones) { 
+		return fijasDao.listarTipoRegiones(regiones);
+	}
+
  
 
 	

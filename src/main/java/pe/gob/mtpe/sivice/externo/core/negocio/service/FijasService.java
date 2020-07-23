@@ -30,7 +30,8 @@ public interface FijasService {
 	// TIPOS DE REGIONES
 	public List<Regiones> listarTipoRegiones();
 	public Regiones buscarPorCodigoRegion(Regiones regiones);
-
+	public List<Regiones> listarTipoRegiones(Regiones regiones);
+	
 	// TIPOS DE CONSEJO
 	public List<Consejos> listarConsejos();
 	public Consejos buscarPorCodigoConsejo(Consejos consejos);

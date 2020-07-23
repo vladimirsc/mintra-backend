@@ -115,7 +115,7 @@ public class ControladorComisiones {
 			@RequestParam(value="tipocomision")         Long          tipocomision,
 			@RequestParam(value="numerodocaprobacion")  String        numerodocaprobacion,
 			@RequestParam(value ="fechaaprobacion")     String        fechaaprobacion,
-			@RequestParam(value="archivocomision")      MultipartFile archivocomision,
+			@RequestParam(value="archivocomision", required = true)      MultipartFile archivocomision,
 			@RequestParam(value ="fechainicio")         String        fechainicio,
 			@RequestParam(value ="fechafin")            String        fechafin,
 			@RequestParam(value ="consejeroasignado")   Long          consejeroasignado,

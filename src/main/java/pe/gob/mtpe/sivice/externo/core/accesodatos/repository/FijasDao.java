@@ -36,6 +36,8 @@ public interface FijasDao {
 	public Regiones buscarPorCodigoRegion(Regiones regiones);
 	
 	public Regiones buscarPorNombreRegion(String nombreregion);
+	
+	public List<Regiones> listarTipoRegiones(Regiones regiones);
 
 	// TIPOS DE CONSEJO
 	public List<Consejos> listarConsejos();

@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.base.BaseDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.EncargadoRegion;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.EncargadoRegionDao;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
@@ -61,6 +62,18 @@ public class EncargadoRegionDaoImpl extends BaseDao<Long, EncargadoRegion>  impl
 				.setParameter("idregion", encargadoRegion.getRegion().getrEgionidpk())
 				.setParameter("encargado",encargadoRegion.getvNombre()+"%") 
 				.setParameter("numerodoc",encargadoRegion.getvNumdocaprobacion()) 
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		return lista;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<EncargadoRegion> listarFiltrado(Regiones region) {
+		EntityManager manager = createEntityManager();
+		List<EncargadoRegion> lista = manager
+				.createQuery("SELECT e FROM EncargadoRegion e INNER JOIN e.region r WHERE r.rEgionidpk=:idregion AND e.cFlgeliminado=:eliminado ORDER BY e.eNcargadoregionidpk DESC")
+				.setParameter("idregion", region.getrEgionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;

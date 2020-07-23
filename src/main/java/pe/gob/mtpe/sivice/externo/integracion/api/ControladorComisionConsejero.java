@@ -122,7 +122,7 @@ public class ControladorComisionConsejero {
 		// ******* REGISTRAR O LISTAR CONSEJEROS ASIGNADOS POR COMISION
  
 		List<ComiConsej> listaconsejero = new ArrayList<ComiConsej>();
-		listaconsejero = ComisionConsejeroService.buscar(idcomision);
+		listaconsejero = ComisionConsejeroService.buscar(idcomision,idRegion,idUsuario);
 		return listaconsejero;
 	}
 	
@@ -133,8 +133,8 @@ public class ControladorComisionConsejero {
 			@RequestParam(value="vtipoconsejero",required = true )   Long vtipoconsejero,
 			@RequestParam(value="vfechainicio" )     String vfechainicio,
 			@RequestParam(value="vfechafin" )        String vfechafin,
-			@RequestParam(value="vnumerodocumento" ) String vnumerodocumento,
-			@RequestParam(value="vdocumento" )       MultipartFile  vdocumento,
+			@RequestParam(value="vnumerodocumento") String vnumerodocumento,
+			@RequestParam(value="vdocumento", required = false )       MultipartFile  vdocumento,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol

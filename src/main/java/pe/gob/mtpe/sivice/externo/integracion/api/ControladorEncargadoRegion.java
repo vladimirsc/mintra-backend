@@ -63,11 +63,8 @@ public class ControladorEncargadoRegion {
 		EncargadoRegion generico = new EncargadoRegion();
 		List<EncargadoRegion> lsregiones= new ArrayList<EncargadoRegion>();
 		
-		Regiones region = new Regiones();
-		
-		if(regionpk!=null) {
-			region.setrEgionidpk(regionpk);
-		}
+		Regiones region = new Regiones(); 
+		region.setrEgionidpk(idRegion);
 		
 		generico.setRegion(region);
 		generico.setvNombre(nombre);
@@ -84,7 +81,16 @@ public class ControladorEncargadoRegion {
 			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		
 		List<EncargadoRegion> generico= new ArrayList<EncargadoRegion>();
-		generico = encargadoRegionService.listar();
+ 
+		if(ConstantesUtil.C_ROLE_ADMCONSSAT.equals(nombreRol)) {
+			generico = encargadoRegionService.listar();
+		}else {
+			
+			Regiones region = new Regiones(); 
+			region.setrEgionidpk(idRegion);
+			generico = encargadoRegionService.listarFiltrado(region);
+		}
+		
 		return generico;
 	}
 	

@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.ComiConsej;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoComisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ComisionConsejeroDao;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.ComisionDao;
@@ -45,16 +48,24 @@ public class ComisionConsejeroServiceImpl implements ComisionConsejeroService {
 	}
 
 	@Override
-	public List<ComiConsej> buscar(Long comision) {
+	public List<ComiConsej> buscar(Long comision,Long idRegion,Long idUsuario) {
 		
 		//PREGUNTAMOS SI TIENE CONSEJEROS ASIGNADOS
 		List<ComiConsej>  listaConsejeros  = new ArrayList<ComiConsej>();
 		listaConsejeros= comisiConsejeDao.buscar(comision); 
 		logger.info("==================="+listaConsejeros.size());
 		if(listaConsejeros.size()==0) {
-			//LISTO LOS CONSEJEROS POR REGION
 			
 			Comisiones comsiones = new Comisiones();
+			
+			//LISTO LOS CONSEJEROS POR REGION
+			TipoComisiones tipoComisiones = new TipoComisiones();
+			Regiones region = new Regiones();
+			Consejos consejo = new Consejos();
+			
+			comsiones.setTipocomision(tipoComisiones);
+			comsiones.setConsejo(consejo);
+			comsiones.setRegion(region);
 			comsiones.setcOmisionidpk(comision);
 			comsiones = comisiondao.consultaPorId(comsiones);
 			

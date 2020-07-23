@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.EncargadoRegion;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.EncargadoRegionDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.EncargadoRegionService;
 
@@ -42,9 +43,13 @@ public class EncargadoRegionServiceImpl implements EncargadoRegionService {
 	}
 
 	@Override
-	public List<EncargadoRegion> buscar(EncargadoRegion encargadoRegion) {
-		// TODO Auto-generated method stub
+	public List<EncargadoRegion> buscar(EncargadoRegion encargadoRegion) { 
 		return encargadoRegionDao.buscar(encargadoRegion);
+	}
+
+	@Override
+	public List<EncargadoRegion> listarFiltrado(Regiones region) { 
+		return encargadoRegionDao.listarFiltrado(region);
 	}
 
 }

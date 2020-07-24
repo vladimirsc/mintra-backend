@@ -51,7 +51,6 @@ public class UsuarioDaoImpl extends BaseDao<Long, Usuarios> implements UsuarioDa
 		
 		EntityManager manager = createEntityManager();
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
-		
 		CriteriaQuery<Usuarios> criteriaQuery = builder.createQuery(Usuarios.class);
 		Root<Usuarios> root = criteriaQuery.from(Usuarios.class);
 		
@@ -66,11 +65,12 @@ public class UsuarioDaoImpl extends BaseDao<Long, Usuarios> implements UsuarioDa
 		Predicate valor2 = builder.equal(root.get("vNumdocumento"), usuario.getvNumdocumento());
 		Predicate valor3 =builder.and(valor1,valor2);
 		Predicate valor4 =builder.equal(root.get("vNombre"),usuario.getvNombre());
-		Predicate valor5 =builder.equal(root.get("vAppaterno"),usuario.getvAppaterno());
+		Predicate valor5 =builder.like(root.get("vAppaterno"),usuario.getvAppaterno()+"%");
 		Predicate valor6 =builder.equal(root.get("vApmaterno"),usuario.getvApmaterno());
 		Predicate valor7 =builder.equal(root.get("regiones"),usuario.getRegiones().getrEgionidpk());
-		
-		Predicate finalbusqueda =builder.or(valor3,valor4,valor5,valor6,valor7);
+		Predicate valor8 =builder.and(valor7);
+		Predicate valor9 =builder.or(valor3,valor4,valor5,valor6);
+		Predicate finalbusqueda = builder.and(valor9,valor8);
 		criteriaQuery.where(finalbusqueda);
 		Query<Usuarios> query = (Query<Usuarios>) manager.createQuery(criteriaQuery);
 		List<Usuarios> resultado = query.getResultList();

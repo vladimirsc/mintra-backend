@@ -95,7 +95,7 @@ public class ControllerRoles {
 		try {
 			usuarioRol.setuSuariorolidpk(idusuariorol);
 			usuarioRol = usuarioRolService.buscarPorId(usuarioRol);
-			usuarioRol = usuarioRolService.Eliminar(usuarioRol);
+			usuarioRol = usuarioRolService.deshabilitarrol(usuarioRol);
 			
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

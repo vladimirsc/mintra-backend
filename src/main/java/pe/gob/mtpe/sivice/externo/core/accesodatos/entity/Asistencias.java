@@ -26,7 +26,7 @@ public class Asistencias implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TBD_ASISTENCIAS")
-	@SequenceGenerator(name = "SEQ_TBD_ASISTENCIAS", sequenceName = "DB_TRAMITE.SEQ_TBD_ASISTENCIAS", allocationSize = 1)
+	@SequenceGenerator(name = "SEQ_TBD_ASISTENCIAS", sequenceName = "DB_TRAMITE_BK.SEQ_TBD_ASISTENCIAS", allocationSize = 1)
 	@Column(name = "ASISTENCIA_ID_PK")
 	private Long aSistenciaidpk;
 

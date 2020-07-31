@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Profesiones;
@@ -31,7 +32,7 @@ import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({"/api/fijas"})
 public class ControladorFijas {
@@ -43,12 +44,15 @@ public class ControladorFijas {
 	
 	
 	// ==================    PROFESIONES          ===========================	
+	@ApiOperation(value = "Lista las profesiones")
 	@GetMapping({"/listarprofesiones"})
 	public List<Profesiones> listarProfesiones() {
 		logger.info("============  LISTAR PROFESIONES =================");
 		return fijasService.listarProfesiones();
 	} 
 	
+	
+	@ApiOperation(value = "Buscar profesion por codigo")
 	@GetMapping("/buscarprofesion/{id}")
     public ResponseEntity<?> buscarPorIdProfesion(@PathVariable Long id) {
 		logger.info("============  BUSCAR PROFESION =================");
@@ -79,12 +83,16 @@ public class ControladorFijas {
 	
 	
 	// ==================    TIPOS DE DOCUMENTOS  ===========================
+	@ApiOperation(value = "Lista los tipo de documentos")
 	@GetMapping({"/listartipodocumentos"})
 	public List<TipoDocumentos> listarTipoDocumentos() {
 		logger.info("============  LISTAR listarTipoDocumentos =================");
 		return fijasService.listarTipoDocumentos();
 	} 
 	
+	
+	
+	@ApiOperation(value = "Busca el tipo de documento por su codigo")
 	@GetMapping("/buscartipodocumento/{id}")
     public ResponseEntity<?> buscarPorIdTipoDocumento(@PathVariable Long id) {
 		logger.info("============  BUSCAR buscarPorIdTipoDocumento =================");
@@ -112,12 +120,15 @@ public class ControladorFijas {
 	
 	
 	// ==================    TIPOS DE CONSEJEROS  ===========================
+	@ApiOperation(value = "Lista los tipos de consejeros")
 	@GetMapping({"/listartipoconsejeros"})
 	public List<Tipoconsejero> listarConsejeros() {
 		logger.info("============  LISTAR listarConsejeros =================");
 		return fijasService.listarTipoConsejeros();
 	} 
 	
+	
+	@ApiOperation(value = "Buscar consejero por su codigo")
 	@GetMapping("/buscartipoconsejero/{id}")
     public ResponseEntity<?> buscarPorIdConsejero(@PathVariable Long id) {
 		logger.info("============  BUSCAR buscarPorIdConsejero =================");
@@ -145,6 +156,7 @@ public class ControladorFijas {
     }
 
 	// ==================    TIPOS DE REGIONES    ===========================
+	@ApiOperation(value = "Lista las regiones")
 	@GetMapping({"/listaregiones"})
 	public List<Regiones> listarRegiones(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -164,6 +176,9 @@ public class ControladorFijas {
 		return lstregiones;
 	} 
 	
+	
+	
+	@ApiOperation(value = "Busca region por su codigo")
 	@GetMapping("/buscaregion/{id}")
     public ResponseEntity<?> buscarPorIdRegion(@PathVariable Long id) {
 		logger.info("============  BUSCAR buscarPorIdRegion =================");
@@ -190,12 +205,16 @@ public class ControladorFijas {
     }
 	
 	// ==================   listar tipo CONSEJO     ===========================
+	@ApiOperation(value = "Lista los tipos de consejo")
 	@GetMapping({"/listartipoconsejo"})
 	public List<Consejos> listarConsejos() {
 		logger.info("============  LISTAR listarConsejos =================");
 		return fijasService.listarConsejos();
 	} 
 	
+	
+	
+	@ApiOperation(value = "Busca consejo por su codigo")
 	@GetMapping("/buscarconsejo/{id}")
     public ResponseEntity<?> buscarPorIdConsejo(@PathVariable Long id) {
 		logger.info("============  BUSCAR buscarPorIdConsejo =================");
@@ -223,13 +242,19 @@ public class ControladorFijas {
     	return new ResponseEntity<Consejos>(generico,HttpStatus.OK);
     }
 	
+	
+	
 	// ==================    TIPOS DE COMISIONES  ===========================
+	@ApiOperation(value = "Lista los tipo de comisiones")
 	@GetMapping({"/listartipocomisiones"})
 	public List<TipoComisiones> listarTipoComisiones() {
 		logger.info("============  LISTAR listarTipoComisiones =================");
 		return fijasService.listarTipoComisiones();
 	} 
 	
+	
+	
+	@ApiOperation(value = "Busca comision por su codigo")
 	@GetMapping("/buscartipocomision/{id}")
     public ResponseEntity<?> buscarPorIdTipoComisiones(@PathVariable Long id) {
 		logger.info("============  BUSCAR buscarPorIdTipoComisiones =================");
@@ -258,12 +283,16 @@ public class ControladorFijas {
     }
 	
 	// ==================    TIPOS DE SESION      ===========================
+	@ApiOperation(value = "Lista los tipo de sesion")
 	@GetMapping({"/listartiposesion"})
 	public List<TipoSesiones> listarTipoSesion() {
 		logger.info("============  LISTAR listarTipoSesion =================");
 		return fijasService.listarTipoSesion();
 	} 
 	
+	
+	
+	@ApiOperation(value = "Lista informacion de una sesion por su codigo")
 	@GetMapping("/buscarsesion/{id}")
     public ResponseEntity<?> buscarPorCodigoTipoSesion(@PathVariable Long id) {
 		logger.info("============  BUSCAR buscarPorIdTipoSesion =================");
@@ -294,12 +323,16 @@ public class ControladorFijas {
 	
 	
 	// ==================    TIPOS DE TEMAS       ===========================
+	@ApiOperation(value = "Lista los tipo de temas")
 	@GetMapping({"/listartemas"})
 	public List<TipoTemas> listarTipoTemas() {
 		logger.info("============  LISTAR listarTipoTemas =================");
 		return fijasService.listarTipoTemas();
 	} 
 	
+	
+	
+	@ApiOperation(value = "Busca un tema por su codigo")
 	@GetMapping("/buscartema/{id}")
     public ResponseEntity<?> buscarPorIdTipoTema(@PathVariable Long id) {
 		logger.info("============  BUSCAR buscarPorIdTipoTema =================");
@@ -330,12 +363,17 @@ public class ControladorFijas {
 	
 	
 	// ==================    ENTIDADES       ===========================
+	@ApiOperation(value = "Lista las entidades")
 	@GetMapping({"/listarentidades"})
 	public List<Entidades> listarEntidades() {
 		logger.info("============  LISTAR listarTipoTemas =================");
 		return fijasService.listarEntidades();
 	} 
 	
+	
+	
+	
+	@ApiOperation(value = "Busca entidad por su codigo")
 	@GetMapping("/buscarentidad/{id}")
     public ResponseEntity<?> buscarPorIdEntidad(@PathVariable Long id) {
 		Entidades entidad = new Entidades();
@@ -354,6 +392,7 @@ public class ControladorFijas {
 	}
 	  
 	// ==================    ENTIDADES       ===========================
+	@ApiOperation(value = "Lista los roles")
 	@GetMapping({"/listaroles"})
 	public List<Roles> listarRoles(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,

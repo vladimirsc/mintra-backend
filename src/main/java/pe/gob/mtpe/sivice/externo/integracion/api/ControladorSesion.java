@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
@@ -34,7 +35,7 @@ import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "/api/sesion" })
 public class ControladorSesion {
@@ -50,6 +51,9 @@ public class ControladorSesion {
 	@Autowired
 	private ComisionService comisionService;
 
+	
+	
+	@ApiOperation(value = "Lista la sesiones")
 	@GetMapping("/")
 	public List<Sesiones> listarSesion(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -67,6 +71,8 @@ public class ControladorSesion {
 		return sesionService.listar(sesion);
 	}
 
+	
+	@ApiOperation(value = "Busca sesiones por los criterios de busqueda")
 	@PostMapping("/buscar")
 	public List<Sesiones> buscarSesion(
 			@RequestParam("codigosesion")  String codigosesion,
@@ -102,6 +108,9 @@ public class ControladorSesion {
 		return generico;
 	}
 	
+	
+	
+	@ApiOperation(value = "Muestra la informacion de una sesion por su codigo")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorIdPlanTrabajo(
 			@PathVariable Long id,
@@ -130,6 +139,8 @@ public class ControladorSesion {
 		return new ResponseEntity<Sesiones>(generico,HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Registra una sesion")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarSesion(
 			 @RequestParam(value="consejofk")   Long consejofk,
@@ -191,6 +202,8 @@ public class ControladorSesion {
 		return new ResponseEntity<Sesiones>(generico,HttpStatus.CREATED);
 	}
 
+	
+	@ApiOperation(value = "Actualiza una sesion")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarSesion( 
 			 @RequestParam(value="sEsionidpk")  Long sEsionidpk,
@@ -231,6 +244,8 @@ public class ControladorSesion {
 		return new ResponseEntity<Sesiones>(generico,HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Elimina una sesion")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminarSesion(
 			@PathVariable Long id,
@@ -265,7 +280,7 @@ public class ControladorSesion {
 	}
 	
 	
-	
+	@ApiOperation(value = "Busca una sesion por nombre")
 	@PostMapping("/buscarpornombre")
 	public List<Sesiones> buscarSesion(
 			@RequestParam(value="nombresesion")  String  nombresesion ,

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Comisiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
@@ -40,7 +41,7 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "api/comisiones" })
 public class ControladorComisiones {
@@ -60,6 +61,9 @@ public class ControladorComisiones {
 	private String rutaRaiz;
 
 	// @Secured({"ROLE_ADMCONSSAT","ROLE_ADMCORSSAT","ROLE_OPECONSSAT","ROLE_OPECORSSAT"})
+	
+	
+	@ApiOperation(value = "Listar Comisiones")
 	@GetMapping("/")
 	public List<Comisiones> listarComisiones(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -77,6 +81,8 @@ public class ControladorComisiones {
 		return comisionService.listar(comisiones);
 	}
 
+	
+	@ApiOperation(value = "Mostrar informacion de la comision por su codigo identificador")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorIdComision(
 			@PathVariable Long id,
@@ -105,11 +111,14 @@ public class ControladorComisiones {
 		return new ResponseEntity<Comisiones>(generico, HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Buscar comisiones por criterio de busquedas")
 	@PostMapping("/buscar")
 	public List<Comisiones> buscarComisiones(@RequestBody Comisiones buscar) {
 		return comisionService.buscar(buscar);
 	}
 
+	@ApiOperation(value = "Registrar una comision")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarComisiones(
 			@RequestParam(value="tipocomision")         Long          tipocomision,
@@ -175,6 +184,8 @@ public class ControladorComisiones {
 		return new ResponseEntity<Comisiones>(generico, HttpStatus.CREATED);
 	}
 
+	
+	@ApiOperation(value = "Actualizar una comision")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarComisiones(
 			@RequestParam(value="codigocomision")       Long          codigocomision,
@@ -244,6 +255,8 @@ public class ControladorComisiones {
 		return new ResponseEntity<Comisiones>(generico, HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Eliminar una comision")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminarComisiones(
 			@PathVariable Long id,
@@ -278,6 +291,8 @@ public class ControladorComisiones {
 
 	}
 
+	
+	@ApiOperation(value = "Buscar comision por su nombre")
 	@PostMapping("/buscarpornombre")
 	public List<Comisiones> buscarComision(
 			@RequestParam(value = "nombrecomision") String nombrecomision,
@@ -287,6 +302,9 @@ public class ControladorComisiones {
 		return comisionService.buscarComision(nombrecomision);
 	}
 	
+	
+	
+	@ApiOperation(value = "descargar archivo de la comision")
 	@GetMapping("/descargar/{id}")
 	public void descargarArchivo(
 			@PathVariable Long id, 

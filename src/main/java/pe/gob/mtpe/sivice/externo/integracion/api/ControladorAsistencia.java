@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile; 
+import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.AsistenciaConsejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Asistencias;
@@ -39,7 +41,7 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.InvitadoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "/api/asistencia" })
 public class ControladorAsistencia {
@@ -66,6 +68,8 @@ public class ControladorAsistencia {
 	private String rutaRaiz;
 	
 	
+	
+	@ApiOperation(value = "Mostrar informacion de la sesion")
 	@GetMapping("/{idsesion}")
 	public ResponseEntity<?> buscarPorIdAsistencias(
 			@PathVariable Long idsesion,
@@ -91,6 +95,8 @@ public class ControladorAsistencia {
 		return new ResponseEntity<Sesiones>(sesion, HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Listar asistentes por sesion")
 	@GetMapping("/listarasistentes/{idsesion}")
 	public List<AsistenciaConsejeros> buscarAsistencias(
 			@PathVariable Long idsesion, 
@@ -105,6 +111,8 @@ public class ControladorAsistencia {
 		return lista;
 	}
 
+	
+	@ApiOperation(value = "Marcar la asistencia")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarHoraAsistencia(
 			@RequestParam(value = "idAsistencia") Long idAsistencia,
@@ -140,6 +148,9 @@ public class ControladorAsistencia {
 		return new ResponseEntity<Asistencias>(generico, HttpStatus.OK);
 	}
 
+	
+	
+	@ApiOperation(value = "Mostra informacion de la asistencia por el codigo")
 	@GetMapping("/info/{idasistencia}")
 	public ResponseEntity<?> infoAsistente(
 			@PathVariable Long idasistencia,
@@ -199,6 +210,8 @@ public class ControladorAsistencia {
 		return new ResponseEntity<AsistenciaConsejeros>(infoAsistencia, HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Registrar un invitado")
 	@PostMapping("/registrarinvitado")
 	public ResponseEntity<?> grabarInvitado(
 			@RequestParam(value = "entidad") Long entidad,
@@ -253,6 +266,8 @@ public class ControladorAsistencia {
 		return new ResponseEntity<Invitados>(generico, HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Cargar archivo de asistencia")
 	@PostMapping("/cargardocasistencia")
 	public ResponseEntity<?> cargarArchivoAsistencias(
 			@RequestParam(value = "docasistencia") MultipartFile docasistencia,
@@ -306,7 +321,7 @@ public class ControladorAsistencia {
 	
 	
 	
-	
+	@ApiOperation(value = "Descargar archivo de asistencia")
 	@GetMapping("/descargar/{idsesion}")
 	public void descargarArchivo(
 			@PathVariable Long idsesion,

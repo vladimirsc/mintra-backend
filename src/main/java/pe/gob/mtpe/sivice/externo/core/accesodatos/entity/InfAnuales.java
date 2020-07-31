@@ -28,7 +28,7 @@ public class InfAnuales implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_INF_ANUALES") 
-	@SequenceGenerator(name="SEQ_TBX_INF_ANUALES",sequenceName="DB_TRAMITE.SEQ_TBX_INF_ANUALES", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBX_INF_ANUALES",sequenceName="DB_TRAMITE_BK.SEQ_TBX_INF_ANUALES", allocationSize=1) 
 	@Column(name = "INFORME_ID_PK")
 	private Long iNformeidpk;
 

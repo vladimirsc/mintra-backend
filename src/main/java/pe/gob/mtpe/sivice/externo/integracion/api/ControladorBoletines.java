@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Boletines;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
@@ -36,7 +38,7 @@ import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({"api/boletines"})
 public class ControladorBoletines {
@@ -55,6 +57,8 @@ public class ControladorBoletines {
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
 
+	
+	@ApiOperation(value = "Lista los boletines")
 	@GetMapping("/")
 	public List<Boletines> listarBoletines(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario, 
@@ -74,6 +78,8 @@ public class ControladorBoletines {
 	}
 
   
+	
+	@ApiOperation(value = "Registrar un boletin")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarBoletin(
 			@RequestParam("archivoboletin") MultipartFile archivoboletin, 
@@ -136,7 +142,7 @@ public class ControladorBoletines {
 	}
 	
 	
-
+	@ApiOperation(value = "Actualizar un boletin")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarBoletin(
 			@RequestParam(value="codigoboletin")                                 Long codigoboletin,
@@ -187,6 +193,7 @@ public class ControladorBoletines {
 		return new ResponseEntity<Boletines>(generico,HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Eliminar un boletin")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminarBoletin(
 			@PathVariable Long id,
@@ -221,6 +228,8 @@ public class ControladorBoletines {
 	}
 	
 	
+	
+	@ApiOperation(value = "Mostrar informacion del boletin por su identificador")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorId(
 			@PathVariable Long id,
@@ -253,6 +262,8 @@ public class ControladorBoletines {
 	}
 
 	
+	
+	@ApiOperation(value = "Buscar boletines por los criterios de busqueda")
 	@PostMapping("/buscar")
 	public List<Boletines> buscar(
 			@RequestBody Boletines buscar,
@@ -268,6 +279,9 @@ public class ControladorBoletines {
 		return boletinService.buscarBoletines(buscar);
 	}
 	
+	
+	
+	@ApiOperation(value = "descargar archivo del boletin")
 	@GetMapping("/descargar/{id}")
 	public void descargarArchivo(
 			@PathVariable Long id, HttpServletResponse res) {

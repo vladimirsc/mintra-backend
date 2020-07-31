@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
@@ -40,7 +42,7 @@ import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @RestController
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RequestMapping({"/api/consejeros"})
 public class ControladorConsejeros {
 
@@ -58,6 +60,8 @@ public class ControladorConsejeros {
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
 
+	
+	@ApiOperation(value = "Lista los consejeros")
 	@GetMapping("/")
 	public List<Consejeros> listarConsejeros(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -78,6 +82,8 @@ public class ControladorConsejeros {
 		return consejeroService.listar(consejero);
 	}
 
+	
+	@ApiOperation(value = "Busca consejeros segun los criterios de busqueda ingresados")
 	@PostMapping("/buscar")
 	public List<Consejeros> buscarConsejeros( 
 			@RequestBody Consejeros buscar,
@@ -112,6 +118,9 @@ public class ControladorConsejeros {
 		return consejeroService.buscar(buscar);
 	}
 	
+	
+	
+	@ApiOperation(value = "Muestra la informacion de un consejero por su codigo unico")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorId( 
 			@PathVariable Long id,
@@ -153,6 +162,9 @@ public class ControladorConsejeros {
 	}
 
 	
+	
+	
+	@ApiOperation(value = "Registrar un consejero")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarConsejeros(
 			@RequestParam(value="docaprob")        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  Long vTipdocumento,
@@ -274,6 +286,7 @@ public class ControladorConsejeros {
 	
 	
 
+	@ApiOperation(value = "Actualizar informacion de un consejero")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizarConsejeros(
 			@RequestParam(value="docaprob",required = false)        MultipartFile docaprob,      @RequestParam(value="vTipdocumento")  Long vTipdocumento,
@@ -371,6 +384,7 @@ public class ControladorConsejeros {
 	}
 
 
+	@ApiOperation(value = "Eliminar un consejero")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
 			@PathVariable Long id ,
@@ -424,6 +438,8 @@ public class ControladorConsejeros {
 	  return consejeroService.listarConsejerosPorComision(consejero);
 	} */
 	
+	
+	@ApiOperation(value = "descargar el archivo de un consejero")
 	@GetMapping("/descargar/{id}")
 	public void descargarArchivo(@PathVariable Long id, HttpServletResponse res) {
 		

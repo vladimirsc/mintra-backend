@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.ComiConsej;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Tipoconsejero;
@@ -34,7 +36,7 @@ import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "/api/comisiconsej" })
 public class ControladorComisionConsejero {
@@ -83,6 +85,8 @@ public class ControladorComisionConsejero {
 	
 	*/
 
+	
+	@ApiOperation(value = "Mostrar informacion del consejero por su codigo identificador")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscar(
 			@PathVariable Long id,
@@ -112,6 +116,7 @@ public class ControladorComisionConsejero {
 
 	
 	
+	@ApiOperation(value = "Registra o Listar los consejeros por comision")
 	@GetMapping("/consejeroscomision/{idcomision}")
 	public List<ComiConsej> listarConsejerosComision(
 			@PathVariable Long idcomision,
@@ -127,6 +132,7 @@ public class ControladorComisionConsejero {
 	}
 	
 
+	@ApiOperation(value = "Actualizar datos del consejero")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(
 			@RequestParam(value="codcomiconsejero" ) Long codcomiconsejero,
@@ -190,7 +196,7 @@ public class ControladorComisionConsejero {
 	
 	
 	
-	
+	@ApiOperation(value = "Eliminar un consejero")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
 			@PathVariable Long id,
@@ -224,6 +230,7 @@ public class ControladorComisionConsejero {
 	}
 	
 	
+	@ApiOperation(value = "descargar archivo")
 	@GetMapping("/descargar/{id}")
 	public void descargarArchivo(
 			@PathVariable Long id,

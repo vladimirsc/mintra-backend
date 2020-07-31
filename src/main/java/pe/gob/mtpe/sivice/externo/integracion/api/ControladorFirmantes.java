@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Firmantes;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.FirmanteService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "/api/firmantes" })
 public class ControladorFirmantes {
@@ -33,6 +35,8 @@ public class ControladorFirmantes {
 	@Autowired
 	private FirmanteService firmanteService;
 
+	
+	@ApiOperation(value = "Listar los firmantes")
 	@GetMapping("/")
 	public List<Firmantes> listar(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -41,6 +45,9 @@ public class ControladorFirmantes {
 		return firmanteService.listar();
 	}
 
+	
+	
+	@ApiOperation(value = "Buscar firmante por su codigo")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscar(
 			@PathVariable Long id,
@@ -68,6 +75,9 @@ public class ControladorFirmantes {
 		return new ResponseEntity<Firmantes>(generico,HttpStatus.OK);
 	}
 
+	
+	
+	@ApiOperation(value = "Buscar firmantes por criterio de busqueda")
 	@PostMapping("/buscar")
 	public List<Firmantes> buscar(
 			@RequestBody Firmantes buscar,
@@ -77,6 +87,10 @@ public class ControladorFirmantes {
 		return null;
 	}
 
+	
+	
+	
+	@ApiOperation(value = "Registrar un firmante")
 	@PostMapping("/firmantes")
 	public ResponseEntity<?> registrar(
 			@RequestBody Firmantes generico,
@@ -97,6 +111,9 @@ public class ControladorFirmantes {
 		return new ResponseEntity<Firmantes>(generico,HttpStatus.CREATED);
 	}
 
+	
+	
+	@ApiOperation(value = "Actualizar un firmante")
 	@PutMapping("/firmantes")
 	public ResponseEntity<?> actualizar(
 			@RequestBody Firmantes firmantes,
@@ -128,6 +145,9 @@ public class ControladorFirmantes {
 		return new ResponseEntity<Firmantes>(generico,HttpStatus.OK);
 	}
 
+	
+	
+	@ApiOperation(value = "Eliminar un firmante")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
 			@PathVariable Long id,

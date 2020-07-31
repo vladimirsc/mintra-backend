@@ -275,7 +275,7 @@ public class FijasDaoImpl extends BaseDao<Long, Profesiones> implements FijasDao
 	public List<Entidades> listarEntidades() {
 		EntityManager manager = createEntityManager();
 		List<Entidades> lista = manager
-				.createQuery("FROM Entidades p WHERE p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
+				.createQuery("SELECT p FROM Entidades p WHERE p.cFlgactivo=:activo AND p.cFlgeliminado=:eliminado")
 				.setParameter("activo", ConstantesUtil.C_INDC_ACTIVO)
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
@@ -27,7 +28,7 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.UsuarioService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
 @RestController
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RequestMapping({ "/api/seguridad" })
 public class ControllerSeguridad {
 
@@ -37,7 +38,7 @@ public class ControllerSeguridad {
 	@Autowired
 	private BCryptPasswordEncoder encriptarclave;
 	
-	
+	@ApiOperation(value = "Muestra informacion de un usuario por su codigo")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
 		
@@ -59,7 +60,7 @@ public class ControllerSeguridad {
 	}
 	
 	
-
+	@ApiOperation(value = "Lista los usuarios")
 	@GetMapping("/")
 	public List<Usuarios> listar( 
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -79,6 +80,7 @@ public class ControllerSeguridad {
 	}
 	
 	
+	@ApiOperation(value = "Busca usuarios por criterio de busqueda")
 	@PostMapping(value = "/buscar")
 	public List<Usuarios> buscar(
 		    @RequestParam("tipodocumento")    Long tipodocumento,
@@ -113,7 +115,7 @@ public class ControllerSeguridad {
 	
 	
  
-
+	@ApiOperation(value = "Registra un usuario")
 	@PostMapping(value = "/registrar")
 	public ResponseEntity<?> registra(@RequestParam("tipodocumento") Long tipodocumento,
 			@RequestParam("vNombre") String vNombre, @RequestParam("vAppaterno") String vAppaterno,
@@ -167,6 +169,7 @@ public class ControllerSeguridad {
 	}
 	
 	
+	@ApiOperation(value = "Actualiza un usuario")
 	@PutMapping(value = "/actualizar")
 	public ResponseEntity<?> actualizar(
 			@RequestParam("idusuario") Long idusuario,
@@ -236,6 +239,8 @@ public class ControllerSeguridad {
 	}
 	
 	
+	
+	@ApiOperation(value = "Elimina un usuario")
 	@DeleteMapping("/eliminar/{id}")
 	public ResponseEntity<?> eliminar(@PathVariable Long id) {
 		 Usuarios usuario = new Usuarios();

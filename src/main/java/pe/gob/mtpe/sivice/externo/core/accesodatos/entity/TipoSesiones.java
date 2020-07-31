@@ -26,7 +26,7 @@ public class TipoSesiones implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_TIPO_SESIONES") 
-	@SequenceGenerator(name="SEQ_TBX_TIPO_SESIONES",sequenceName="DB_TRAMITE.SEQ_TBX_TIPO_SESIONES", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBX_TIPO_SESIONES",sequenceName="DB_TRAMITE_BK.SEQ_TBX_TIPO_SESIONES", allocationSize=1) 
 	@Column(name = "TIPOSESION_ID_PK")
 	private Long tIposesionidpk;
 

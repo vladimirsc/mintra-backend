@@ -28,7 +28,7 @@ public class Comisiones implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBC_COMISIONES") 
-	@SequenceGenerator(name="SEQ_TBC_COMISIONES",sequenceName="DB_TRAMITE.SEQ_TBC_COMISIONES", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBC_COMISIONES",sequenceName="DB_TRAMITE_BK.SEQ_TBC_COMISIONES", allocationSize=1) 
 	@Column(name = "COMISION_ID_PK")
 	private Long cOmisionidpk;
 

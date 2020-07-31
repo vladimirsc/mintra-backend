@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
@@ -22,13 +24,15 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.UsuarioRolService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
 @RestController
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RequestMapping({ "/api/roles" })
 public class ControllerRoles {
 
 	@Autowired
 	private UsuarioRolService usuarioRolService;
 
+	
+	@ApiOperation(value = "Registra un rol")
 	@PostMapping(value = "/registrar")
 	public ResponseEntity<?> registra(@RequestParam("idusuario") Long idusuario, @RequestParam("idrol") Long idrol) {
 
@@ -68,6 +72,8 @@ public class ControllerRoles {
 	}
 	
 	
+	
+	@ApiOperation(value = "Activa un usuario")
 	@GetMapping(value = "/activar/{idusuariorol}")
 	public ResponseEntity<?>  activarRol(@PathVariable Long idusuariorol){
 		UsuarioRol usuarioRol = new UsuarioRol();
@@ -88,6 +94,9 @@ public class ControllerRoles {
 	}
 	
 	
+	
+	
+	@ApiOperation(value = "desactiva un usuario")
 	@GetMapping(value = "/desactivar/{idusuariorol}")
 	public ResponseEntity<?>  desactivarRol(@PathVariable Long idusuariorol){
 		UsuarioRol usuarioRol = new UsuarioRol();
@@ -107,6 +116,8 @@ public class ControllerRoles {
 		return new ResponseEntity<UsuarioRol>(usuarioRol, HttpStatus.OK);
 	}
 	
+	
+	@ApiOperation(value = "Lista los roles por usuario")
 	@GetMapping(value="/{idusuario}")
 	public List<UsuarioRol> listaRolesPorUsuario(@PathVariable Long idusuario){
 		

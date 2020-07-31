@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.PlanTrabajo;
@@ -36,7 +38,7 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.PlanTrabajoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "/api/plantrabajo" })
 public class ControladorPlanTrabajo {
@@ -57,6 +59,8 @@ public class ControladorPlanTrabajo {
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
 
+	
+	@ApiOperation(value = "Lista los planes de trabajo")
 	@GetMapping("/")
 	public List<PlanTrabajo> listarPlanTrabajo(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -73,6 +77,8 @@ public class ControladorPlanTrabajo {
 		return planTrabajoService.listar(planTrabajo);
 	}
 	
+	
+	@ApiOperation(value = "Muestra la informacion del plan de trabajo por su codigo")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorIdPlanTrabajo(
 			@PathVariable Long id,
@@ -108,6 +114,7 @@ public class ControladorPlanTrabajo {
 	}
 	
 
+	@ApiOperation(value = "Busca planes de trabajo por criterios de busqueda")
 	@PostMapping("/buscar")
 	public List<PlanTrabajo> buscarPlanTrabajo(
 			@RequestBody PlanTrabajo buscar,
@@ -124,7 +131,7 @@ public class ControladorPlanTrabajo {
 	}
 	
 	
- 	
+	@ApiOperation(value = "Registra un plan de trabajo")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarPlanTrabajo(
 			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion , @RequestParam(value="docplantrabajo" ,required = false) MultipartFile docplantrabajo,
@@ -204,6 +211,8 @@ public class ControladorPlanTrabajo {
 		return new ResponseEntity<PlanTrabajo>(generico,HttpStatus.CREATED);
 	}
 
+	
+	@ApiOperation(value = "Actualiza un plan de trabajo")
 	@PutMapping("/{id}")
 	public ResponseEntity<?> actualizarPlanTrabajo(
 			@RequestParam(value="docaprobacion",required = false) MultipartFile docaprobacion, @RequestParam(value="docplantrabajo",required = false) MultipartFile docplantrabajo,
@@ -267,6 +276,8 @@ public class ControladorPlanTrabajo {
     	return new ResponseEntity<PlanTrabajo>(generico,HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Elimina un plan de trabajo")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminarPlanTrabajo(
 			@PathVariable Long id,
@@ -301,7 +312,7 @@ public class ControladorPlanTrabajo {
 	}
 	
 	
-	
+	@ApiOperation(value = "Descarga el archivo de aprobacion")
 	@GetMapping("/descargaraprobacion/{id}")
 	public void descargarArchivoAprobacion(
 			@PathVariable Long id, 
@@ -320,6 +331,9 @@ public class ControladorPlanTrabajo {
 
 	}
 	
+	
+	
+	@ApiOperation(value = "Descarga el plan de trabajo")
 	@GetMapping("/descargarplan/{id}")
 	public void descargarArchivoPlan(
 			@PathVariable Long id,

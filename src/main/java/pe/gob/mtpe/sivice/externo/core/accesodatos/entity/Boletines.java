@@ -18,7 +18,7 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "TBX_BOLETINES",schema="DB_TRAMITE")
+@Table(name = "TBX_BOLETINES")
 public class Boletines implements Serializable {
 
 	/**
@@ -29,7 +29,7 @@ public class Boletines implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_BOLETINES") 
-	@SequenceGenerator(name="SEQ_TBX_BOLETINES",sequenceName="DB_TRAMITE.SEQ_TBX_BOLETINES", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBX_BOLETINES",sequenceName="DB_TRAMITE_BK.SEQ_TBX_BOLETINES", allocationSize=1) 
 	@Column(name = "BOLETIN_ID_PK")
 	private Long bOletinidpk;
 

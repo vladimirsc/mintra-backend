@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile; 
+import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Temas;
@@ -35,7 +37,7 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.TemaService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "/api/temas" })
 public class ControladorTemas {
@@ -51,6 +53,7 @@ public class ControladorTemas {
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
 
+	@ApiOperation(value = "Muestra la informacion de la sesion")
 	@GetMapping("/{idsesion}")
 	public ResponseEntity<?> cabeceraSesion(
 			@PathVariable Long idsesion,
@@ -81,6 +84,8 @@ public class ControladorTemas {
 		return new ResponseEntity<Sesiones>(cabeceraSesionTema, HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Lista los temas por sesion")
 	@GetMapping("/temasporsesion/{idsesion}")
 	public List<Temas> temasPorSesion(
 			@PathVariable Long idsesion,
@@ -92,6 +97,8 @@ public class ControladorTemas {
 		return listaTemasPorSesion;
 	}
 
+	
+	@ApiOperation(value = "Busca los temas por criterio de bisqueda")
 	@PostMapping("/buscar")
 	public List<Temas> buscarTemas(
 			@RequestBody Temas buscar,
@@ -101,6 +108,8 @@ public class ControladorTemas {
 		return temaService.buscar(buscar);
 	}
 
+	
+	@ApiOperation(value = "Busca plan de trabajo por su codigo")
 	@GetMapping("/info/{id}")
 	public ResponseEntity<?> buscarPorIdPlanTrabajo(
 			@PathVariable Long id,
@@ -131,6 +140,8 @@ public class ControladorTemas {
 		return new ResponseEntity<Temas>(generico, HttpStatus.OK);
 	}
  
+	
+	@ApiOperation(value = "Registra tema")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrarTemas(
 			@RequestParam("docAdjunto1") MultipartFile docAdjunto1,
@@ -201,6 +212,8 @@ public class ControladorTemas {
 		return new ResponseEntity<Temas>(generico, HttpStatus.CREATED);
 	}
 
+	
+	@ApiOperation(value = "Actualiza un tema")
 	@PutMapping("/{id}")
 	public ResponseEntity<?> actualizarTemas(
 			@RequestBody Temas temas,
@@ -233,6 +246,8 @@ public class ControladorTemas {
 		return new ResponseEntity<Temas>(generico, HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Elimina un tema")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminarTemas(
 			@PathVariable Long id,
@@ -266,7 +281,7 @@ public class ControladorTemas {
 
 	}
 	
-	
+	@ApiOperation(value = "Descarga archvio Primero")
 	@GetMapping("/archivo1_tema/{id}")
 	public ResponseEntity<?>  descargarArchivo1Tema(
 			@PathVariable Long id, 
@@ -303,6 +318,7 @@ public class ControladorTemas {
 	}
 	
 	
+	@ApiOperation(value = "Descarga archvio Segundo")
 	@GetMapping("/archivo2_tema/{id}")
 	public ResponseEntity<?>   descargarArchivo2Tema(
 			@PathVariable Long id, 
@@ -339,7 +355,7 @@ public class ControladorTemas {
 	}
 	
 	
-	
+	@ApiOperation(value = "Descarga archvio Tercero")
 	@GetMapping("/archivo3_tema/{id}")
 	public ResponseEntity<?>   descargarArchivo3Tema(
 			@PathVariable Long id, HttpServletResponse res) {

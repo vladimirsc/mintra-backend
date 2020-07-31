@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.BandejaActas;
@@ -32,7 +34,7 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.AcuerdoService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "/api/acuerdos" })
 public class ControladorAcuerdos {
@@ -50,6 +52,7 @@ public class ControladorAcuerdos {
 		return acuerdoService.listar();
 	}
 
+	@ApiOperation(value = "Muestra informacion del acuerdo por su identificador")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarPorIdAcuerdo(
 			@PathVariable Long id,
@@ -81,6 +84,7 @@ public class ControladorAcuerdos {
 
 	}
 
+	@ApiOperation(value = "Busca los acuerdos por sesion")
 	@PostMapping("/buscaracuerdosporsesion")
 	public List<BandejaActas> buscar(
 			@RequestParam("codigosesion") String codigosesion,
@@ -111,6 +115,7 @@ public class ControladorAcuerdos {
 
 	}
 
+	@ApiOperation(value = "Registrar un acuerdo")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar(
 			@RequestBody Acuerdos acuerdos,
@@ -131,6 +136,7 @@ public class ControladorAcuerdos {
 		return new ResponseEntity<Acuerdos>(acuerdos, HttpStatus.CREATED);
 	}
 
+	@ApiOperation(value = "Actualizar un acuerdo")
 	@PutMapping("/acuerdos")
 	public ResponseEntity<?> actualizar(
 			@RequestBody Acuerdos acuerdos,
@@ -163,6 +169,7 @@ public class ControladorAcuerdos {
 		return new ResponseEntity<Acuerdos>(generico, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Eliminar un acuerdo")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
 			@PathVariable Long id,
@@ -198,7 +205,7 @@ public class ControladorAcuerdos {
 		return new ResponseEntity<Acuerdos>(generico, HttpStatus.OK);
 	}
 	
- 
+	@ApiOperation(value = "Listar acuerdos por acta")
 	@GetMapping("/acuerdosporacta/{idacta}")
 	public List<Acuerdos> listarAcuerdosPorActas(
 			@PathVariable Long idacta,

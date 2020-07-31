@@ -27,7 +27,7 @@ public class Particalen implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TBD_PARTICALEN")
-	@SequenceGenerator(name = "SEQ_TBD_PARTICALEN", sequenceName = "DB_TRAMITE.SEQ_TBD_PARTICALEN", allocationSize = 1)
+	@SequenceGenerator(name = "SEQ_TBD_PARTICALEN", sequenceName = "DB_TRAMITE_BK.SEQ_TBD_PARTICALEN", allocationSize = 1)
 	@Column(name = "PARTCALEND_ID_PK")
 	private Long pArtcalendidpk;
 	

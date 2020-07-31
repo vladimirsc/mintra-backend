@@ -28,7 +28,7 @@ public class Firmantes implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBS_FIRMANTES") 
-	@SequenceGenerator(name="SEQ_TBS_FIRMANTES",sequenceName="DB_TRAMITE.SEQ_TBS_FIRMANTES", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBS_FIRMANTES",sequenceName="DB_TRAMITE_BK.SEQ_TBS_FIRMANTES", allocationSize=1) 
 	@Column(name = "FIRMANTE_ID_PK")
 	private Long fIrmanteidpk;
 

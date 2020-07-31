@@ -27,7 +27,7 @@ public class Actas implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBD_ACTAS") 
-	@SequenceGenerator(name="SEQ_TBD_ACTAS",sequenceName="DB_TRAMITE.SEQ_TBD_ACTAS", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBD_ACTAS",sequenceName="DB_TRAMITE_BK.SEQ_TBD_ACTAS", allocationSize=1) 
 	@Column(name = "ACTA_ID_PK")
 	private Long aCtaidpk;
 

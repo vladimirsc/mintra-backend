@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping; 
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Particalen;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ParticipanteCalendarioService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "api/particicalendario" })
 public class ControladorParticiCalendario {
@@ -34,7 +36,7 @@ public class ControladorParticiCalendario {
 	private ParticipanteCalendarioService participanteCalendarioService;
 
 
-	 
+	@ApiOperation(value = "Registra un participante al calendario") 
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar(
 			@RequestBody Particalen generico,
@@ -64,6 +66,7 @@ public class ControladorParticiCalendario {
 	
 	
 	
+	@ApiOperation(value = "Lista los participantes por calendario")
 	@GetMapping("/listaparticipantes/{calendariofk}")
 	public List<Particalen> listarParticpantesPorCalendario(
 			@PathVariable("calendariofk") Long  codigocalendario,
@@ -74,6 +77,7 @@ public class ControladorParticiCalendario {
 	}
 	
 	
+	@ApiOperation(value = "Elimina un participante")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
 			@PathVariable Long id,

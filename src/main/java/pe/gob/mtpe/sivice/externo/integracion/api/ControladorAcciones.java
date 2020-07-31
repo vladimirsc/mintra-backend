@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acciones; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.AccionesService;
@@ -35,9 +37,9 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*"})
 @RestController
-@RequestMapping({ "api/acciones" })
+@RequestMapping({ "api/acciones"})
 public class ControladorAcciones {
 
 	private static final Logger logger = LoggerFactory.getLogger(ControladorAcciones.class);
@@ -52,11 +54,15 @@ public class ControladorAcciones {
 	@Value("${rutaArchivo}")
 	private String rutaRaiz;
 
+	/*
+	@ApiOperation(value = "Obtiene Todas las acciones que se registran en un acuerdo")
 	@GetMapping("/")
 	public List<Acciones> listar() {
 		return accionesService.listar();
 	}
-
+     */
+	
+	@ApiOperation(value = "Obtiene la Informacion de una accion por su Codigo Unico")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscarSeguimientos(
 			@PathVariable Long id,
@@ -85,16 +91,17 @@ public class ControladorAcciones {
 		return new ResponseEntity<Acciones>(generico,HttpStatus.OK);
 	}
 
+	/* 
 	@PostMapping("/buscar")
 	public List<Acciones> buscar(@RequestBody Acciones buscar,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
 		return accionesService.buscar(buscar);
-	}
+	} */
 
 	
-
+	@ApiOperation(value = "Registra una accion para el acuerdo")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar(
 	     @RequestParam(value = "idacuerdo")          Long idacuerdo,
@@ -122,6 +129,7 @@ public class ControladorAcciones {
 		return new ResponseEntity<Acciones>(generico,HttpStatus.CREATED);
 	}
 
+	 /*
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(
 			@RequestParam(value = "idaccion")      Long idaccion, 
@@ -164,8 +172,9 @@ public class ControladorAcciones {
 		}  
 		
 		return new ResponseEntity<Acciones>(generico,HttpStatus.OK);
-	}
+	} */
 
+	@ApiOperation(value = "Elimina una accion registrada para el acuerdo")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
 			@PathVariable Long id,
@@ -200,6 +209,7 @@ public class ControladorAcciones {
 
 	}
 	
+	@ApiOperation(value = "Lista todas las acciones que se registraron en el acuerdo")
 	@GetMapping("/accionesporacuerdo/{idacuerdo}")
 	public List<Acciones> listarAccionesPorAcuerdo(
 			@PathVariable Long idacuerdo,
@@ -212,6 +222,7 @@ public class ControladorAcciones {
 	}
 	
 	
+	@ApiOperation(value = "Descarga el archivo adjunto")
 	@GetMapping("/descargar/{id}")
 	public void descargarArchivo(
 			@PathVariable Long id, HttpServletResponse res) {

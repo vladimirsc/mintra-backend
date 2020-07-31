@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.InfAnuales;
@@ -35,7 +37,7 @@ import pe.gob.mtpe.sivice.externo.core.negocio.service.InformAnualService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping({ "/api/informes" })
 public class ControladorInformeAnuales {
@@ -54,6 +56,8 @@ public class ControladorInformeAnuales {
 	@Autowired
 	private  FijasService fijasService;
 
+	
+	@ApiOperation(value = "Listar los informes anuales")
 	@GetMapping("/")
 	public List<InfAnuales> listar( 
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -70,6 +74,8 @@ public class ControladorInformeAnuales {
 		return informAnualService.listar(infAnuales);
 	}
 
+	
+	@ApiOperation(value = "Mostrar informacion de un informe por su codigo")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscar(
 			@PathVariable Long id,
@@ -98,6 +104,8 @@ public class ControladorInformeAnuales {
 		return new ResponseEntity<InfAnuales>(generico,HttpStatus.OK);
 	}
 
+	
+	@ApiOperation(value = "Buscar informes anuales por criterio de busqueda")
 	@PostMapping("/buscar")
 	public List<InfAnuales> buscar(
 		@RequestParam(value="comision")     String  comision,
@@ -127,6 +135,8 @@ public class ControladorInformeAnuales {
 		return informAnualService.buscar(informes);
 	}
 
+	
+	@ApiOperation(value = "Registrar un informe")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar( 
 			@RequestParam(value="vCodinforme")                   String       vCodinforme,
@@ -184,6 +194,8 @@ public class ControladorInformeAnuales {
 		return new ResponseEntity<InfAnuales>(generico,HttpStatus.CREATED);
 	}
 
+	
+	@ApiOperation(value = "Actualziar un informe")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(
 			@RequestParam(value="iNformeidpk")                   Long          iNformeidpk,
@@ -234,6 +246,8 @@ public class ControladorInformeAnuales {
 	}
 	
 
+	
+	@ApiOperation(value = "Eliminar un informe")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
 			@PathVariable Long id,
@@ -269,6 +283,8 @@ public class ControladorInformeAnuales {
 	}
 	
 	 
+	
+	@ApiOperation(value = "Descargar archivo del informe")
 	@GetMapping("/descargar/{id}")
 	public void descargarArchivo(
 			@PathVariable Long id, HttpServletResponse res) {

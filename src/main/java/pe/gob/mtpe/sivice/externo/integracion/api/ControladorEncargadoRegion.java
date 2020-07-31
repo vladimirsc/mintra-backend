@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile; 
+import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.EncargadoRegion;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
@@ -35,7 +37,7 @@ import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
 @RestController
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RequestMapping({"/api/encargadoregion"})
 public class ControladorEncargadoRegion {
 	
@@ -50,7 +52,7 @@ public class ControladorEncargadoRegion {
 	
 	
 	
-	
+	@ApiOperation(value = "Busca encaragdos de la region")
 	@PostMapping("/buscar")
 	public List<EncargadoRegion> informacion(
 			@RequestParam(value = "regionpk")           Long    regionpk,
@@ -74,6 +76,8 @@ public class ControladorEncargadoRegion {
 		return lsregiones;
 	}
 	
+	
+	@ApiOperation(value = "Lista encargados de la regiones")
 	@GetMapping("/")
 	public List<EncargadoRegion> informacion(
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
@@ -95,6 +99,8 @@ public class ControladorEncargadoRegion {
 	}
 	
 	
+	
+	@ApiOperation(value = "Registra un encargado por region")
 	@PostMapping("/registrar")
 	public ResponseEntity<?> registrar(
 			          @RequestParam(value = "regionpk")            Long          regionpk,
@@ -107,7 +113,7 @@ public class ControladorEncargadoRegion {
 			          @RequestParam(value = "numerocelular")       String        numerocelular,  
 			          @RequestParam(value = "fechadocaprobacion")  String        fechadocaprobacion, 
 			          @RequestParam(value = "numdocaprobacion")  String        numdocaprobacion,
-			          @RequestParam(value="docaprob")              MultipartFile docaprob,
+			          @RequestParam(value="docaprob",required = false)              MultipartFile docaprob,
 			          @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 					  @RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 					  @RequestHeader(name = "info_rol", required = true) String nombreRol
@@ -162,6 +168,8 @@ public class ControladorEncargadoRegion {
 	}
 	
 	
+	
+	@ApiOperation(value = "Actualizar informacion del encargado de la region")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(
 			          @RequestParam(value = "eNcargadoregionidpk") Long          eNcargadoregionidpk,
@@ -234,6 +242,8 @@ public class ControladorEncargadoRegion {
 		return new ResponseEntity<EncargadoRegion>(generico,HttpStatus.OK);
 	}
 	
+	
+	@ApiOperation(value = "Muestra la informacion del encargado de la region")
 	@GetMapping("/{idencargadoregion}")
 	public ResponseEntity<?> informacion(
 			@PathVariable Long idencargadoregion,
@@ -257,6 +267,7 @@ public class ControladorEncargadoRegion {
 	}
 	
 	
+	@ApiOperation(value = "Elimina al encargado de la region")
 	@DeleteMapping("/{idencargadoregion}")
 	public ResponseEntity<?> eliminar(
 			@PathVariable Long idencargadoregion,
@@ -283,6 +294,7 @@ public class ControladorEncargadoRegion {
 	}
 	
 	
+	@ApiOperation(value = "descarga el archivo ")
 	@GetMapping("/descargar/{id}")
 	public ResponseEntity<?>   descargar(
 			@PathVariable Long id, 

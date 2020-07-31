@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acciones; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.AccionesService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
@@ -111,7 +112,8 @@ public class ControladorAcciones {
 	     @RequestParam(value = "fecha_ejecutara")    String fecha_ejecutara,
 	     @RequestParam(value = "flgejecuto")         String flgejecuto,
 	     @RequestParam(value = "fecha_ejecuto")      String fecha_ejecuto,
-	     @RequestParam(value = "docaccion")          MultipartFile docaccion,@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+	     @RequestParam(value = "docaccion")          MultipartFile docaccion,
+	     @RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 		 @RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 		 @RequestHeader(name = "info_rol", required = true) String nombreRol
 	) {
@@ -129,16 +131,20 @@ public class ControladorAcciones {
 		return new ResponseEntity<Acciones>(generico,HttpStatus.CREATED);
 	}
 
-	 /*
+	@ApiOperation(value = "Actualiza una accion")
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(
-			@RequestParam(value = "idaccion")      Long idaccion, 
+			@RequestParam(value = "idaccion")           Long idaccion,
+			@RequestParam(value = "identidad")          Long identidad,
+		    @RequestParam(value = "responsable")        String responsable,
+		    @RequestParam(value = "descripcionaccion")  String descripcionaccion,
+		    @RequestParam(value = "fecha_ejecutara")    String fecha_ejecutara,
 			@RequestParam(value = "flgejecuto")         String flgejecuto,
-			@RequestParam(value = "fecha_ejecuto") String fecha_ejecuto,
-			@RequestParam(value = "docaccion")      MultipartFile docaccion,
-			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestParam(value = "fecha_ejecuto")      String fecha_ejecuto,
+			@RequestParam(value = "docaccion", required = false)          MultipartFile docaccion,
+			@RequestHeader(name = "id_usuario", required = true)        Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
-			@RequestHeader(name = "info_rol", required = true) String nombreRol
+			@RequestHeader(name = "info_rol", required = true)          String nombreRol
 			) {
 		Acciones generico = new Acciones();
 		Map<String, Object> response = new HashMap<>();
@@ -152,7 +158,9 @@ public class ControladorAcciones {
 				response.put(ConstantesUtil.X_ENTIDAD, generico);
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
 			}
-			 if(!docaccion.isEmpty()) {
+			
+			
+			 if(docaccion!=null && docaccion.getSize()>0) {
 				 Archivos archivo = new Archivos();
 				 archivo = archivoUtilitarioService.cargarArchivo(docaccion, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION);
 				 if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
@@ -161,8 +169,17 @@ public class ControladorAcciones {
 					 generico.setvExtarchivo(archivo.getExtension());
 				 }
 			 }
-			generico.setdFecejecuto(FechasUtil.convertStringToDate(fecha_ejecuto));
-			generico = accionesService.Actualizar(generico);
+			 
+			 Entidades entidades = new Entidades();
+			 entidades.seteNtidadidpk(identidad);
+			
+			 generico.setEntidad(entidades);
+			 generico.setvResponsable(responsable);
+			 generico.setvDesaccion(descripcionaccion);
+			 generico.setdFecejecutara( (fecha_ejecutara!=null)? FechasUtil.convertStringToDate(fecha_ejecutara) : null );
+			 generico.setcFlgejecuto(flgejecuto);
+			 generico.setdFecejecuto( (fecha_ejecuto!=null)? FechasUtil.convertStringToDate(fecha_ejecuto) : null );
+			 generico = accionesService.Actualizar(generico);
 
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
@@ -172,7 +189,7 @@ public class ControladorAcciones {
 		}  
 		
 		return new ResponseEntity<Acciones>(generico,HttpStatus.OK);
-	} */
+	}  
 
 	@ApiOperation(value = "Elimina una accion registrada para el acuerdo")
 	@DeleteMapping("/{id}")

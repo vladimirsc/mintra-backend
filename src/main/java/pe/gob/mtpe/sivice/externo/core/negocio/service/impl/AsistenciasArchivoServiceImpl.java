@@ -23,4 +23,9 @@ public class AsistenciasArchivoServiceImpl implements AsistenciasArchivoService 
 		return asistenciasArchivosDao.descargarArchivo(idsession);
 	}
 
+	@Override
+	public AsistenciasArchivos VerificarArchivo(Long idsession) { 
+		return asistenciasArchivosDao.VerificarArchivo(idsession);
+	}
+
 }

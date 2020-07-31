@@ -72,15 +72,7 @@ public class ControladorCalendarios {
 		generico.setcAlendarioidpk(id);
 		Map<String, Object> response = new HashMap<>();
 		try {
-			
-			generico = calendarioService.buscarPorId(generico);
-			if (generico == null) {
-				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CALENDARIO_MSG_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.CALENDARIO_ERROR_BUSCAR);
-				response.put(ConstantesUtil.X_ENTIDAD, generico);
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-			}
-			
+		
 			generico = calendarioService.buscarPorId(generico);
 		} catch (DataAccessException e) {
 			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);

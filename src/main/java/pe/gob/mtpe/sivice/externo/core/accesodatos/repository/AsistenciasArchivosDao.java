@@ -7,4 +7,6 @@ public interface AsistenciasArchivosDao {
 	AsistenciasArchivos cargarArchivo(AsistenciasArchivos asistenciasArchivos);
 	
 	AsistenciasArchivos descargarArchivo(Long idsession);
+	
+	AsistenciasArchivos VerificarArchivo(Long idsession);
 }

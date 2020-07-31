@@ -279,8 +279,8 @@ public class ControladorAsistencia {
 		AsistenciasArchivos asistenciasArchivos = new AsistenciasArchivos();
 		Map<String, Object> response = new HashMap<>();
 		try {
-
-			if (docasistencia.isEmpty()) {
+			
+			if (docasistencia!=null && docasistencia.getSize()>0) {
 				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CONSEJERO_MSG_DOCAPROBACION_VACIO);
 				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.CONSEJERO_ERROR_DOCAPROBACION_VACIO);
 				response.put(ConstantesUtil.X_ENTIDAD, asistenciasArchivos);
@@ -317,6 +317,32 @@ public class ControladorAsistencia {
 
 		return new ResponseEntity<AsistenciasArchivos>(asistenciasArchivos, HttpStatus.OK);
  
+	}
+	
+	
+	@ApiOperation(value = "Verifica si el archivo existe")
+	@GetMapping("/verificarasistencia/{idsesion}")
+	public ResponseEntity<?>  verificarArchivoAsistencia(
+			@PathVariable Long idsesion,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol  ) {
+		
+		AsistenciasArchivos asistenciasArchivos = new AsistenciasArchivos();
+		Map<String, Object> response = new HashMap<>();
+		try {
+			asistenciasArchivos = asistenciasArchivoService.VerificarArchivo(idsesion);
+			 
+		} catch (DataAccessException e) {
+			response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.GENERAL_MSG_ERROR_BASE);
+			response.put(ConstantesUtil.X_ERROR,
+					e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put(ConstantesUtil.X_ENTIDAD, asistenciasArchivos);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<AsistenciasArchivos>(asistenciasArchivos, HttpStatus.OK);
+
 	}
 	
 	

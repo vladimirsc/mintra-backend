@@ -38,4 +38,25 @@ public class AsistenciasArchivosDaoImpl extends BaseDao<Long, AsistenciasArchivo
 		return asistencia;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public AsistenciasArchivos VerificarArchivo(Long idsession) {
+		AsistenciasArchivos asistencia = new AsistenciasArchivos(); 
+		EntityManager manager = createEntityManager();
+		List<AsistenciasArchivos> lista = manager
+				.createQuery("SELECT b FROM AsistenciasArchivos b WHERE b.sEsionfk=:sesion AND b.vFlgeliminado=:eliminado ORDER BY b.aSistearchivoidpk DESC")
+				.setParameter("sesion",idsession)
+				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
+		manager.close();
+		
+		if(lista.isEmpty()) {
+			asistencia = null;
+		}else {
+			asistencia = lista.get(0);
+		}
+		
+ 
+		return asistencia;
+	}
+
 }

@@ -39,7 +39,7 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 
 	@Override
 	public Actas Registrar(Actas actas) {
-		actas.setvCodacta(GenerarCorrelativo());
+		actas.setvCodacta(GenerarCorrelativo(actas));
 		guardar(actas);
 		return actas;
 	}
@@ -59,9 +59,13 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 		return actas;
 	}
 
-	public String GenerarCorrelativo() {
+	public String GenerarCorrelativo(Actas actas) {
 		EntityManager manager = createEntityManager();
-		Long correlativo = (Long) manager.createQuery("SELECT COUNT(b)+1 FROM Actas b").getSingleResult();
+		Long correlativo = (Long) manager.createQuery("SELECT COUNT(b)+1 FROM Actas b INNER JOIN b.sesionfk s WHERE s.region.rEgionidpk=:idregion AND s.consejofk.cOnsejoidpk=:idconsejo AND s.tipoSesiones.tIposesionidpk=:idtiposesion")
+				.setParameter("idregion", actas.getSesionfk().getRegion().getrEgionidpk())
+				.setParameter("idconsejo", actas.getSesionfk().getConsejofk().getcOnsejoidpk())
+				.setParameter("idtiposesion", actas.getSesionfk().getTipoSesiones().gettIposesionidpk())
+				.getSingleResult();
 		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.ACTA_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;
@@ -118,8 +122,9 @@ public class ActasDaoImpl extends BaseDao<Long, Actas> implements ActasDao {
 	public List<Actas> listarActasPorSesion(Actas actas) {
 		EntityManager manager = createEntityManager();
 		List<Actas> lista = manager
-				.createQuery("SELECT a  FROM Actas  a INNER JOIN  a.sesionfk s INNER JOIN s.region r  WHERE r.rEgionidpk=:codigoregion AND a.cFlagelimina=:eliminado")
+				.createQuery("SELECT a  FROM Actas  a INNER JOIN  a.sesionfk s INNER JOIN s.region r  WHERE r.rEgionidpk=:codigoregion AND s.consejofk.cOnsejoidpk=:idconsejo AND a.cFlagelimina=:eliminado ORDER BY s.sEsionidpk DESC")
 				.setParameter("codigoregion", actas.getNregion())
+				.setParameter("idconsejo", actas.getnTipoConsejo())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;

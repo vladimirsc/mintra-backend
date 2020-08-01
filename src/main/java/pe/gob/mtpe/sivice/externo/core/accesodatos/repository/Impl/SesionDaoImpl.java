@@ -25,8 +25,9 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 	public List<Sesiones> listar(Sesiones sesion) {
 		EntityManager manager = createEntityManager();
 		List<Sesiones> lista = manager
-				.createQuery("SELECT c FROM Sesiones c INNER JOIN c.region r WHERE r.rEgionidpk=:idregion AND c.cFlgeliminado=:eliminado ORDER BY c.sEsionidpk DESC")
+				.createQuery("SELECT s FROM Sesiones s INNER JOIN s.region r WHERE r.rEgionidpk=:idregion AND s.consejofk.cOnsejoidpk=:idconsejo  AND s.cFlgeliminado=:eliminado ORDER BY s.sEsionidpk DESC")
 				.setParameter("idregion",sesion.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", sesion.getConsejofk().getcOnsejoidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -43,7 +44,7 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 	public Sesiones buscarPorIdAsistencia(Sesiones sesion) {
 		EntityManager manager = createEntityManager();
 		List<Sesiones> lista = manager
-				.createQuery("FROM Sesiones c WHERE c.sEsionidpk=:idsesion AND c.cFlgeliminado=:eliminado ORDER BY c.sEsionidpk DESC")
+				.createQuery("SELECT c FROM Sesiones c WHERE c.sEsionidpk=:idsesion AND c.cFlgeliminado=:eliminado ORDER BY c.sEsionidpk DESC")
 				.setParameter("idsesion", sesion.getsEsionidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
@@ -85,7 +86,7 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 
 	@Override
 	public Sesiones Registrar(Sesiones sesion) {
-		sesion.setvCodsesion(GenerarCorrelativo());
+		sesion.setvCodsesion(GenerarCorrelativo(sesion));
 		guardar(sesion);
 		return sesion;
 	}
@@ -105,9 +106,13 @@ public class SesionDaoImpl extends BaseDao<Long, Sesiones> implements SesionDao 
 		return sesion;
 	}
 	
-	public String GenerarCorrelativo() {
+	public String GenerarCorrelativo(Sesiones sesion) {
 		EntityManager manager = createEntityManager();
-		Long correlativo = (Long) manager.createQuery("SELECT COUNT(c)+1 FROM Sesiones c").getSingleResult();
+		Long correlativo = (Long) manager.createQuery("SELECT COUNT(s)+1 FROM Sesiones s WHERE s.region.rEgionidpk=:idregion AND s.consejofk.cOnsejoidpk=:idconsejo AND s.tipoSesiones.tIposesionidpk=:idtiposesion")
+				.setParameter("idregion", sesion.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", sesion.getConsejofk().getcOnsejoidpk())
+				.setParameter("idtiposesion", sesion.getTipoSesiones().gettIposesionidpk())
+				.getSingleResult();
 		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.SESION_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;

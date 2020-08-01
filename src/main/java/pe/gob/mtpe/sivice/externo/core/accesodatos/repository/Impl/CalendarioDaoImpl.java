@@ -26,8 +26,9 @@ public class CalendarioDaoImpl extends BaseDao<Long, Calendarios> implements Cal
 	public List<Calendarios> listar(Calendarios calendario) {
 		EntityManager manager = createEntityManager();
 		List<Calendarios> lista = manager
-				.createQuery("SELECT b FROM Calendarios b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.cFlgeliminado=:eliminado ORDER BY b.cAlendarioidpk DESC")
+				.createQuery("SELECT b FROM Calendarios b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.consejo.cOnsejoidpk=:idconsejo AND b.cFlgeliminado=:eliminado ORDER BY b.cAlendarioidpk DESC")
 				.setParameter("idregion",calendario.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", calendario.getConsejo().getcOnsejoidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;

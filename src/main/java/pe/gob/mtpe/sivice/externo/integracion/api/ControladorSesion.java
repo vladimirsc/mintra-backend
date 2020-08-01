@@ -68,6 +68,9 @@ public class ControladorSesion {
 		Sesiones sesion = new Sesiones();
 		sesion.setRegion(region);
 		
+		Consejos consejos = new Consejos();
+		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+		sesion.setConsejofk(consejos);
 		return sesionService.listar(sesion);
 	}
 

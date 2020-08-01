@@ -281,29 +281,25 @@ public class ControladorAsistencia {
 		try {
 			
 			if (docasistencia!=null && docasistencia.getSize()>0) {
-				response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.CONSEJERO_MSG_DOCAPROBACION_VACIO);
-				response.put(ConstantesUtil.X_ERROR, ConstantesUtil.CONSEJERO_ERROR_DOCAPROBACION_VACIO);
-				response.put(ConstantesUtil.X_ENTIDAD, asistenciasArchivos);
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+				Archivos archivo = new Archivos();
+				archivo = archivoUtilitarioService.cargarArchivo(docasistencia, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION);
+				
+				if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
+					asistenciasArchivos.setnOmbrearchivo(archivo.getNombre());
+					asistenciasArchivos.seteXtensionarchivo(archivo.getExtension());
+					asistenciasArchivos.setuBicacionarchivo(archivo.getUbicacion());
+					asistenciasArchivos.setsEsionfk(sesioncodigo);
+					asistenciasArchivos.setvFlgeliminado("0");
+				} else {
+					response.put(ConstantesUtil.X_MENSAJE, "ARCHIVO NO ADJUNTO");
+					response.put(ConstantesUtil.X_ERROR, "NO SE ENCONTRO EL ARCHIVO ADJUNTO");
+					response.put(ConstantesUtil.X_ENTIDAD, archivo);
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+
+				} 
 			}
 			
-			Archivos archivo = new Archivos();
-			archivo = archivoUtilitarioService.cargarArchivo(docasistencia, ConstantesUtil.C_CONSEJERO_DOC_ASIGNACION);
-			
-			if (archivo.isVerificarCarga() == true && archivo.isVerificarCarga() == true) {
-				asistenciasArchivos.setnOmbrearchivo(archivo.getNombre());
-				asistenciasArchivos.seteXtensionarchivo(archivo.getExtension());
-				asistenciasArchivos.setuBicacionarchivo(archivo.getUbicacion());
-				asistenciasArchivos.setsEsionfk(sesioncodigo);
-				asistenciasArchivos.setvFlgeliminado("0");
-			} else {
-				response.put(ConstantesUtil.X_MENSAJE, "ARCHIVO NO ADJUNTO");
-				response.put(ConstantesUtil.X_ERROR, "NO SE ENCONTRO EL ARCHIVO ADJUNTO");
-				response.put(ConstantesUtil.X_ENTIDAD, archivo);
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-
-			}
-
+ 
 			asistenciasArchivos = asistenciasArchivoService.cargarArchivo(asistenciasArchivos);
 
 

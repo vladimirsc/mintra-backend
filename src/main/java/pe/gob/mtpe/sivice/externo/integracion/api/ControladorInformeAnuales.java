@@ -71,6 +71,10 @@ public class ControladorInformeAnuales {
 		InfAnuales infAnuales  = new InfAnuales();
 		infAnuales.setRegion(region);
 		
+		Consejos consejos = new Consejos();
+		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+		infAnuales.setConsejo(consejos);
+		
 		return informAnualService.listar(infAnuales);
 	}
 

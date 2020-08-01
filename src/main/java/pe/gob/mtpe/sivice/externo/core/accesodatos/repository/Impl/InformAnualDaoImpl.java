@@ -24,8 +24,9 @@ public class InformAnualDaoImpl extends BaseDao<Long, InfAnuales> implements Inf
 	public List<InfAnuales> listar(InfAnuales infAnuales) {
 		EntityManager manager = createEntityManager();
 		List<InfAnuales> lista = manager
-				.createQuery("SELECT b FROM InfAnuales b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.cFlgeliminado=:eliminado ORDER BY b.iNformeidpk DESC")
+				.createQuery("SELECT b FROM InfAnuales b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.consejo.cOnsejoidpk=:idconsejo AND b.cFlgeliminado=:eliminado ORDER BY b.iNformeidpk DESC")
 				.setParameter("idregion", infAnuales.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", infAnuales.getConsejo().getcOnsejoidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -79,7 +80,7 @@ public class InformAnualDaoImpl extends BaseDao<Long, InfAnuales> implements Inf
 
 	@Override
 	public InfAnuales Registrar(InfAnuales infAnuales) {
-		infAnuales.setvCodinforme(GenerarCorrelativo());
+		infAnuales.setvCodinforme(GenerarCorrelativo(infAnuales));
 		infAnuales.setdFecreg(new Date());
 		guardar(infAnuales);
 		return infAnuales;
@@ -100,9 +101,12 @@ public class InformAnualDaoImpl extends BaseDao<Long, InfAnuales> implements Inf
 		return infAnuales;
 	}
 	
-	public String GenerarCorrelativo() {
+	public String GenerarCorrelativo(InfAnuales infAnuales) {
 		EntityManager manager = createEntityManager();
-		Long correlativo = (Long) manager.createQuery("SELECT COUNT(c)+1 FROM InfAnuales c").getSingleResult();
+		Long correlativo = (Long) manager.createQuery("SELECT COUNT(f)+1 FROM InfAnuales f WHERE f.region.rEgionidpk=:idregion AND f.consejo.cOnsejoidpk=:idconsejo")
+				.setParameter("idregion", infAnuales.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", infAnuales.getConsejo().getcOnsejoidpk())
+				.getSingleResult();
 		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.INFORME_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;

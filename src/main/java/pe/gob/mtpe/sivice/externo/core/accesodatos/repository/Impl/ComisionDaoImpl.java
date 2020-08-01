@@ -53,7 +53,7 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 
 	@Override
 	public Comisiones Registrar(Comisiones comisiones) {
-		comisiones.setvCodcomision(GenerarCorrelativo());
+		comisiones.setvCodcomision(GenerarCorrelativo(comisiones));
 		guardar(comisiones); 
 		return comisiones;
 	}
@@ -74,9 +74,12 @@ public class ComisionDaoImpl extends BaseDao<Long, Comisiones> implements Comisi
 	}
 	
 	
-	public String GenerarCorrelativo() {
+	public String GenerarCorrelativo(Comisiones comisiones) {
 		EntityManager manager = createEntityManager();
-		Long correlativo = (Long) manager.createQuery("SELECT COUNT(c)+1 FROM Comisiones c")
+		Long correlativo = (Long) manager.createQuery("SELECT COUNT(c)+1 FROM Comisiones c WHERE c.region.rEgionidpk=:idregion AND c.consejo.cOnsejoidpk=:idconsejo AND c.tipocomision.tIpocomsidpk=:idtpcomision")
+				.setParameter("idregion", comisiones.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", comisiones.getConsejo().getcOnsejoidpk())
+				.setParameter("idtpcomision", comisiones.getTipocomision().gettIpocomsidpk())
 				.getSingleResult();
 		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.COMISION_ALIAS_CORRELATIVO);
 		manager.close();

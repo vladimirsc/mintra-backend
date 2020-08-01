@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Firmantes;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
@@ -464,6 +465,12 @@ public class ControladorActas {
 			@RequestHeader(name = "info_rol", required = true) String nombreRol){
 		 actas.setNregion(idRegion);
 		 actas.setnUsureg(idUsuario);
+		 actas.setnTipoConsejo(fijasDao.BuscarConsejoPorNombre(nombreRol));
+		// Consejos consejos = new Consejos();
+	    // consejos.setcOnsejoidpk(fijasDao.BuscarConsejoPorNombre(nombreRol));
+	     
+	    
+	   
 		return actaService.listarActasPorSesion(actas);
 	}
 	

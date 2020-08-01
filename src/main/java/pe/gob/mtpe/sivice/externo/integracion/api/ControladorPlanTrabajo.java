@@ -74,6 +74,10 @@ public class ControladorPlanTrabajo {
 		PlanTrabajo planTrabajo = new PlanTrabajo();
 		planTrabajo.setRegion(region);
 		
+		Consejos consejos = new Consejos();
+		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+		planTrabajo.setConsejo(consejos);
+		
 		return planTrabajoService.listar(planTrabajo);
 	}
 	

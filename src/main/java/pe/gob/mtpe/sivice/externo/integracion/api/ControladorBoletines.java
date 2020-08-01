@@ -71,9 +71,12 @@ public class ControladorBoletines {
 		
 		Regiones region = new Regiones();
 		region.setrEgionidpk(idRegion);
-		
 		boletines.setRegion(region);
- 
+		
+		Consejos consejos = new Consejos();
+		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+		boletines.setConsejo(consejos);
+		
 		return boletinService.listar(boletines);
 	}
 

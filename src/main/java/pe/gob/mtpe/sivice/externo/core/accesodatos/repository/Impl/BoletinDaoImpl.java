@@ -23,8 +23,9 @@ public class BoletinDaoImpl extends BaseDao<Long, Boletines> implements BoletinD
 	public List<Boletines> listar(Boletines boletines) {
 		EntityManager manager = createEntityManager();
 		List<Boletines> lista = manager
-				.createQuery("SELECT b FROM Boletines b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.cFlgeliminado=:eliminado ORDER BY b.bOletinidpk DESC")
+				.createQuery("SELECT b FROM Boletines b INNER JOIN b.region r WHERE r.rEgionidpk=:idregion AND b.consejo.cOnsejoidpk=:idconsejo AND b.cFlgeliminado=:eliminado ORDER BY b.bOletinidpk DESC")
 				.setParameter("idregion",boletines.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", boletines.getConsejo().getcOnsejoidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -38,7 +39,7 @@ public class BoletinDaoImpl extends BaseDao<Long, Boletines> implements BoletinD
 
 	@Override
 	public Boletines Registrar(Boletines boletines) {
-		boletines.setvNumbol(GenerarCorrelativo());
+		boletines.setvNumbol(GenerarCorrelativo(boletines));
 		guardar(boletines);
 		return boletines;
 	}
@@ -58,9 +59,12 @@ public class BoletinDaoImpl extends BaseDao<Long, Boletines> implements BoletinD
 		return boletines;
 	}
 
-	public String GenerarCorrelativo() {
+	public String GenerarCorrelativo(Boletines boletines) {
 		EntityManager manager = createEntityManager();
-		Long correlativo = (Long) manager.createQuery("SELECT COUNT(b)+1 FROM Boletines b").getSingleResult();
+		Long correlativo = (Long) manager.createQuery("SELECT COUNT(b)+1 FROM Boletines b WHERE b.region.rEgionidpk=:idregion AND b.consejo.cOnsejoidpk=:idconsejo")
+				.setParameter("idregion", boletines.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", boletines.getConsejo().getcOnsejoidpk())
+				.getSingleResult();
 		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,
 				ConstantesUtil.BOLETIN_ALIAS_CORRELATIVO);
 		manager.close();

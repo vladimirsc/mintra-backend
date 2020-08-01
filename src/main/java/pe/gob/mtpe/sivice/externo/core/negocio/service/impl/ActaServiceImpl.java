@@ -68,6 +68,10 @@ public class ActaServiceImpl implements ActaService {
 
 	@Override
 	public Actas Registrar(Actas actas) {
+		Sesiones sesion = new Sesiones();
+		sesion.setsEsionidpk(actas.getSesionfk().getsEsionidpk());
+		sesion=sesionDao.buscarPorIdAsistencia(sesion);
+		actas.setSesionfk(sesion);
 		return actasDao.Registrar(actas);
 	}
 
@@ -89,7 +93,7 @@ public class ActaServiceImpl implements ActaService {
 
 	@Override
 	public Sesiones cabeceraActa(Sesiones sesiones) {
-		return sesionDao.buscarPorId(sesiones);
+		return sesionDao.buscarPorIdAsistencia(sesiones);
 	}
 
 	@Override

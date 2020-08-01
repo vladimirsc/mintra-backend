@@ -77,6 +77,7 @@ public class Actas implements Serializable {
 	private transient String vfechaInicio; 
 	private transient String vfechafin; 
 	private transient Long   nregion;
+	private transient Long  nTipoConsejo;
 
 	public Actas() {
 
@@ -237,6 +238,14 @@ public class Actas implements Serializable {
 
 	public void setNregion(Long nregion) {
 		this.nregion = nregion;
+	}
+
+	public Long getnTipoConsejo() {
+		return nTipoConsejo;
+	}
+
+	public void setnTipoConsejo(Long nTipoConsejo) {
+		this.nTipoConsejo = nTipoConsejo;
 	}
 	
 	

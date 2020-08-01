@@ -57,6 +57,11 @@ public class ControladorCalendarios {
 		
 		Calendarios calendario = new Calendarios();
 		calendario.setRegion(region);
+		
+		Consejos consejos = new Consejos();
+		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+		calendario.setConsejo(consejos);
+		
 		return calendarioService.listar(calendario);
 	}
 

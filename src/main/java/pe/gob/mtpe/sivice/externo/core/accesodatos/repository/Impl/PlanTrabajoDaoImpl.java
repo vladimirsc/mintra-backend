@@ -28,8 +28,9 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 	public List<PlanTrabajo> listar(PlanTrabajo planTrabajo) {
 		EntityManager manager = createEntityManager();
 		List<PlanTrabajo> lista = manager
-				.createQuery("SELECT c FROM PlanTrabajo c INNER JOIN c.region r WHERE r.rEgionidpk=:idregion  AND c.cFlgeliminado=:eliminado ORDER BY c.pLantrabidpk DESC")
+				.createQuery("SELECT c FROM PlanTrabajo c INNER JOIN c.region r WHERE r.rEgionidpk=:idregion AND c.consejo.cOnsejoidpk=:idconsejo  AND c.cFlgeliminado=:eliminado ORDER BY c.pLantrabidpk DESC")
 				.setParameter("idregion", planTrabajo.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", planTrabajo.getConsejo().getcOnsejoidpk())
 				.setParameter("eliminado", ConstantesUtil.C_INDC_INACTIVO).getResultList();
 		manager.close();
 		return lista;
@@ -71,7 +72,7 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 
 	@Override
 	public PlanTrabajo Registrar(PlanTrabajo planTrabajo) {
-		planTrabajo.setvCodigoplantrab(GenerarCorrelativo());
+		planTrabajo.setvCodigoplantrab(GenerarCorrelativo(planTrabajo));
 		planTrabajo.setdFecreg(new Date());
 		guardar(planTrabajo);
 		return planTrabajo;
@@ -95,9 +96,12 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 	}
 	
 	
-	public String GenerarCorrelativo() {
+	public String GenerarCorrelativo(PlanTrabajo planTrabajo) {
 		EntityManager manager = createEntityManager();
-		Long correlativo = (Long) manager.createQuery("SELECT COUNT(c)+1 FROM PlanTrabajo c").getSingleResult();
+		Long correlativo = (Long) manager.createQuery("SELECT COUNT(p)+1 FROM PlanTrabajo p WHERE p.region.rEgionidpk=:idregion AND p.consejo.cOnsejoidpk=:idconsejo")
+				.setParameter("idregion", planTrabajo.getRegion().getrEgionidpk())
+				.setParameter("idconsejo", planTrabajo.getConsejo().getcOnsejoidpk())
+				.getSingleResult();
 		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.PLANTRABAJO_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;

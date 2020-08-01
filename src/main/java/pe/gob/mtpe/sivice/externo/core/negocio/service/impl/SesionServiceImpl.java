@@ -53,8 +53,8 @@ public class SesionServiceImpl implements SesionService {
 			sesion.setComisionfk(comisionbuscar);
 		}*/
 
-		sesion.setConsejofk(sesion.getConsejofk());
-		sesion.setTipoSesiones(sesion.getTipoSesiones());
+		//sesion.setConsejofk(sesion.getConsejofk());
+		//sesion.setTipoSesiones(sesion.getTipoSesiones());
 
 		return sesionDao.Registrar(sesion);
 

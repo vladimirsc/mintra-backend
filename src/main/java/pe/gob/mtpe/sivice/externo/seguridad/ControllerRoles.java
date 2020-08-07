@@ -12,15 +12,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Roles;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.UsuarioRol;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.UsuarioRolService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.UsuarioService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 
 @RestController
@@ -30,11 +32,22 @@ public class ControllerRoles {
 
 	@Autowired
 	private UsuarioRolService usuarioRolService;
+	
+	@Autowired
+	private  FijasService fijasService;
+	
+	@Autowired
+	private UsuarioService  usuarioService;
 
 	
 	@ApiOperation(value = "Registra un rol")
 	@PostMapping(value = "/registrar")
-	public ResponseEntity<?> registra(@RequestParam("idusuario") Long idusuario, @RequestParam("idrol") Long idrol) {
+	public ResponseEntity<?> registra(
+			@RequestParam("idusuario") Long idusuario, 
+			@RequestParam("idrol")     Long idrol,
+			@RequestHeader(name = "id_usuario", required = true)        Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true)          String nombreRol) {
 
 		UsuarioRol usuarioRol = new UsuarioRol();
 		UsuarioRol usuarioRolbuscar = new UsuarioRol();
@@ -50,8 +63,35 @@ public class ControllerRoles {
 
 			usuarioRol.setUsuario(usuario);
 			usuarioRol.setRoles(rol);
-
+			
 			usuarioRolbuscar = usuarioRolService.buscarPorRol(usuarioRol);
+			
+			// VALIDAMOS QUE SOLO SEA UN ROL CONSSAT, ROLE_OPECONSSAT 
+			if(usuarioRolbuscar==null) {
+				if(ConstantesUtil.C_ROLE_ADMCONSSAT.equals(nombreRol)) {
+					
+					Usuarios Infousuario = new Usuarios();
+					Infousuario =  usuarioService.buscarPorId(usuario);
+					
+					Roles Inforol = new Roles();
+					Inforol = fijasService.buscaRoles(rol);
+					
+					if(ConstantesUtil.C_ROLE_CONSSAT.equals(Inforol.getvDesnombre()) ||  ConstantesUtil.C_ROLE_OPECONSSAT.equals(Inforol.getvDesnombre()) ) {
+						if(!ConstantesUtil.C_NOMBRE_REGION_LIMA.equals(Infousuario.getRegiones().getvDesnombre())) {
+							response.put(ConstantesUtil.X_MENSAJE, ConstantesUtil.C_ROL_MSG_ERROR);
+							response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_ROL_ERROR_MENSAJE);
+							response.put(ConstantesUtil.X_ENTIDAD, usuarioRolbuscar);
+							return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+						}
+						
+					}
+							
+					
+				}	
+				
+			}
+			
+			
 			if (usuarioRolbuscar != null) {
 				usuarioRol=usuarioRolService.deshabilitarrol(usuarioRolbuscar);
 			} else {

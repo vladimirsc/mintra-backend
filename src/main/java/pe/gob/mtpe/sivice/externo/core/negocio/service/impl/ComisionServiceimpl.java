@@ -49,13 +49,13 @@ public class ComisionServiceimpl implements ComisionService {
 	}
 
 	@Override
-	public List<Comisiones> buscarComision(String nombre_comision) { 
-		return ComisionDao.buscarComision(nombre_comision);
+	public List<Comisiones> buscarComision(Comisiones comisiones) { 
+		return ComisionDao.buscarComision(comisiones);
 	}
 
 	@Override
-	public Comisiones buscarComisionPorNombre(String nombre_comision) { 
-		return ComisionDao.buscarComisionPorNombre(nombre_comision);
+	public Comisiones buscarComisionPorNombre(String nombre_comision,Long idRegion) { 
+		return ComisionDao.buscarComisionPorNombre(nombre_comision,idRegion);
 	}
 
 }

@@ -26,7 +26,7 @@ public class Entidades implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_ENTIDADES") 
-	@SequenceGenerator(name="SEQ_TBX_ENTIDADES",sequenceName="DB_TRAMITE_BK.SEQ_TBX_ENTIDADES", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBX_ENTIDADES",sequenceName="DB_TRAMITE.SEQ_TBX_ENTIDADES", allocationSize=1) 
 	@Column(name = "ENTIDAD_ID_PK")
 	private Long eNtidadidpk;
 

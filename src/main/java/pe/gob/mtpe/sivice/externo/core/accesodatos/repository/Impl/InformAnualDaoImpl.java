@@ -68,9 +68,12 @@ public class InformAnualDaoImpl extends BaseDao<Long, InfAnuales> implements Inf
 		Predicate valor3 = builder.equal(root.get("vNumdocap"), infAnuales.getvNumdocap());
 		Predicate valor4 = builder.equal(root.get("comision"), infAnuales.getComision());
 		Predicate valor5 = builder.between(root.get("dFecdesde"), infAnuales.getdFecdesde(), infAnuales.getdFhasta());
+		Predicate valor6 = builder.equal(root.get("region"),infAnuales.getRegion().getrEgionidpk()) ;   
+		Predicate valor7 = builder.equal(root.get("consejo"),infAnuales.getConsejo().getcOnsejoidpk()) ;
 		Predicate finalbusqueda=builder.or(valor1,valor2,valor3,valor4,valor5);
+		Predicate vsqland=builder.and(valor6,valor7);
 		
-		criteriaQuery.where(finalbusqueda);
+		criteriaQuery.where(finalbusqueda,vsqland);
 		Query<InfAnuales> query = (Query<InfAnuales>) manager.createQuery(criteriaQuery);
 		List<InfAnuales> resultado = query.getResultList();
 		manager.close(); 
@@ -102,12 +105,13 @@ public class InformAnualDaoImpl extends BaseDao<Long, InfAnuales> implements Inf
 	}
 	
 	public String GenerarCorrelativo(InfAnuales infAnuales) {
+		Long tipoinforme = Long.parseLong("0");
 		EntityManager manager = createEntityManager();
 		Long correlativo = (Long) manager.createQuery("SELECT COUNT(f)+1 FROM InfAnuales f WHERE f.region.rEgionidpk=:idregion AND f.consejo.cOnsejoidpk=:idconsejo")
 				.setParameter("idregion", infAnuales.getRegion().getrEgionidpk())
 				.setParameter("idconsejo", infAnuales.getConsejo().getcOnsejoidpk())
 				.getSingleResult();
-		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.INFORME_ALIAS_CORRELATIVO);
+		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,tipoinforme,ConstantesUtil.INFORME_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;
 	}

@@ -30,6 +30,9 @@ public class ConstantesUtil {
 	//VALIDACIONES
 	public static final String C_DNI_DUPLICADO_MSG_CONSEJEROS ="SE ENCUENTRA ASIGNADO A OTRO USUARIO";
 	public static final String C_DNI_DUPLICADO_ERROR_CONSEJEROS ="El DNI se encuentra activo,con otro consejero";
+	
+	public static final String C_CORREO_DUPLICADO_MSG_CONSEJEROS ="SE ENCUENTRA ASIGNADO A OTRO USUARIO";
+	public static final String C_CORREO_DUPLICADO_ERROR_CONSEJEROS ="El Correo se encuentra activo,con otro consejero";
 	// ******* ACTAS ******
 
 	// busquedas
@@ -367,6 +370,9 @@ public class ConstantesUtil {
     public static final String C_MSG_MENSAJE_USUARIOROL ="Error al cambiar estado del rol";
     public static final String C_MSG_ERROR_USUARIOROL ="no realizo el cambio";
     
+    // ROLES
+    public static final String C_ROL_MSG_ERROR = "Esta Region no le pertenece el ROL";
+    public static final String C_ROL_ERROR_MENSAJE = "El ROL solo debe pertenecer al CONSSAT(REGION-LIMA)";
     
     public static final String C_CONSSAT="CONSSAT";
     public static final String C_CONRSAT="CONRSAT";
@@ -380,6 +386,13 @@ public class ConstantesUtil {
     public static final String C_ROLE_CORSSAT="ROLE_CORSSAT";
     public static final String C_ROLE_OPECONSSAT="ROLE_OPECONSSAT";
     public static final String C_ROLE_OPECORSSAT="ROLE_OPECORSSAT";
+    
+    public static final String C_NOMBRE_REGION_LIMA ="LIMA";
+    
+    //MODULOS CORRELATIVOS
+    public static final String C_SESION_MODULO ="SESIONES";
+    public static final String C_COMISION_MODULO ="COMISIONES";
+    
     
  
     

@@ -26,7 +26,7 @@ public class Regiones implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_REGIONES") 
-	@SequenceGenerator(name="SEQ_TBX_REGIONES",sequenceName="DB_TRAMITE_BK.SEQ_TBX_REGIONES", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBX_REGIONES",sequenceName="DB_TRAMITE.SEQ_TBX_REGIONES", allocationSize=1) 
 	@Column(name = "REGION_ID_PK")
 	private Long rEgionidpk;
 

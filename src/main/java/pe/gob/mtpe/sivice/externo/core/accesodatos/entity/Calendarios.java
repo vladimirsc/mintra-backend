@@ -28,7 +28,7 @@ public class Calendarios implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBC_CALENDARIOS") 
-	@SequenceGenerator(name="SEQ_TBC_CALENDARIOS",sequenceName="DB_TRAMITE_BK.SEQ_TBC_CALENDARIOS", allocationSize=1)
+	@SequenceGenerator(name="SEQ_TBC_CALENDARIOS",sequenceName="DB_TRAMITE.SEQ_TBC_CALENDARIOS", allocationSize=1)
 	@Column(name = "CALENDARIO_ID_PK")
 	private Long cAlendarioidpk;
 

@@ -61,17 +61,19 @@ public class CalendarioDaoImpl extends BaseDao<Long, Calendarios> implements Cal
 		Predicate valor3 = builder.between(root.get("dFecactividad"),calendarios.getdFechaInicioActividad(),calendarios.getdFechaFinActividad());
 		Predicate valor4=null;
 		Predicate valor5 = builder.equal(root.get("region"),calendarios.getRegion().getrEgionidpk());
-		Predicate valor6 = builder.and(valor5);
+		Predicate valor6 = builder.equal(root.get("consejo"),calendarios.getConsejo().getcOnsejoidpk()); 
 		
-		if(!"".equals(calendarios.getcFlgejecuto()) && "1".equals(calendarios.getcFlgejecuto()) || ("1".equals(calendarios.getcFlgejecuto()))){
+		
+		if( "true".equals(calendarios.getcFlgejecuto())){
 			valor4 = builder.equal(root.get("dFecejecuto"), calendarios.getdFecejecuto()) ;  
 		}else {
 			calendarios.setdFecejecuto(FechasUtil.convertStringToDate("01-01-1880"));
 			valor4 =  builder.equal(root.get("dFecejecuto"), calendarios.getdFecejecuto()) ; 
 		}
-			
-		Predicate valor7 = builder.or(valor1,valor2,valor3,valor4);
-		Predicate finalbusqueda = builder.and(valor7,valor6);
+		
+		Predicate buscarand = builder.and(valor5,valor6);
+		Predicate buscaror = builder.or(valor1,valor2,valor3,valor4);
+		Predicate finalbusqueda = builder.and(buscaror,buscarand);
 		criteriaQuery.where(finalbusqueda);
 		Query<Calendarios> query = (Query<Calendarios>) manager.createQuery(criteriaQuery);
 		List<Calendarios> resultado = query.getResultList();

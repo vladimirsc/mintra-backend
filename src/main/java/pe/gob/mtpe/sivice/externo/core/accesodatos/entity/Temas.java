@@ -27,7 +27,7 @@ public class Temas implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TBD_TEMAS")
-	@SequenceGenerator(name = "SEQ_TBD_TEMAS", sequenceName = "DB_TRAMITE_BK.SEQ_TBD_TEMAS", allocationSize = 1)
+	@SequenceGenerator(name = "SEQ_TBD_TEMAS", sequenceName = "DB_TRAMITE.SEQ_TBD_TEMAS", allocationSize = 1)
 	@Column(name = "TEMA_ID_PK")
 	private Long tEmaidpk;
 

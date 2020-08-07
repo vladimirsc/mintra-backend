@@ -101,7 +101,12 @@ public class ControladorCalendarios {
 		
 		Regiones region = new Regiones();
 		region.setrEgionidpk(idRegion);
+		
+		Consejos consejos = new Consejos();
+		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+		 
 		buscar.setRegion(region);
+		buscar.setConsejo(consejos);
 		return calendarioService.buscar(buscar);
 	}
 

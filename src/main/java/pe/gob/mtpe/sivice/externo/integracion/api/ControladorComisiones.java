@@ -74,7 +74,7 @@ public class ControladorComisiones {
  
 		Regiones region = new Regiones();
 		region.setrEgionidpk(idRegion);
-		
+ 
 		Comisiones comisiones = new Comisiones();
 		comisiones.setRegion(region);
 		
@@ -114,7 +114,17 @@ public class ControladorComisiones {
 	
 	@ApiOperation(value = "Buscar comisiones por criterio de busquedas")
 	@PostMapping("/buscar")
-	public List<Comisiones> buscarComisiones(@RequestBody Comisiones buscar) {
+	public List<Comisiones> buscarComisiones(
+			@RequestBody Comisiones buscar,
+			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
+			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
+			@RequestHeader(name = "info_rol", required = true) String nombreRol
+			) {
+		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
+		buscar.setRegion(region); 
 		return comisionService.buscar(buscar);
 	}
 
@@ -128,6 +138,7 @@ public class ControladorComisiones {
 			@RequestParam(value ="fechainicio")         String        fechainicio,
 			@RequestParam(value ="fechafin")            String        fechafin,
 			@RequestParam(value ="consejeroasignado")   Long          consejeroasignado,
+			@RequestParam(value ="descripcion")            String        descripcion,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol
@@ -142,9 +153,11 @@ public class ControladorComisiones {
 
 			Consejos consejo = new Consejos();
 			consejo.setcOnsejoidpk(codigoconsejo);
+			consejo = fijasService.buscarPorCodigoConsejo(consejo);
 
 			Regiones region = new Regiones();
 			region.setrEgionidpk(idRegion);
+			region = fijasService.buscarPorCodigoRegion(region);
 			// *******************************************************
 			
 			
@@ -161,6 +174,7 @@ public class ControladorComisiones {
 			
 			TipoComisiones vtipocomision = new TipoComisiones();
 			vtipocomision.settIpocomsidpk(tipocomision);
+			vtipocomision = fijasService.buscarPorCodigoTipoComision(vtipocomision);
 			
 			generico.setConsejero(consejero);
 			generico.setRegion(region);
@@ -171,6 +185,7 @@ public class ControladorComisiones {
 			generico.setdFecinicio( (fechainicio!=null)?FechasUtil.convertStringToDate(fechainicio) : null );
 			generico.setdFecfin((fechafin!=null)?FechasUtil.convertStringToDate(fechafin) : null );
 			generico.setnUsureg(idUsuario);
+			generico.setvDescripcion(descripcion);
 			
 			generico = comisionService.Registrar(generico);
 		} catch (DataAccessException e) {
@@ -196,6 +211,7 @@ public class ControladorComisiones {
 			@RequestParam(value ="fechainicio")         String        fechainicio,
 			@RequestParam(value ="fechafin")            String        fechafin ,
 			@RequestParam(value ="consejeroasignado")   Long          consejeroasignado,
+			@RequestParam(value ="descripcion")            String        descripcion,
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol
@@ -242,6 +258,7 @@ public class ControladorComisiones {
 			generico.setdFecinicio( (fechainicio!=null)?FechasUtil.convertStringToDate(fechainicio) : null );
 			generico.setdFecfin((fechafin!=null)?FechasUtil.convertStringToDate(fechafin) : null );
 			generico.setnUsumodifica(idUsuario);
+			generico.setvDescripcion(descripcion);
 			
 			generico = comisionService.Actualizar(generico);
 		} catch (DataAccessException e) {
@@ -299,7 +316,24 @@ public class ControladorComisiones {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol) {
-		return comisionService.buscarComision(nombrecomision);
+		
+		
+		// ***** DATOS DE USUARIO DE INICIO DE SESION **********
+		Long codigoconsejo = fijasService.BuscarConsejoPorNombre(nombreRol); // CONSSAT
+
+		Consejos consejo = new Consejos();
+		consejo.setcOnsejoidpk(codigoconsejo);
+
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		// *******************************************************
+		
+		Comisiones generico = new Comisiones();
+		generico.setvCodcomision(nombrecomision);
+		generico.setConsejo(consejo);
+		generico.setRegion(region);
+		
+		return comisionService.buscarComision(generico);
 	}
 	
 	

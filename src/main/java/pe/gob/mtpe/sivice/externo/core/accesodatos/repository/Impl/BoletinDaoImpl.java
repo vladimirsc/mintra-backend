@@ -60,13 +60,13 @@ public class BoletinDaoImpl extends BaseDao<Long, Boletines> implements BoletinD
 	}
 
 	public String GenerarCorrelativo(Boletines boletines) {
+		Long tipoboletin = Long.parseLong("0");
 		EntityManager manager = createEntityManager();
 		Long correlativo = (Long) manager.createQuery("SELECT COUNT(b)+1 FROM Boletines b WHERE b.region.rEgionidpk=:idregion AND b.consejo.cOnsejoidpk=:idconsejo")
 				.setParameter("idregion", boletines.getRegion().getrEgionidpk())
 				.setParameter("idconsejo", boletines.getConsejo().getcOnsejoidpk())
 				.getSingleResult();
-		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,
-				ConstantesUtil.BOLETIN_ALIAS_CORRELATIVO);
+		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,tipoboletin,ConstantesUtil.BOLETIN_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;
 	}

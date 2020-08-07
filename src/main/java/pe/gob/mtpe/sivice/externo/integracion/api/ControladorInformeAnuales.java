@@ -66,13 +66,14 @@ public class ControladorInformeAnuales {
 			) {
 		
 		 Regiones region = new Regiones();
-		  region.setrEgionidpk(idRegion);
+		 region.setrEgionidpk(idRegion);
+		 
+		 Consejos consejos = new Consejos();
+		 consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
 		
 		InfAnuales infAnuales  = new InfAnuales();
 		infAnuales.setRegion(region);
-		
-		Consejos consejos = new Consejos();
-		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+
 		infAnuales.setConsejo(consejos);
 		
 		return informAnualService.listar(infAnuales);
@@ -124,6 +125,11 @@ public class ControladorInformeAnuales {
 
 			) {
 		
+		Regiones region = new Regiones();
+		region.setrEgionidpk(idRegion);
+		
+		Consejos consejo = new Consejos();
+		consejo.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
 		InfAnuales informes = new InfAnuales();
 		
 		if(dFecdesde!=null && dFhasta!=null) {
@@ -131,6 +137,8 @@ public class ControladorInformeAnuales {
 			informes.setdFhasta(FechasUtil.convertStringToDate(dFhasta));
 		}
 		
+		informes.setRegion(region);
+		informes.setConsejo(consejo);
 		informes.setComision(comision);
 		informes.setvCodinforme(vCodinforme);
 		informes.setvSesion(vSesion);

@@ -2,13 +2,11 @@ package pe.gob.mtpe.sivice.externo.core.negocio.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.AsistenciaConsejeros;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Asistencias;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.ComiConsej;
@@ -44,6 +42,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
 	@Autowired
 	private InvitadosDao invitadosDao;
+
 
 	@Override
 	public List<Asistencias> listar() {
@@ -98,12 +97,14 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			// LA SESION
 			String tipoConsejo = sesiones.getConsejofk().getvDesnombre();
 			Long idtipoconsejo = sesiones.getConsejofk().getcOnsejoidpk();
+			Long idregion      = sesiones.getRegion().getrEgionidpk();
 
 			if (ConstantesUtil.C_CONSSAT.equals(tipoConsejo) || ConstantesUtil.C_CONRSAT.equals(tipoConsejo)) {
 
 				if (cantdadAsistentes == 0) { // registramos
 					List<Consejeros> listaConsejeros = new ArrayList<Consejeros>();
-					listaConsejeros = consejeroDao.listarConsejerosPorConsejo(idtipoconsejo);
+					
+						listaConsejeros = consejeroDao.listarConsejerosPorConsejo(idtipoconsejo,idregion);
 
                          // INSERTAMOS LOS CONSEJEROS
 					for (Consejeros i : listaConsejeros) {
@@ -113,8 +114,8 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 						asistencia.setsEsionfk(idsesion);
 						asistencia.setConsejero(filaconsejero);
 						asistencia.setcFlgasistio(ConstantesUtil.C_FLAG_ASISTIO_NO);
-						asistencia.setvHoentrada(ConstantesUtil.C_HORA_INICIO_DEFAULT);
-						asistencia.setvHosalida(ConstantesUtil.C_HORA_FINALDEFAULT);
+						asistencia.setvHoentrada(sesiones.getdHorinicio());
+						asistencia.setvHosalida(sesiones.getdHorfin());
 						asistenciaDao.Registrar(asistencia);
 					}
 				}
@@ -126,6 +127,8 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 					List<ComiConsej> listaComicionConsejero = new ArrayList<ComiConsej>(); 
 
 					listaComicionConsejero = comisionConsejeroDao.listaConsejerosPorComision(sesiones.getComisionfk().getcOmisionidpk());
+					
+
 					logger.info("=============== COMISONES ====================" + listaComicionConsejero.size());
 					for (ComiConsej i : listaComicionConsejero) {
 						logger.info("============" + i.getConsejero().getcOnsejeroidpk());
@@ -135,8 +138,8 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 						asistencia.setsEsionfk(idsesion);
 						asistencia.setConsejero(filaconsejero);
 						asistencia.setcFlgasistio(ConstantesUtil.C_FLAG_ASISTIO_NO);
-						asistencia.setvHoentrada(ConstantesUtil.C_HORA_INICIO_DEFAULT);
-						asistencia.setvHosalida(ConstantesUtil.C_HORA_FINALDEFAULT);
+						asistencia.setvHoentrada(sesiones.getdHorinicio());
+						asistencia.setvHosalida(sesiones.getdHorfin());
 						asistenciaDao.Registrar(asistencia);
 					}
 
@@ -145,7 +148,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 			}
 
 			listAsistencia = asistenciaDao.listarConsejerosAsistencia(idsesion);
-
+ 
             // LLENAMOS LA TABLA GENERICA
 			for (Asistencias i : listAsistencia) {
 				if (i.getConsejero() != null) {

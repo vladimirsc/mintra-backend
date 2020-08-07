@@ -87,11 +87,16 @@ public class ControladorSesion {
 			@RequestHeader(name = "info_rol", required = true) String nombreRol
 			) {
 		
+		List<Sesiones> generico = new  ArrayList<Sesiones>();
+		Sesiones sesionbuscar = new Sesiones();
+		
 		Regiones region = new Regiones();
 		region.setrEgionidpk(idRegion);
 		
-		List<Sesiones> generico = new  ArrayList<Sesiones>();
-		Sesiones sesionbuscar = new Sesiones();
+		Consejos consejos = new Consejos();
+		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+		
+		sesionbuscar.setConsejofk(consejos);
 		sesionbuscar.setRegion(region);
 		
 		 try {
@@ -170,18 +175,21 @@ public class ControladorSesion {
 			
 			Consejos consejo = new Consejos();
 			consejo.setcOnsejoidpk(idconsejo);
+			consejo = fijasService.buscarPorCodigoConsejo(consejo);
 							
 			Regiones region = new Regiones();
 			region.setrEgionidpk(idRegion);
+			region = fijasService.buscarPorCodigoRegion(region);
 			
 			TipoSesiones tipoSesiones = new TipoSesiones();
 			tipoSesiones.settIposesionidpk(tiposesion);
+			tipoSesiones = fijasService.buscarPorCodigoTipoSesion(tipoSesiones);
 			
 			// BUSCAR COMISION POR NOMBRE Y LUEGO ASIGNARLE CODIGO
 			
 			if(ConstantesUtil.C_ROLE_OPECONSSAT.equals(nombreRol) || ConstantesUtil.C_ROLE_OPECORSSAT.equals(nombreRol)) {
 				Comisiones comision = new Comisiones();
-				comision = comisionService.buscarComisionPorNombre(cOmisionfk);
+				comision = comisionService.buscarComisionPorNombre(cOmisionfk,idRegion);
 				generico.setComisionfk(comision);
 			}
 			
@@ -291,7 +299,35 @@ public class ControladorSesion {
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol
 	      ){
-		return sesionService.buscarSesion(nombresesion);
+		
+		//*****  DATOS DE USUARIO DE INICIO DE SESION **********
+		  Long idconsejo = 0L;  
+		  idconsejo = fijasService.BuscarConsejoPorNombre(nombreRol);
+		//*******************************************************
+		  
+		  List<Sesiones>  buscarsesion = new ArrayList<Sesiones>();
+		  Sesiones sesionInfo = new Sesiones();
+		  try {
+			
+			    Consejos consejo = new Consejos();
+				consejo.setcOnsejoidpk(idconsejo);
+				//consejo = fijasService.buscarPorCodigoConsejo(consejo);
+								
+				Regiones region = new Regiones();
+				region.setrEgionidpk(idRegion);
+				//region = fijasService.buscarPorCodigoRegion(region);
+				
+				sesionInfo.setvCodsesion(nombresesion);
+				sesionInfo.setConsejofk(consejo);
+				sesionInfo.setRegion(region);
+				
+				buscarsesion = sesionService.buscarSesion(sesionInfo);
+				
+		} catch (DataAccessException e) {
+			return null;
+		}
+		
+		return buscarsesion;
 	}
 	
  

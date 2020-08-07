@@ -97,12 +97,13 @@ public class PlanTrabajoDaoImpl extends BaseDao<Long, PlanTrabajo> implements Pl
 	
 	
 	public String GenerarCorrelativo(PlanTrabajo planTrabajo) {
+		Long tipoplan = Long.parseLong("0"); 
 		EntityManager manager = createEntityManager();
 		Long correlativo = (Long) manager.createQuery("SELECT COUNT(p)+1 FROM PlanTrabajo p WHERE p.region.rEgionidpk=:idregion AND p.consejo.cOnsejoidpk=:idconsejo")
 				.setParameter("idregion", planTrabajo.getRegion().getrEgionidpk())
 				.setParameter("idconsejo", planTrabajo.getConsejo().getcOnsejoidpk())
 				.getSingleResult();
-		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,ConstantesUtil.PLANTRABAJO_ALIAS_CORRELATIVO);
+		String StrcorrelativoFinal = FechasUtil.obtenerCorrelativo(correlativo,tipoplan,ConstantesUtil.PLANTRABAJO_ALIAS_CORRELATIVO);
 		manager.close();
 		return StrcorrelativoFinal;
 	}

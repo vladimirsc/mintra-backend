@@ -18,7 +18,7 @@ public interface SesionService {
 
 	public Sesiones Eliminar(Sesiones sesion);
 	
-	List<Sesiones> buscarSesion(String nombresesion);
+	List<Sesiones> buscarSesion(Sesiones sesion);
 	
 	
 }

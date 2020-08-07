@@ -309,6 +309,9 @@ public class ControladorConsejeros {
 		Consejeros consejeroBuscar = new Consejeros();
 		consejeroBuscar.setcOnsejeroidpk(cOnsejeroidpk);
 		
+		Consejeros consejeroBuscarDni = new Consejeros();
+		consejeroBuscarDni.setvNumdocumento(vNumdocumento);
+		
 		
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -325,13 +328,13 @@ public class ControladorConsejeros {
 			//verificamos que no cambie de dni
 			if(!consejeroBuscar.getvNumdocumento().equals(vNumdocumento)) {
 				consejeroBuscar.setvNumdocumento(vNumdocumento);
-				 consejeroBuscar = consejeroService.buscarPorDni(consejeroBuscar);
-				if(consejeroBuscar!=null) {
+				consejeroBuscarDni = consejeroService.buscarPorDni(consejeroBuscar);
+				if(consejeroBuscarDni!=null) {
 					response.put(ConstantesUtil.X_MENSAJE," EL DNI("+consejeroBuscar.getvNumdocumento()+") "+ConstantesUtil.C_DNI_DUPLICADO_MSG_CONSEJEROS);
 					response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_DNI_DUPLICADO_ERROR_CONSEJEROS);
 					response.put(ConstantesUtil.X_ENTIDAD, consejeroBuscar);
 					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-				}
+				} 
 			} 
  
 			
@@ -353,7 +356,7 @@ public class ControladorConsejeros {
 			if(vProfesion!=null)    { profesion.setpRofesionidpk(vProfesion); }
 			if(vEntidad!=null)      { entidad.seteNtidadidpk(vEntidad); }
 			
-
+			 
 			consejeroBuscar.setTipodocumento(tipodocumento); 
 			consejeroBuscar.setvNumdocumento(vNumdocumento);
 			consejeroBuscar.setvDesnombre(vDesnombre);

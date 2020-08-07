@@ -27,7 +27,7 @@ public class Actas implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBD_ACTAS") 
-	@SequenceGenerator(name="SEQ_TBD_ACTAS",sequenceName="DB_TRAMITE_BK.SEQ_TBD_ACTAS", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBD_ACTAS",sequenceName="DB_TRAMITE.SEQ_TBD_ACTAS", allocationSize=1) 
 	@Column(name = "ACTA_ID_PK")
 	private Long aCtaidpk;
 
@@ -78,6 +78,7 @@ public class Actas implements Serializable {
 	private transient String vfechafin; 
 	private transient Long   nregion;
 	private transient Long  nTipoConsejo;
+	 
 
 	public Actas() {
 
@@ -247,8 +248,6 @@ public class Actas implements Serializable {
 	public void setnTipoConsejo(Long nTipoConsejo) {
 		this.nTipoConsejo = nTipoConsejo;
 	}
-	
-	
-	
-  
+
+ 
 }

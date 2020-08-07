@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +26,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Actas;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Acuerdos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Archivos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Consejos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Entidades;
-import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Firmantes;
+import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Firmantes; 
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Sesiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.repository.FijasDao;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ActaService;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.ArchivoUtilitarioService;
+import pe.gob.mtpe.sivice.externo.core.negocio.service.FijasService;
 import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
 import pe.gob.mtpe.sivice.externo.core.util.FechasUtil;
 
@@ -58,6 +56,9 @@ public class ControladorActas {
 	
 	@Autowired
 	private FijasDao fijasDao;
+	
+	@Autowired
+	private FijasService fijasService;
 
 
 	@Value("${rutaArchivo}")
@@ -263,9 +264,7 @@ public class ControladorActas {
 	}
 	
 	
-	
-	
-	
+ 
 	
 	@ApiOperation(value = "Obtiene la informacion de un acta")
 	@GetMapping("/infoacta/{id}")
@@ -453,6 +452,14 @@ public class ControladorActas {
 			@RequestHeader(name = "id_usuario", required = true) Long idUsuario,
 			@RequestHeader(name = "info_regioncodigo", required = true) Long idRegion,
 			@RequestHeader(name = "info_rol", required = true) String nombreRol){
+		
+ 
+		Consejos consejos = new Consejos();
+		consejos.setcOnsejoidpk(fijasService.BuscarConsejoPorNombre(nombreRol));
+		
+		actas.setNregion(idRegion);
+		actas.setnTipoConsejo(consejos.getcOnsejoidpk());
+		
 		return actaService.buscarActasPorSesion(actas);
 	}
 	

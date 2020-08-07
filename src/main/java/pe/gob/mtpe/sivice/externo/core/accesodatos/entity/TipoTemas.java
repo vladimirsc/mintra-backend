@@ -26,7 +26,7 @@ public class TipoTemas implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_TIPO_TEMAS") 
-	@SequenceGenerator(name="SEQ_TBX_TIPO_TEMAS",sequenceName="DB_TRAMITE_BK.SEQ_TBX_TIPO_TEMAS", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBX_TIPO_TEMAS",sequenceName="DB_TRAMITE.SEQ_TBX_TIPO_TEMAS", allocationSize=1) 
 	@Column(name = "TIPOTEMA_ID_PK")
 	private Long tIpotemaidpk;
 

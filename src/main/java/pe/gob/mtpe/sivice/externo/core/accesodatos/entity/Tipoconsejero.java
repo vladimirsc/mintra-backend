@@ -26,7 +26,7 @@ public class Tipoconsejero implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_TIPOCONSEJERO") 
-	@SequenceGenerator(name="SEQ_TBX_TIPOCONSEJERO",sequenceName="DB_TRAMITE_BK.SEQ_TBX_TIPOCONSEJERO", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBX_TIPOCONSEJERO",sequenceName="DB_TRAMITE.SEQ_TBX_TIPOCONSEJERO", allocationSize=1) 
 	@Column(name = "TPCONSEJERO_ID_PK")
 	private Long tPconsejeroidpk;
 

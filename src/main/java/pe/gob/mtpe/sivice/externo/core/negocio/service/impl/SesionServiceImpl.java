@@ -89,12 +89,12 @@ public class SesionServiceImpl implements SesionService {
 	}
 
 	@Override
-	public List<Sesiones> buscarSesion(String nombresesion) {
+	public List<Sesiones> buscarSesion(Sesiones sesion) {
 		 
-		if(nombresesion==null) {
+		if(sesion==null) {
 			return null;
 		}
-		return sesionDao.buscarSesion(nombresesion);
+		return sesionDao.buscarSesion(sesion);
 	}
 
 }

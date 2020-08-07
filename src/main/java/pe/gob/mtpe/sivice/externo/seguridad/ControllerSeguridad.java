@@ -2,8 +2,7 @@ package pe.gob.mtpe.sivice.externo.seguridad;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
+import java.util.Map; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.ApiOperation;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Regiones;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.TipoDocumentos;
 import pe.gob.mtpe.sivice.externo.core.accesodatos.entity.Usuarios;
 import pe.gob.mtpe.sivice.externo.core.negocio.service.UsuarioService;
-import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil;
+import pe.gob.mtpe.sivice.externo.core.util.ConstantesUtil; 
 
 @RestController
 @CrossOrigin(origins = { "http://localhost:4200", "*" })
@@ -37,6 +35,8 @@ public class ControllerSeguridad {
 	
 	@Autowired
 	private BCryptPasswordEncoder encriptarclave;
+	
+	//private static final Logger logger = LoggerFactory.getLogger(ControllerSeguridad.class);
 	
 	@ApiOperation(value = "Muestra informacion de un usuario por su codigo")
 	@GetMapping("/{id}")
@@ -153,6 +153,11 @@ public class ControllerSeguridad {
 					usuariobuscar.setEnabled("1");
 					usuariobuscar.setcFlgeliminado("1");
 					usuariobuscar = usuarioService.Actualizar(usuariobuscar);
+				}else {
+					response.put(ConstantesUtil.X_MENSAJE," EL USUARIO("+usuariobuscar.getUsername()+") "+ConstantesUtil.C_CORREO_DUPLICADO_MSG_CONSEJEROS);
+					response.put(ConstantesUtil.X_ERROR, ConstantesUtil.C_CORREO_DUPLICADO_ERROR_CONSEJEROS);
+					response.put(ConstantesUtil.X_ENTIDAD, usuariobuscar);
+					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 				}
 
 			}

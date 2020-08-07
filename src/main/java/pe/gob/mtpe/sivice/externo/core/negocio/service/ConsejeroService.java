@@ -24,6 +24,6 @@ public interface ConsejeroService {
 	
 	List<Consejeros> listarConsejerosPorComision(Consejeros consejero);
 	
-	List<Consejeros> listarConsejerosPorConsejo(Long idconsejo);
+	//List<Consejeros> listarConsejerosPorConsejo(Long idconsejo);
 
 }

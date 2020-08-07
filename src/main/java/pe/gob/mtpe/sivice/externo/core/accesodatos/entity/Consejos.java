@@ -26,7 +26,7 @@ public class Consejos implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="SEQ_TBX_CONSEJOS") 
-	@SequenceGenerator(name="SEQ_TBX_CONSEJOS",sequenceName="DB_TRAMITE_BK.SEQ_TBX_CONSEJOS", allocationSize=1) 
+	@SequenceGenerator(name="SEQ_TBX_CONSEJOS",sequenceName="DB_TRAMITE.SEQ_TBX_CONSEJOS", allocationSize=1) 
 	@Column(name = "CONSEJO_ID_PK")
 	private Long cOnsejoidpk;
 

@@ -7,24 +7,31 @@ import java.util.Date;
 
 public class FechasUtil {
 
-	public static String obtenerCorrelativo(Long numCorrelativo, String alias) {
+	public static String obtenerCorrelativo(Long numCorrelativo,Long tipo, String alias) {
 		int anio = 0;
 		String strignAnio = null;
 		String StrcorrelativoFinal = null;
 		String StrCorrelativo = String.valueOf(numCorrelativo);
 		try {
+			String adicionalTipo = "";
+			if(tipo>0) {
+				adicionalTipo = "-" + tipo.toString();
+			}else {
+				
+			}
+			
 			Calendar cal = Calendar.getInstance();
 			anio = cal.get(Calendar.YEAR);
 			strignAnio = String.valueOf(anio);
 			switch (StrCorrelativo.length()) {
 			case 1:
-				StrcorrelativoFinal = alias + "-" + strignAnio + '-' + "000" + StrCorrelativo;
+				StrcorrelativoFinal = alias + adicionalTipo +"-" + strignAnio + '-' + "000" + StrCorrelativo;
 				break;
 			case 2:
-				StrcorrelativoFinal = alias + "-" + strignAnio + '-' + "00" + StrCorrelativo;
+				StrcorrelativoFinal = alias + adicionalTipo + "-" + strignAnio + '-' + "00" + StrCorrelativo;
 				break;
 			case 3:
-				StrcorrelativoFinal = alias + "-" + strignAnio + '-' + "0" + StrCorrelativo;
+				StrcorrelativoFinal = alias + adicionalTipo + "-" + strignAnio + '-' + "0" + StrCorrelativo;
 				break;
 			default:
 				StrcorrelativoFinal = StrCorrelativo;
